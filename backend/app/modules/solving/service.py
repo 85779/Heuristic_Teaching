@@ -1,91 +1,136 @@
 """Solving service for problem-solving business logic."""
 
-from typing import TYPE_CHECKING
+import os
+from typing import TYPE_CHECKING, Optional
+from app.modules.solving.models import (
+    SolvingRequest,
+    SolvingResponse,
+    EvaluationResult,
+    ReferenceSolution,
+    DetailLevel,
+)
+from app.modules.solving.evaluator import Evaluator
+from app.modules.solving.parser import SolutionParser
+from app.modules.solving.prompts.director import PromptDirector
+from app.infrastructure.llm.dashscope_client import DashScopeClient
+from app.infrastructure.llm.base_client import Message
 
 if TYPE_CHECKING:
     from app.core.context import ModuleContext
 
 
-class SolvingService:
-    """Service for managing problem-solving operations.
-
-    This service provides the core business logic for the solving module,
-    handling the four-phase problem-solving workflow.
+class ReferenceSolutionService:
+    """Service for generating reference solutions.
+    
+    Main entry point for Module 1: generates organized reference solutions
+    from problem statements with optional student work for continuation.
     """
 
-    def __init__(self, context: "ModuleContext"):
+    def __init__(self, context: Optional["ModuleContext"] = None):
         """Initialize the solving service.
-
+        
         Args:
-            context: Module execution context
+            context: Module execution context (optional)
         """
-        raise NotImplementedError
+        self._context = context
+        self._evaluator = Evaluator()
+        self._parser = SolutionParser()
+        self._director = PromptDirector()
+        self._llm_client: Optional[DashScopeClient] = None
 
-    async def start_solving_session(self, problem_id: str) -> str:
-        """Start a new problem-solving session.
-
-        Args:
-            problem_id: ID of the problem to solve
-
+    def _get_llm_client(self) -> DashScopeClient:
+        """Get or create LLM client.
+        
         Returns:
-            str: Session ID
-
-        Raises:
-            NotImplementedError
+            DashScopeClient instance
         """
-        raise NotImplementedError
+        if self._llm_client is None:
+            api_key = os.getenv("DASHSCOPE_API_KEY")
+            model = os.getenv("SOLVING_MODEL", "qwen-turbo")
+            if not api_key:
+                raise ValueError("DASHSCOPE_API_KEY environment variable not set")
+            self._llm_client = DashScopeClient(api_key=api_key, model=model)
+        return self._llm_client
 
-    async def process_orientation(self, session_id: str) -> None:
-        """Process the orientation phase.
-
+    async def generate(self, request: SolvingRequest) -> SolvingResponse:
+        """Generate reference solution for the given problem.
+        
         Args:
-            session_id: ID of the solving session
-
-        Raises:
-            NotImplementedError
+            request: SolvingRequest with problem and optional student work
+            
+        Returns:
+            SolvingResponse with evaluation result and solution (if correct)
         """
-        raise NotImplementedError
+        try:
+            # Step 1: Evaluate student work
+            evaluation = await self._evaluator.evaluate_student_work(
+                problem=request.problem,
+                student_work=request.student_work or "",
+                detail_level=DetailLevel.SIMPLE,
+            )
 
-    async def process_reconstruction(self, session_id: str) -> None:
-        """Process the reconstruction phase.
+            # Step 2: If incorrect, return error feedback
+            if not evaluation.is_correct:
+                error_feedback = self._evaluator.create_error_feedback(evaluation)
+                return SolvingResponse(
+                    success=False,
+                    evaluation=evaluation,
+                    solution=None,
+                    error_feedback=error_feedback,
+                )
 
-        Args:
-            session_id: ID of the solving session
+            # Step 3: Build appropriate prompt
+            if request.student_work:
+                prompt = self._director.build_continuation_prompt(
+                    problem=request.problem,
+                    student_work=request.student_work,
+                )
+            else:
+                prompt = self._director.build_full_solution_prompt(
+                    problem=request.problem,
+                )
 
-        Raises:
-            NotImplementedError
-        """
-        raise NotImplementedError
+            # Step 4: Call LLM (text mode - natural language output)
+            llm_client = self._get_llm_client()
+            enable_thinking = request.enable_thinking if hasattr(request, 'enable_thinking') else False
+            response = await llm_client.chat(
+                messages=[Message(role="user", content=prompt)],
+                temperature=request.temperature,
+                max_tokens=request.max_tokens if hasattr(request, 'max_tokens') and request.max_tokens else 8192,
+                enable_thinking=enable_thinking,
+            )
 
-    async def process_transformation(self, session_id: str) -> None:
-        """Process the transformation phase.
+            # Step 5: Parse natural language output into structured solution
+            solution = self._parser.parse(response, request.problem)
 
-        Args:
-            session_id: ID of the solving session
+            return SolvingResponse(
+                success=True,
+                evaluation=evaluation,
+                solution=solution,
+                error_feedback=None,
+            )
 
-        Raises:
-            NotImplementedError
-        """
-        raise NotImplementedError
+        except Exception as e:
+            # Return error response
+            return SolvingResponse(
+                success=False,
+                evaluation=EvaluationResult(
+                    is_correct=False,
+                    confidence=0.0,
+                    issues=[],
+                    can_continue=False,
+                ),
+                solution=None,
+                error_feedback=None,
+            )
 
-    async def process_verification(self, session_id: str) -> None:
-        """Process the verification phase.
+    async def close(self) -> None:
+        """Close resources."""
+        if self._llm_client:
+            await self._llm_client.close()
 
-        Args:
-            session_id: ID of the solving session
 
-        Raises:
-            NotImplementedError
-        """
-        raise NotImplementedError
-
-    async def complete_session(self, session_id: str) -> None:
-        """Complete a problem-solving session.
-
-        Args:
-            session_id: ID of the solving session
-
-        Raises:
-            NotImplementedError
-        """
-        raise NotImplementedError
+# Keep legacy class for backward compatibility
+class SolvingService(ReferenceSolutionService):
+    """Legacy service class - now just an alias for ReferenceSolutionService."""
+    pass

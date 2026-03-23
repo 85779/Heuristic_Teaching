@@ -19,11 +19,19 @@ class Settings(BaseSettings):
     MONGODB_DB_NAME: str = "math_tutor"
     
     # LLM 配置
-    LLM_PROVIDER: str = "openai"  # openai | anthropic
+    LLM_PROVIDER: str = "openai"  # openai | anthropic | dashscope
     LLM_API_KEY: Optional[str] = None
     LLM_MODEL: str = "gpt-4"
     LLM_TEMPERATURE: float = 0.7
     LLM_MAX_TOKENS: int = 4096
+    
+    # DashScope 配置 (阿里云百炼)
+    DASHSCOPE_API_KEY: Optional[str] = None
+    DASHSCOPE_BASE_URL: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    
+    # 各模块使用的模型
+    SOLVING_MODEL: str = "qwen-turbo"         # 模块一：组织化解主治线
+    INTERVENTION_MODEL: str = "qwen-turbo"     # 模块二：断点干预
     
     # Redis 配置 (可选)
     REDIS_URL: Optional[str] = None

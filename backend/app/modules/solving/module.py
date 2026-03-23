@@ -67,11 +67,16 @@ class SolvingModule(IModule):
         Args:
             context: Module execution context
         """
-        raise NotImplementedError
+        self._context = context
+        self._logger = context.logger
+        self._logger.info("SolvingModule initialized")
 
     async def shutdown(self) -> None:
         """Shutdown the solving module."""
-        raise NotImplementedError
+        if hasattr(self, '_context') and self._context:
+            self._logger = getattr(self, '_logger', None)
+            if self._logger:
+                self._logger.info("SolvingModule shutting down")
 
     def register_routes(self, router: "APIRouter") -> None:
         """Register API routes for the solving module.
@@ -79,4 +84,6 @@ class SolvingModule(IModule):
         Args:
             router: FastAPI APIRouter to register routes with
         """
-        raise NotImplementedError
+        # Import and include the solving routes
+        from . import routes as solving_routes
+        router.include_router(solving_routes.router)

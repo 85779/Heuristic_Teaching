@@ -9,7 +9,10 @@ from app.modules.solving.models import (
     ReconstructionResult,
     TransformationResult,
     VerificationResult,
+    SolvingRequest,
+    SolvingResponse,
 )
+from app.modules.solving.service import ReferenceSolutionService
 
 router = APIRouter(prefix="/solving", tags=["solving"])
 
@@ -124,3 +127,46 @@ async def complete_session(session_id: str) -> SolvingSession:
         NotImplementedError
     """
     raise NotImplementedError
+
+
+# ============== Reference Solution Endpoint ==============
+
+# Global service instance (will be initialized by module)
+_service: Optional[ReferenceSolutionService] = None
+
+
+def get_service() -> ReferenceSolutionService:
+    """Get or create the service instance."""
+    global _service
+    if _service is None:
+        _service = ReferenceSolutionService()
+    return _service
+
+
+@router.post("/reference", response_model=SolvingResponse)
+async def generate_reference_solution(
+    request: SolvingRequest,
+) -> SolvingResponse:
+    """Generate reference solution for a problem.
+    
+    This is the main entry point for Module 1: takes a problem
+    (with optional student work) and returns either:
+    - A complete reference solution (if evaluation passes)
+    - Error feedback (if student work has issues)
+    
+    Args:
+        request: SolvingRequest with:
+            - problem: LaTeX problem statement
+            - student_work: Optional LaTeX student work
+            - model: Model to use (default: qwen-turbo)
+            - temperature: Temperature (default: 0.7)
+    
+    Returns:
+        SolvingResponse with:
+            - success: Whether solution was generated
+            - evaluation: Evaluation result
+            - solution: ReferenceSolution (if success)
+            - error_feedback: ErrorFeedback (if not success)
+    """
+    service = get_service()
+    return await service.generate(request)
