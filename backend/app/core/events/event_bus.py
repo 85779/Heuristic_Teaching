@@ -72,21 +72,29 @@ class Event:
         self.event_id = f"{self.timestamp.timestamp()}_{event_type}"
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert event to dictionary representation."""
-        raise NotImplementedError("Event serialization not implemented")
+        """Serialize event to dict."""
+        return {
+            "event_type": self.event_type,
+            "data": self.data,
+            "session_id": self.session_id,
+            "source_module": self.source_module,
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "event_id": self.event_id,
+        }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Event':
-        """
-        Create event from dictionary representation.
-
-        Args:
-            data: Dictionary with event data
-
-        Returns:
-            Event instance
-        """
-        raise NotImplementedError("Event deserialization not implemented")
+    def from_dict(cls, data: Dict[str, Any]) -> "Event":
+        """Reconstruct event from dict."""
+        timestamp = data.get("timestamp")
+        if timestamp and isinstance(timestamp, str):
+            timestamp = datetime.fromisoformat(timestamp)
+        return cls(
+            event_type=data["event_type"],
+            data=data.get("data", {}),
+            session_id=data.get("session_id"),
+            source_module=data.get("source_module"),
+            timestamp=timestamp,
+        )
 
 
 class EventBus:
@@ -107,78 +115,56 @@ class EventBus:
         self.logger = logging.getLogger(__name__)
 
     def subscribe(self, event_type: str, handler: Callable) -> None:
-        """
-        Subscribe to a specific event type.
-
-        Args:
-            event_type: Event type to subscribe to
-            handler: Async callable to handle events
-        """
-        raise NotImplementedError("Event subscription not implemented")
+        """Subscribe to a specific event type."""
+        if event_type not in self._subscribers:
+            self._subscribers[event_type] = []
+        self._subscribers[event_type].append(handler)
 
     def subscribe_all(self, handler: Callable) -> None:
-        """
-        Subscribe to all events.
-
-        Args:
-            handler: Async callable to handle all events
-        """
-        raise NotImplementedError("Wildcard subscription not implemented")
+        """Subscribe to all events."""
+        self._wildcard_subscribers.append(handler)
 
     def unsubscribe(self, event_type: str, handler: Callable) -> None:
-        """
-        Unsubscribe from an event type.
-
-        Args:
-            event_type: Event type to unsubscribe from
-            handler: Handler to remove
-        """
-        raise NotImplementedError("Event unsubscription not implemented")
+        """Unsubscribe from an event type."""
+        if event_type in self._subscribers:
+            self._subscribers[event_type] = [
+                h for h in self._subscribers[event_type] if h != handler
+            ]
+        self._wildcard_subscribers = [
+            h for h in self._wildcard_subscribers if h != handler
+        ]
 
     async def publish(self, event: Event) -> None:
-        """
-        Publish an event to all subscribers.
-
-        Args:
-            event: Event to publish
-        """
-        raise NotImplementedError("Event publishing not implemented")
+        """Publish an event to all subscribers."""
+        handlers = self._subscribers.get(event.event_type, [])
+        for handler in handlers:
+            if asyncio.iscoroutinefunction(handler):
+                asyncio.create_task(handler(event))
+            else:
+                asyncio.get_event_loop().run_in_executor(None, handler, event)
+        for handler in self._wildcard_subscribers:
+            if asyncio.iscoroutinefunction(handler):
+                asyncio.create_task(handler(event))
+            else:
+                asyncio.get_event_loop().run_in_executor(None, handler, event)
 
     async def publish_batch(self, events: List[Event]) -> None:
-        """
-        Publish multiple events in batch.
-
-        Args:
-            events: List of events to publish
-        """
-        raise NotImplementedError("Batch publishing not implemented")
+        """Publish multiple events in batch."""
+        for event in events:
+            await self.publish(event)
 
     def get_subscriber_count(self, event_type: str) -> int:
-        """
-        Get number of subscribers for an event type.
-
-        Args:
-            event_type: Event type
-
-        Returns:
-            Number of subscribers
-        """
-        raise NotImplementedError("Subscriber count not implemented")
+        """Get number of subscribers for an event type."""
+        return len(self._subscribers.get(event_type, []))
 
     def list_event_types(self) -> List[str]:
-        """
-        List all event types with subscribers.
-
-        Returns:
-            List of event type strings
-        """
-        raise NotImplementedError("Event type listing not implemented")
+        """List all event types with subscribers."""
+        return sorted(self._subscribers.keys())
 
     def clear_subscribers(self, event_type: Optional[str] = None) -> None:
-        """
-        Clear subscribers for an event type or all events.
-
-        Args:
-            event_type: Specific event type (clears all if None)
-        """
-        raise NotImplementedError("Subscriber clearing not implemented")
+        """Clear subscribers for an event type or all events."""
+        if event_type is None:
+            self._subscribers.clear()
+            self._wildcard_subscribers.clear()
+        elif event_type in self._subscribers:
+            del self._subscribers[event_type]
