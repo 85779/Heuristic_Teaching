@@ -39,12 +39,9 @@ async def create_intervention(
     """
     try:
         intervention = await service.generate(
-            problem=request.context.get("problem", ""),
-            student_work=request.context.get("student_work", ""),
-            student_steps=request.context.get("student_steps", []),
-            solution_steps=request.context.get("solution_steps", []),
-            intensity=request.context.get("intensity", 0.5),
             session_id=request.session_id,
+            student_work=request.context.get("student_work"),
+            intensity=request.context.get("intensity", 0.5),
             student_id=request.student_id,
         )
         return InterventionResponse(

@@ -1,6 +1,6 @@
 """API routes for the solving module."""
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from typing import Optional
 
 from app.modules.solving.models import (
@@ -146,6 +146,8 @@ def get_service() -> ReferenceSolutionService:
 @router.post("/reference", response_model=SolvingResponse)
 async def generate_reference_solution(
     request: SolvingRequest,
+    session_id: Optional[str] = None,
+    x_session_id: Optional[str] = Header(None, alias="X-Session-ID"),
 ) -> SolvingResponse:
     """Generate reference solution for a problem.
     
@@ -168,5 +170,7 @@ async def generate_reference_solution(
             - solution: ReferenceSolution (if success)
             - error_feedback: ErrorFeedback (if not success)
     """
+    # Get session_id from request body attribute or header fallback
+    resolved_session_id = getattr(request, 'session_id', None) or session_id or x_session_id
     service = get_service()
-    return await service.generate(request)
+    return await service.generate(request, session_id=resolved_session_id)

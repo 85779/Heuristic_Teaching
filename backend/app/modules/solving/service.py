@@ -52,7 +52,11 @@ class ReferenceSolutionService:
             self._llm_client = DashScopeClient(api_key=api_key, model=model)
         return self._llm_client
 
-    async def generate(self, request: SolvingRequest) -> SolvingResponse:
+    async def generate(
+        self,
+        request: SolvingRequest,
+        session_id: Optional[str] = None,
+    ) -> SolvingResponse:
         """Generate reference solution for the given problem.
         
         Args:
@@ -102,6 +106,16 @@ class ReferenceSolutionService:
 
             # Step 5: Parse natural language output into structured solution
             solution = self._parser.parse(response, request.problem)
+
+            # Store to SessionState if session_id provided
+            if session_id and solution and self._context is not None:
+                state = {
+                    "problem": request.problem,
+                    "student_work": request.student_work or "",
+                    "student_steps": getattr(request, 'student_steps', []) or [],
+                    "solution_steps": [s.dict() for s in solution.steps],
+                }
+                self._context.state_manager.set_module_state(session_id, "solving", state)
 
             return SolvingResponse(
                 success=True,

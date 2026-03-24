@@ -7,17 +7,39 @@ from app.modules.intervention.models import InterventionType, InterventionStatus
 
 @pytest.mark.asyncio
 async def test_generate_returns_intervention():
-    """service.generate() returns an Intervention object."""
+    """service.generate() returns an Intervention object from SessionState."""
+    from unittest.mock import MagicMock, patch
+    from app.modules.intervention.locator.models import BreakpointLocation, BreakpointType
+    from app.modules.intervention.analyzer.models import BreakpointAnalysis
+    from app.modules.intervention.generator.models import GeneratedHint
+    from app.core.state.state_manager import StateManager
+
+    # Setup state manager with solving state
+    state_manager = StateManager()
+    state_manager.set_module_state("sess_1", "solving", {
+        "problem": "题目",
+        "student_work": "学生作答",
+        "student_steps": [{"step_id": "s1", "step_name": "Step 1", "content": "content"}],
+        "solution_steps": [
+            {"step_id": "s1", "step_name": "Step 1", "content": "content"},
+            {"step_id": "s2", "step_name": "Step 2", "content": "next content"},
+        ],
+    })
+
+    # Create service with mocked context
+    mock_context = MagicMock()
+    mock_context.state_manager = state_manager
+    mock_context.logger = MagicMock()
+
+    # Create service — patches prevent real LLM calls during __init__
     with patch('app.modules.intervention.service.BreakpointLocator') as MockLocator, \
          patch('app.modules.intervention.service.BreakpointAnalyzer') as MockAnalyzer, \
          patch('app.modules.intervention.service.HintGenerator') as MockGenerator:
-        
-        from app.modules.intervention.locator.models import BreakpointLocation, BreakpointType
-        from app.modules.intervention.analyzer.models import BreakpointAnalysis
-        from app.modules.intervention.generator.models import GeneratedHint
-        
-        # Setup mocks
-        mock_locator = MockLocator.return_value
+
+        service = InterventionService(context=mock_context)
+
+        # Now replace sub-modules with direct mocks (bypass complex patch chain)
+        mock_locator = MagicMock()
         mock_locator.locate.return_value = BreakpointLocation(
             breakpoint_position=1,
             breakpoint_type=BreakpointType.MISSING_STEP,
@@ -25,41 +47,36 @@ async def test_generate_returns_intervention():
             gap_description="第2步缺失",
             student_last_step="step 1",
         )
-        
-        mock_analyzer = MockAnalyzer.return_value
-        mock_analyzer.analyze = AsyncMock(return_value=BreakpointAnalysis(
+        mock_analyzer = AsyncMock(return_value=BreakpointAnalysis(
             required_knowledge=["知识"],
             required_connection="联系",
             possible_approaches=["方法"],
             difficulty_level=0.5,
         ))
-        
-        mock_generator = MockGenerator.return_value
+        mock_generator = MagicMock()
         mock_generator.generate = AsyncMock(return_value=GeneratedHint(
             content="hint content",
             level="surface",
             approach_used="method",
             original_intensity=0.3,
         ))
-        
-        service = InterventionService()
+
+        service._locator = mock_locator
+        service._analyzer = mock_analyzer
+        service._generator = mock_generator
+
         result = await service.generate(
-            problem="题目",
-            student_work="学生作答",
-            student_steps=[{"step_id": "s1", "step_name": "Step 1", "content": "content"}],
-            solution_steps=[
-                {"step_id": "s1", "step_name": "Step 1", "content": "content"},
-                {"step_id": "s2", "step_name": "Step 2", "content": "next content"},
-            ],
-            intensity=0.3,
             session_id="sess_1",
+            intensity=0.3,
             student_id="student_1",
         )
-        
+
         assert result is not None
         assert result.intervention_type == InterventionType.HINT
         assert result.status == InterventionStatus.SUGGESTED
         assert result.content == "hint content"
+        assert result.session_id == "sess_1"
+        assert result.student_id == "student_1"
 
 
 @pytest.mark.asyncio

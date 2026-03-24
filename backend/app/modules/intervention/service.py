@@ -37,36 +37,25 @@ class InterventionService:
 
     async def generate(
         self,
-        problem: str,
-        student_work: str,
-        student_steps: List[dict],
-        solution_steps: List[dict],
-        intensity: float,
         session_id: str,
-        student_id: str,
+        intensity: float = 0.5,
+        student_work: Optional[str] = None,
+        student_id: Optional[str] = None,
     ) -> Intervention:
-        """
-        Main entry point: Generate an intervention hint.
+        # Read from SessionState
+        solving_state = self._context.state_manager.get_module_state(session_id, "solving")
+        if not solving_state:
+            raise ValueError(f"No solving state found for session {session_id}")
         
-        Flow:
-        1. BreakpointLocator.locate() → BreakpointLocation
-        2. BreakpointAnalyzer.analyze() → BreakpointAnalysis
-        3. HintGenerator.generate() → GeneratedHint
-        4. Return Intervention object
+        problem = solving_state.get("problem", "")
+        student_steps = solving_state.get("student_steps", [])
+        solution_steps = solving_state.get("solution_steps", [])
         
-        Args:
-            problem: The problem statement (LaTeX)
-            student_work: Student's work so far (LaTeX)
-            student_steps: List of student's steps as dicts (from session state)
-            solution_steps: List of reference solution steps as dicts
-            intensity: Intervention intensity (0.0~1.0)
-            session_id: Current session ID
-            student_id: Student ID
+        # Override student_work if provided
+        if not student_work:
+            student_work = solving_state.get("student_work", "")
         
-        Returns:
-            Intervention object with generated hint content
-        """
-        # Step 1: Locate breakpoint - convert dicts to TeachingStep
+        # Rest of the flow stays the same - convert steps to TeachingStep, then call locator.analyze → generator.generate
         from app.modules.solving.models import TeachingStep
         
         student_steps_obj = [
@@ -85,28 +74,27 @@ class InterventionService:
             )
             for i, s in enumerate(solution_steps)
         ]
+        
         location = self._locator.locate(student_steps_obj, solution_steps_obj)
         
-        # Step 2: Analyze (LLM call)
         solution_step_contents = [s["content"] for s in solution_steps]
         analysis = await self._analyzer.analyze(
             breakpoint_location=location,
             problem=problem,
-            student_work=student_work,
+            student_work=student_work or "",
             solution_steps=solution_step_contents,
         )
         
-        # Step 3: Generate hint (LLM call)
         hint = await self._generator.generate(
             analysis=analysis,
             problem=problem,
             intensity=intensity,
         )
         
-        # Step 4: Build and return Intervention
+        import uuid
         intervention = Intervention(
             id=f"int_{uuid.uuid4().hex[:8]}",
-            student_id=student_id,
+            student_id=student_id or "unknown",
             session_id=session_id,
             intervention_type=InterventionType.HINT,
             status=InterventionStatus.SUGGESTED,
