@@ -28,12 +28,12 @@ class OutputParser:
         """Initialize the output parser."""
         self.logger = logging.getLogger(__name__)
 
-    def parse_json(self, raw_output: str) -> Dict[str, Any]:
+    def parse_json(self, output: str) -> Dict[str, Any]:
         """
         Parse raw output as JSON.
 
         Args:
-            raw_output: Raw string output from LLM
+            output: Raw string output from LLM
 
         Returns:
             Parsed JSON as dictionary
@@ -41,14 +41,18 @@ class OutputParser:
         Raises:
             ValueError: If JSON parsing fails
         """
-        raise NotImplementedError("JSON parsing not implemented")
+        import json
+        try:
+            return json.loads(output)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON: {e}")
 
-    def parse_yaml(self, raw_output: str) -> Dict[str, Any]:
+    def parse_yaml(self, output: str) -> Dict[str, Any]:
         """
         Parse raw output as YAML.
 
         Args:
-            raw_output: Raw string output from LLM
+            output: Raw string output from LLM
 
         Returns:
             Parsed YAML as dictionary
@@ -56,21 +60,28 @@ class OutputParser:
         Raises:
             ValueError: If YAML parsing fails
         """
-        raise NotImplementedError("YAML parsing not implemented")
+        import yaml
+        return yaml.safe_load(output) or {}
 
-    def parse_markdown(self, raw_output: str) -> Dict[str, Any]:
+    def parse_markdown(self, output: str, schema: Optional[Dict] = None) -> Dict[str, Any]:
         """
         Parse raw output as Markdown with structured sections.
 
         Args:
-            raw_output: Raw string output from LLM
+            output: Raw string output from LLM
+            schema: Optional schema for validation
 
         Returns:
             Parsed structured content
         """
-        raise NotImplementedError("Markdown parsing not implemented")
+        import re
+        result: Dict[str, Any] = {"raw": output}
+        code_blocks = self.extract_json_blocks(output)
+        if code_blocks:
+            result["code_blocks"] = code_blocks
+        return result
 
-    def validate(self, data: Dict[str, Any], schema: Dict[str, Any]) -> bool:
+    def validate_schema(self, data: Any, schema: Dict) -> bool:
         """
         Validate data against a schema.
 
@@ -81,24 +92,49 @@ class OutputParser:
         Returns:
             True if validation passes
         """
-        raise NotImplementedError("Schema validation not implemented")
+        if not isinstance(data, dict):
+            return False
+        required = schema.get("required", [])
+        return all(k in data for k in required)
 
-    def extract_sections(self, raw_output: str, section_names: List[str]) -> Dict[str, str]:
+    def extract_json_blocks(self, output: str) -> List[str]:
+        """
+        Extract JSON blocks from markdown code fences.
+
+        Args:
+            output: Raw string output
+
+        Returns:
+            List of extracted JSON strings
+        """
+        import re
+        pattern = r'```json\s*\n(.*?)\n```'
+        matches = re.findall(pattern, output, re.DOTALL)
+        return [m.strip() for m in matches]
+
+    def extract_sections(self, output: str, section_names: List[str]) -> Dict[str, str]:
         """
         Extract named sections from raw output.
 
         Args:
-            raw_output: Raw string output
+            output: Raw string output
             section_names: List of section names to extract
 
         Returns:
             Dictionary mapping section names to their content
         """
-        raise NotImplementedError("Section extraction not implemented")
+        import re
+        result = {}
+        for name in section_names:
+            pattern = rf'##?\s*{re.escape(name)}\s*\n(.*?)(?=##?\s|\Z)'
+            match = re.search(pattern, output, re.DOTALL)
+            if match:
+                result[name] = match.group(1).strip()
+        return result
 
     def parse_with_fallback(
         self,
-        raw_output: str,
+        output: str,
         parsers: List[str],
         schema: Optional[Dict[str, Any]] = None
     ) -> Any:
@@ -106,23 +142,57 @@ class OutputParser:
         Try multiple parsers in order until one succeeds.
 
         Args:
-            raw_output: Raw string output
+            output: Raw string output
             parsers: List of parser names to try (json, yaml, markdown)
             schema: Optional schema for validation
 
         Returns:
             Parsed output from first successful parser
         """
-        raise NotImplementedError("Fallback parsing not implemented")
+        for parser_name in parsers:
+            try:
+                result = self.parse(output, parser_name, schema)
+                if schema is None or self.validate_schema(result, schema):
+                    return result
+            except ValueError:
+                continue
+        raise ValueError("All parsers failed")
 
-    def clean_output(self, raw_output: str) -> str:
+    def clean_output(self, output: str) -> str:
         """
         Clean raw output by removing common artifacts.
 
         Args:
-            raw_output: Raw string output
+            output: Raw string output
 
         Returns:
             Cleaned output string
         """
-        raise NotImplementedError("Output cleaning not implemented")
+        import re
+        output = re.sub(r'```[\w]*\n.*?\n```', '', output, flags=re.DOTALL)
+        output = re.sub(r'#{1,6}\s+', '', output)
+        return output.strip()
+
+    def parse(self, output: str, format: str, schema: Optional[Dict] = None) -> Any:
+        """
+        Parse output using the specified format.
+
+        Args:
+            output: Raw string output
+            format: Format to parse (json, yaml, markdown)
+            schema: Optional schema for validation
+
+        Returns:
+            Parsed output
+
+        Raises:
+            ValueError: If format is unknown or parsing fails
+        """
+        if format == "json":
+            return self.parse_json(output)
+        elif format == "yaml":
+            return self.parse_yaml(output)
+        elif format == "markdown":
+            return self.parse_markdown(output, schema)
+        else:
+            raise ValueError(f"Unknown format: {format}")

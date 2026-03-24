@@ -11,6 +11,7 @@ The SessionManager is responsible for:
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
 import logging
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -37,15 +38,16 @@ class Session:
         self.metadata = metadata or {}
         self.created_at = datetime.utcnow()
         self.last_activity = datetime.utcnow()
-        self.expires_at = self.created_at + timedelta(hours=24)
+        self.expires_at = datetime.utcnow() + timedelta(hours=1)
 
     def is_expired(self) -> bool:
-        """Check if session is expired."""
-        raise NotImplementedError("Expiration check not implemented")
+        """Check if session has expired."""
+        return datetime.utcnow() > self.expires_at
 
     def update_activity(self) -> None:
-        """Update last activity timestamp."""
-        raise NotImplementedError("Activity update not implemented")
+        """Update last_activity and extend expires_at by 1 hour."""
+        self.last_activity = datetime.utcnow()
+        self.expires_at = datetime.utcnow() + timedelta(hours=1)
 
     def extend(self, hours: int = 1) -> None:
         """
@@ -54,7 +56,7 @@ class Session:
         Args:
             hours: Number of hours to extend
         """
-        raise NotImplementedError("Session extension not implemented")
+        self.expires_at = self.expires_at + timedelta(hours=hours)
 
 
 class SessionManager:
@@ -88,7 +90,10 @@ class SessionManager:
         Returns:
             New Session instance
         """
-        raise NotImplementedError("Session creation not implemented")
+        session_id = str(uuid.uuid4())
+        session = Session(session_id, user_id, metadata)
+        self._sessions[session_id] = session
+        return session
 
     def get_session(self, session_id: str) -> Optional[Session]:
         """
@@ -100,7 +105,7 @@ class SessionManager:
         Returns:
             Session if found and active, None otherwise
         """
-        raise NotImplementedError("Session retrieval not implemented")
+        return self._sessions.get(session_id)
 
     def validate_session(self, session_id: str) -> bool:
         """
@@ -112,7 +117,10 @@ class SessionManager:
         Returns:
             True if session is valid
         """
-        raise NotImplementedError("Session validation not implemented")
+        session = self._sessions.get(session_id)
+        if session is None:
+            return False
+        return not session.is_expired()
 
     def end_session(self, session_id: str) -> None:
         """
@@ -121,7 +129,8 @@ class SessionManager:
         Args:
             session_id: Session identifier
         """
-        raise NotImplementedError("Session termination not implemented")
+        if session_id in self._sessions:
+            del self._sessions[session_id]
 
     def update_activity(self, session_id: str) -> None:
         """
@@ -130,7 +139,9 @@ class SessionManager:
         Args:
             session_id: Session identifier
         """
-        raise NotImplementedError("Activity update not implemented")
+        session = self._sessions.get(session_id)
+        if session:
+            session.update_activity()
 
     def list_sessions(self, user_id: Optional[str] = None) -> List[Session]:
         """
@@ -142,7 +153,9 @@ class SessionManager:
         Returns:
             List of Session objects
         """
-        raise NotImplementedError("Session listing not implemented")
+        if user_id is None:
+            return list(self._sessions.values())
+        return [s for s in self._sessions.values() if s.user_id == user_id]
 
     def cleanup_expired_sessions(self) -> int:
         """
@@ -151,7 +164,10 @@ class SessionManager:
         Returns:
             Number of sessions removed
         """
-        raise NotImplementedError("Session cleanup not implemented")
+        to_delete = [sid for sid, s in self._sessions.items() if s.is_expired()]
+        for sid in to_delete:
+            del self._sessions[sid]
+        return len(to_delete)
 
     def get_session_stats(self, session_id: str) -> Dict[str, Any]:
         """
@@ -163,4 +179,14 @@ class SessionManager:
         Returns:
             Dictionary of session statistics
         """
-        raise NotImplementedError("Session stats not implemented")
+        session = self._sessions.get(session_id)
+        if session is None:
+            return {}
+        return {
+            "session_id": session.session_id,
+            "user_id": session.user_id,
+            "created_at": session.created_at.isoformat(),
+            "last_activity": session.last_activity.isoformat(),
+            "expires_at": session.expires_at.isoformat(),
+            "is_expired": session.is_expired()
+        }

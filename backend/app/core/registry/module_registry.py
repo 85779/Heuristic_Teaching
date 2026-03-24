@@ -9,85 +9,13 @@ The ModuleRegistry is responsible for:
 """
 
 from typing import Dict, List, Optional
-from abc import ABC, abstractmethod
 import logging
 
+from app.core.interfaces.module import IModule
+from app.core.context import ModuleContext
+from app.core.registry.dependency_resolver import DependencyResolver
+
 logger = logging.getLogger(__name__)
-
-
-class IModule(ABC):
-    """Base interface for all modules."""
-
-    @property
-    @abstractmethod
-    def module_id(self) -> str:
-        """Unique module identifier."""
-        pass
-
-    @property
-    @abstractmethod
-    def module_name(self) -> str:
-        """Module display name."""
-        pass
-
-    @property
-    @abstractmethod
-    def version(self) -> str:
-        """Module version."""
-        pass
-
-    @property
-    def dependencies(self) -> List[str]:
-        """List of module IDs this module depends on."""
-        return []
-
-    @property
-    def provides_events(self) -> List[str]:
-        """List of event types this module publishes."""
-        return []
-
-    @property
-    def subscribes_events(self) -> List[str]:
-        """List of event types this module subscribes to."""
-        return []
-
-    @abstractmethod
-    async def initialize(self, context: 'ModuleContext') -> None:
-        """Initialize the module with provided context."""
-        pass
-
-    @abstractmethod
-    async def shutdown(self) -> None:
-        """Shutdown the module and cleanup resources."""
-        pass
-
-    def register_routes(self, router) -> None:
-        """Register API routes for this module (optional)."""
-        pass
-
-
-class ModuleContext:
-    """Context provided to modules during initialization."""
-
-    def __init__(
-        self,
-        registry: 'ModuleRegistry',
-        orchestrator: 'LLMOrchestrator',
-        state_manager: 'StateManager',
-        event_bus: 'EventBus',
-        config: dict,
-        session_manager: 'SessionManager',
-        repository,
-        logger: logging.Logger
-    ):
-        self.registry = registry
-        self.orchestrator = orchestrator
-        self.state_manager = state_manager
-        self.event_bus = event_bus
-        self.config = config
-        self.session_manager = session_manager
-        self.repository = repository
-        self.logger = logger
 
 
 class ModuleRegistry:
@@ -101,10 +29,12 @@ class ModuleRegistry:
     - Module access and lookup
     """
 
-    def __init__(self):
+    def __init__(self, event_bus=None):
         """Initialize the module registry."""
         self._modules: Dict[str, IModule] = {}
         self._initialized = False
+        self._event_bus = event_bus
+        self._dependency_resolver = DependencyResolver()
         self.logger = logging.getLogger(__name__)
 
     def register_module(self, module: IModule) -> None:
@@ -117,7 +47,9 @@ class ModuleRegistry:
         Raises:
             ValueError: If module with same ID already exists
         """
-        raise NotImplementedError("Module registration not implemented")
+        self._modules[module.module_id] = module
+        self._dependency_resolver.add_module(module.module_id, module.dependencies)
+        self.logger.info(f"Registered module: {module.module_id}")
 
     def get_module(self, module_id: str) -> Optional[IModule]:
         """
@@ -129,7 +61,7 @@ class ModuleRegistry:
         Returns:
             Module instance if found, None otherwise
         """
-        raise NotImplementedError("Module lookup not implemented")
+        return self._modules.get(module_id)
 
     def get_modules_by_capability(self, capability: str) -> List[IModule]:
         """
@@ -141,7 +73,13 @@ class ModuleRegistry:
         Returns:
             List of modules providing the capability
         """
-        raise NotImplementedError("Capability lookup not implemented")
+        result = []
+        for module in self._modules.values():
+            if module.module_id == capability:
+                result.append(module)
+            elif capability in module.provides_events:
+                result.append(module)
+        return result
 
     def get_dependencies(self, module_id: str) -> List[str]:
         """
@@ -153,7 +91,7 @@ class ModuleRegistry:
         Returns:
             List of module IDs that this module depends on
         """
-        raise NotImplementedError("Dependency lookup not implemented")
+        return self._dependency_resolver._dependency_graph.get(module_id, [])
 
     async def initialize_all(self, context: ModuleContext) -> None:
         """
@@ -162,11 +100,26 @@ class ModuleRegistry:
         Args:
             context: Module context to pass to all modules
         """
-        raise NotImplementedError("Module initialization not implemented")
+        order = self._dependency_resolver.resolve_order()
+        self.logger.info(f"Initializing modules in order: {order}")
+        for module_id in order:
+            module = self._modules[module_id]
+            await module.initialize(context)
+            self.logger.info(f"Initialized module: {module_id}")
+        self._initialized = True
 
     async def shutdown_all(self) -> None:
         """Shutdown all modules in reverse dependency order."""
-        raise NotImplementedError("Module shutdown not implemented")
+        if not self._initialized:
+            return
+        order = self._dependency_resolver.resolve_order()
+        reversed_order = list(reversed(order))
+        self.logger.info(f"Shutting down modules in order: {reversed_order}")
+        for module_id in reversed_order:
+            module = self._modules[module_id]
+            await module.shutdown()
+            self.logger.info(f"Shut down module: {module_id}")
+        self._initialized = False
 
     def list_modules(self) -> List[str]:
         """
@@ -175,4 +128,4 @@ class ModuleRegistry:
         Returns:
             List of module identifiers
         """
-        raise NotImplementedError("Module listing not implemented")
+        return sorted(self._modules.keys())

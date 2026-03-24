@@ -34,61 +34,50 @@ class SessionState:
         self.updated_at = datetime.utcnow()
 
     def get_global_state(self) -> Dict[str, Any]:
-        """Get the global shared state."""
-        raise NotImplementedError("Global state retrieval not implemented")
+        """Return copy of global_state."""
+        return dict(self.global_state)
 
     def set_global_state(self, state: Dict[str, Any]) -> None:
-        """Set the global shared state."""
-        raise NotImplementedError("Global state setting not implemented")
+        """Replace global_state, record history."""
+        self.history.append({"type": "global", "before": dict(self.global_state), "timestamp": datetime.utcnow()})
+        self.global_state = dict(state)
+        self.updated_at = datetime.utcnow()
 
     def get_module_state(self, module_id: str) -> Dict[str, Any]:
-        """
-        Get state for a specific module.
-
-        Args:
-            module_id: Module identifier
-
-        Returns:
-            Module state dictionary
-        """
-        raise NotImplementedError("Module state retrieval not implemented")
+        """Return module-specific state."""
+        return dict(self.module_states.get(module_id, {}))
 
     def set_module_state(self, module_id: str, state: Dict[str, Any]) -> None:
-        """
-        Set state for a specific module.
-
-        Args:
-            module_id: Module identifier
-            state: Module state dictionary
-        """
-        raise NotImplementedError("Module state setting not implemented")
+        """Set module state, record history."""
+        self.history.append({
+            "type": "module",
+            "module_id": module_id,
+            "before": dict(self.module_states.get(module_id, {})),
+            "timestamp": datetime.utcnow()
+        })
+        self.module_states[module_id] = dict(state)
+        self.updated_at = datetime.utcnow()
 
     def checkpoint(self, checkpoint_id: str) -> None:
-        """
-        Create a checkpoint of current state.
-
-        Args:
-            checkpoint_id: Unique checkpoint identifier
-        """
-        raise NotImplementedError("Checkpoint creation not implemented")
+        """Save snapshot of current state."""
+        self.checkpoints[checkpoint_id] = {
+            "global_state": dict(self.global_state),
+            "module_states": {k: dict(v) for k, v in self.module_states.items()},
+            "timestamp": datetime.utcnow()
+        }
 
     def restore_checkpoint(self, checkpoint_id: str) -> None:
-        """
-        Restore state from a checkpoint.
-
-        Args:
-            checkpoint_id: Checkpoint identifier to restore
-        """
-        raise NotImplementedError("Checkpoint restoration not implemented")
+        """Restore from checkpoint."""
+        if checkpoint_id not in self.checkpoints:
+            raise KeyError(f"Checkpoint '{checkpoint_id}' not found")
+        cp = self.checkpoints[checkpoint_id]
+        self.global_state = dict(cp["global_state"])
+        self.module_states = {k: dict(v) for k, v in cp["module_states"].items()}
+        self.updated_at = datetime.utcnow()
 
     def list_checkpoints(self) -> List[str]:
-        """
-        List all available checkpoint IDs.
-
-        Returns:
-            List of checkpoint identifiers
-        """
-        raise NotImplementedError("Checkpoint listing not implemented")
+        """Return sorted list of checkpoint IDs."""
+        return sorted(self.checkpoints.keys())
 
 
 class StateManager:
@@ -108,91 +97,44 @@ class StateManager:
         self.logger = logging.getLogger(__name__)
 
     def create_session(self, session_id: str) -> SessionState:
-        """
-        Create a new session state.
-
-        Args:
-            session_id: Unique session identifier
-
-        Returns:
-            New SessionState instance
-        """
-        raise NotImplementedError("Session creation not implemented")
+        """Create new session state."""
+        state = SessionState(session_id)
+        self._sessions[session_id] = state
+        return state
 
     def get_session(self, session_id: str) -> Optional[SessionState]:
-        """
-        Get an existing session state.
-
-        Args:
-            session_id: Session identifier
-
-        Returns:
-            SessionState if found, None otherwise
-        """
-        raise NotImplementedError("Session retrieval not implemented")
+        return self._sessions.get(session_id)
 
     def delete_session(self, session_id: str) -> None:
-        """
-        Delete a session and its state.
-
-        Args:
-            session_id: Session identifier
-        """
-        raise NotImplementedError("Session deletion not implemented")
+        if session_id in self._sessions:
+            del self._sessions[session_id]
 
     def get_global_state(self, session_id: str) -> Dict[str, Any]:
-        """
-        Get global state for a session.
-
-        Args:
-            session_id: Session identifier
-
-        Returns:
-            Global state dictionary
-        """
-        raise NotImplementedError("Global state retrieval not implemented")
+        sess = self.get_session(session_id)
+        if sess is None:
+            return {}
+        return sess.get_global_state()
 
     def get_module_state(self, session_id: str, module_id: str) -> Dict[str, Any]:
-        """
-        Get module state for a session.
-
-        Args:
-            session_id: Session identifier
-            module_id: Module identifier
-
-        Returns:
-            Module state dictionary
-        """
-        raise NotImplementedError("Module state retrieval not implemented")
+        sess = self.get_session(session_id)
+        if sess is None:
+            return {}
+        return sess.get_module_state(module_id)
 
     def set_module_state(self, session_id: str, module_id: str, state: Dict[str, Any]) -> None:
-        """
-        Set module state for a session.
-
-        Args:
-            session_id: Session identifier
-            module_id: Module identifier
-            state: Module state dictionary
-        """
-        raise NotImplementedError("Module state setting not implemented")
+        sess = self.get_session(session_id)
+        if sess is None:
+            sess = self.create_session(session_id)
+        sess.set_module_state(module_id, state)
 
     def list_sessions(self) -> List[str]:
-        """
-        List all active session IDs.
-
-        Returns:
-            List of session identifiers
-        """
-        raise NotImplementedError("Session listing not implemented")
+        return sorted(self._sessions.keys())
 
     def cleanup_old_sessions(self, max_age_hours: int = 24) -> int:
-        """
-        Cleanup sessions older than specified age.
-
-        Args:
-            max_age_hours: Maximum age in hours before cleanup
-
-        Returns:
-            Number of sessions cleaned up
-        """
-        raise NotImplementedError("Session cleanup not implemented")
+        """Remove sessions older than max_age_hours. Returns count deleted."""
+        from datetime import timedelta
+        cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
+        to_delete = [sid for sid, s in self._sessions.items() if s.created_at < cutoff]
+        for sid in to_delete:
+            del self._sessions[sid]
+        return len(to_delete)

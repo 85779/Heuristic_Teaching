@@ -9,57 +9,9 @@ The PromptEngine handles:
 
 from typing import Dict, Any, List, Optional
 import logging
+import re
 
 logger = logging.getLogger(__name__)
-
-
-class PromptTemplate:
-    """Represents a single prompt template."""
-
-    def __init__(
-        self,
-        template_id: str,
-        template_string: str,
-        version: str = "1.0",
-        metadata: Optional[Dict[str, Any]] = None
-    ):
-        """
-        Initialize a prompt template.
-
-        Args:
-            template_id: Unique template identifier
-            template_string: Template string with variable placeholders
-            version: Template version
-            metadata: Additional metadata about the template
-        """
-        self.template_id = template_id
-        self.template_string = template_string
-        self.version = version
-        self.metadata = metadata or {}
-
-    def render(self, variables: Dict[str, Any]) -> str:
-        """
-        Render the template with provided variables.
-
-        Args:
-            variables: Variable values to substitute
-
-        Returns:
-            Rendered template string
-        """
-        raise NotImplementedError("Template rendering not implemented")
-
-    def validate_variables(self, variables: Dict[str, Any]) -> bool:
-        """
-        Validate that all required variables are provided.
-
-        Args:
-            variables: Variables to validate
-
-        Returns:
-            True if all required variables present
-        """
-        raise NotImplementedError("Variable validation not implemented")
 
 
 class PromptEngine:
@@ -75,72 +27,81 @@ class PromptEngine:
 
     def __init__(self):
         """Initialize the prompt engine."""
-        self._templates: Dict[str, Dict[str, PromptTemplate]] = {}
+        self._templates: Dict[str, Any] = {}
         self.logger = logging.getLogger(__name__)
 
-    def add_template(self, template: PromptTemplate) -> None:
+    def register_template(self, template_id: str, template: Any) -> None:
         """
-        Add a template to the engine.
+        Register a template in the engine.
 
         Args:
-            template: PromptTemplate instance to add
+            template_id: Unique template identifier
+            template: Template content (string or other)
         """
-        raise NotImplementedError("Template addition not implemented")
+        self._templates[template_id] = template
 
-    def get_template(self, template_id: str, version: Optional[str] = None) -> Optional[PromptTemplate]:
+    def get_template(self, template_id: str) -> Optional[Any]:
         """
-        Get a template by ID and optional version.
+        Get a template by ID.
 
         Args:
             template_id: Template identifier
-            version: Specific version (defaults to latest)
 
         Returns:
-            PromptTemplate if found, None otherwise
+            Template content if found, None otherwise
         """
-        raise NotImplementedError("Template retrieval not implemented")
+        return self._templates.get(template_id)
 
-    def render(self, template_id: str, variables: Dict[str, Any], version: Optional[str] = None) -> str:
+    def render_template(self, template_id: str, variables: Dict[str, Any]) -> str:
         """
         Render a template with provided variables.
 
         Args:
             template_id: Template identifier
             variables: Variable values to substitute
-            version: Specific template version
 
         Returns:
             Rendered template string
-        """
-        raise NotImplementedError("Template rendering not implemented")
 
-    def list_templates(self) -> List[Dict[str, Any]]:
+        Raises:
+            KeyError: If template not found
         """
-        List all templates with metadata.
+        template = self.get_template(template_id)
+        if template is None:
+            raise KeyError(f"Template '{template_id}' not found")
+        if isinstance(template, str):
+            result = template
+            for key, value in variables.items():
+                result = result.replace(f"${{{key}}}", str(value))
+                result = result.replace(f"{{{{{key}}}}}", str(value))
+            return result
+        return str(template)
+
+    def list_templates(self) -> List[str]:
+        """
+        List all registered template IDs.
 
         Returns:
-            List of template information dictionaries
+            Sorted list of template IDs
         """
-        raise NotImplementedError("Template listing not implemented")
+        return sorted(self._templates.keys())
 
-    def delete_template(self, template_id: str, version: Optional[str] = None) -> None:
+    def validate_template(self, template_id: str, variables: Dict[str, Any]) -> bool:
         """
-        Delete a template or specific version.
+        Validate that all required variables are provided for a template.
 
         Args:
             template_id: Template identifier
-            version: Specific version to delete (all if None)
-        """
-        raise NotImplementedError("Template deletion not implemented")
-
-    def validate_template(self, template: PromptTemplate) -> List[str]:
-        """
-        Validate a template for errors.
-
-        Args:
-            template: Template to validate
+            variables: Variables to validate
 
         Returns:
-            List of validation errors (empty if valid)
+            True if all required variables present, False if template not found or validation fails
         """
-        raise NotImplementedError("Template validation not implemented")
+        template = self.get_template(template_id)
+        if template is None:
+            return False
+        if isinstance(template, str):
+            vars_needed = set(re.findall(r'\$\{(\w+)\}', template))
+            vars_needed.update(set(re.findall(r'\{\{(\w+)\}\}', template)))
+            return vars_needed.issubset(set(variables.keys()))
+        return True

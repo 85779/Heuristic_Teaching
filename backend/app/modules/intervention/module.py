@@ -5,6 +5,7 @@ problem-solving analysis.
 """
 
 from app.core.interfaces.module import IModule
+from app.modules.intervention.service import InterventionService
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -63,11 +64,25 @@ class InterventionModule(IModule):
         Args:
             context: Module execution context
         """
-        raise NotImplementedError
+        self._context = context
+        self._service = InterventionService(context)
+
+        # Set service instance for routes
+        from . import routes as intervention_routes
+        intervention_routes.set_service(self._service)
+
+        # Subscribe to solving events
+        event_bus = context.event_bus
+        event_bus.subscribe("solving.stuck_detected", self._on_stuck_detected)
+        event_bus.subscribe("solving.error_detected", self._on_error_detected)
+        event_bus.subscribe("solving.step_completed", self._on_step_completed)
+
+        context.logger.info("InterventionModule initialized")
 
     async def shutdown(self) -> None:
         """Shutdown the intervention module."""
-        raise NotImplementedError
+        if hasattr(self, '_context') and self._context:
+            self._context.logger.info("InterventionModule shutting down")
 
     def register_routes(self, router: "APIRouter") -> None:
         """Register API routes for the intervention module.
@@ -75,4 +90,18 @@ class InterventionModule(IModule):
         Args:
             router: FastAPI APIRouter to register routes with
         """
-        raise NotImplementedError
+        from . import routes as intervention_routes
+        router.include_router(intervention_routes.router)
+
+    async def _on_stuck_detected(self, event) -> None:
+        """Handle solving.stuck_detected event."""
+        # Could trigger intervention flow here
+        pass
+
+    async def _on_error_detected(self, event) -> None:
+        """Handle solving.error_detected event."""
+        pass
+
+    async def _on_step_completed(self, event) -> None:
+        """Handle solving.step_completed event."""
+        pass

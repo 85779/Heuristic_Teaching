@@ -11,6 +11,9 @@ The LLMOrchestrator is responsible for:
 from typing import Dict, Any, List, Optional
 import logging
 
+from app.core.orchestrator.prompt_engine import PromptEngine
+from app.core.orchestrator.output_parser import OutputParser
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,7 +33,18 @@ class LLMOrchestrator:
         """Initialize the LLM orchestrator."""
         self._templates: Dict[str, Any] = {}
         self._llm_client = None
+        self._prompt_engine = PromptEngine()
+        self._output_parser = OutputParser()
         self.logger = logging.getLogger(__name__)
+
+    def set_llm_client(self, client: Any) -> None:
+        """
+        Set the LLM client to use.
+
+        Args:
+            client: LLM client instance
+        """
+        self._llm_client = client
 
     def register_template(self, template_id: str, template: Any) -> None:
         """
@@ -40,7 +54,7 @@ class LLMOrchestrator:
             template_id: Unique template identifier
             template: Template object
         """
-        raise NotImplementedError("Template registration not implemented")
+        self._prompt_engine.register_template(template_id, template)
 
     def render_template(self, template_id: str, variables: Dict[str, Any]) -> str:
         """
@@ -53,7 +67,16 @@ class LLMOrchestrator:
         Returns:
             Rendered prompt string
         """
-        raise NotImplementedError("Template rendering not implemented")
+        return self._prompt_engine.render_template(template_id, variables)
+
+    def list_templates(self) -> List[str]:
+        """
+        List all registered templates.
+
+        Returns:
+            List of template IDs
+        """
+        return self._prompt_engine.list_templates()
 
     async def call_llm(
         self,
@@ -76,7 +99,26 @@ class LLMOrchestrator:
         Returns:
             LLM response dictionary
         """
-        raise NotImplementedError("LLM call not implemented")
+        if self._llm_client is None:
+            raise RuntimeError("LLM client not set. Call set_llm_client() first.")
+        last_error = None
+        for attempt in range(retry_count):
+            try:
+                response = await self._llm_client.chat(
+                    messages=[{"role": "user", "content": prompt}],
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=temperature
+                )
+                return {
+                    "content": response,
+                    "model": model,
+                    "usage": {}
+                }
+            except Exception as e:
+                last_error = e
+                self.logger.warning(f"LLM call attempt {attempt+1} failed: {e}")
+        raise RuntimeError(f"LLM call failed after {retry_count} attempts: {last_error}")
 
     async def run_pipeline(
         self,
@@ -95,7 +137,15 @@ class LLMOrchestrator:
         Returns:
             Pipeline result with outputs from each step
         """
-        raise NotImplementedError("Pipeline execution not implemented")
+        results = []
+        current_context = dict(context)
+        for step in steps:
+            template_id = step
+            rendered = self.render_template(template_id, current_context)
+            llm_result = await self.call_llm(rendered)
+            results.append(llm_result)
+            current_context[f"{step}_result"] = llm_result
+        return {"context": current_context, "results": results}
 
     def parse_output(self, raw_output: str, schema: Any) -> Any:
         """
@@ -108,22 +158,11 @@ class LLMOrchestrator:
         Returns:
             Parsed and validated output
         """
-        raise NotImplementedError("Output parsing not implemented")
-
-    def set_llm_client(self, client: Any) -> None:
-        """
-        Set the LLM client to use.
-
-        Args:
-            client: LLM client instance
-        """
-        raise NotImplementedError("LLM client configuration not implemented")
-
-    def list_templates(self) -> List[str]:
-        """
-        List all registered templates.
-
-        Returns:
-            List of template IDs
-        """
-        raise NotImplementedError("Template listing not implemented")
+        import json
+        try:
+            data = self._output_parser.parse_json(raw_output)
+            if schema:
+                self._output_parser.validate_schema(data, schema)
+            return data
+        except ValueError:
+            return self._output_parser.parse_markdown(raw_output, schema)

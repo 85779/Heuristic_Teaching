@@ -104,7 +104,11 @@ class EventType:
         Returns:
             EventCategory if found, None otherwise
         """
-        raise NotImplementedError("Category lookup not implemented")
+        for cat in EventCategory:
+            prefix = cat.name.lower() + "."
+            if event_type.startswith(prefix):
+                return cat
+        return None
 
     @classmethod
     def is_valid_type(cls, event_type: str) -> bool:
@@ -117,7 +121,7 @@ class EventType:
         Returns:
             True if event type is valid
         """
-        raise NotImplementedError("Event type validation not implemented")
+        return event_type in EVENT_SCHEMAS
 
     @classmethod
     def list_by_category(cls, category: EventCategory) -> List[str]:
@@ -130,7 +134,8 @@ class EventType:
         Returns:
             List of event type strings
         """
-        raise NotImplementedError("Category listing not implemented")
+        prefix = category.name.lower() + "."
+        return [et for et in EVENT_SCHEMAS.keys() if et.startswith(prefix)]
 
 
 class EventValidator:
@@ -151,7 +156,7 @@ class EventValidator:
         Returns:
             True if validation passes
         """
-        raise NotImplementedError("Event validation not implemented")
+        return len(self.get_validation_errors(event_type, data)) == 0
 
     def get_validation_errors(self, event_type: str, data: Dict[str, Any]) -> List[str]:
         """
@@ -164,7 +169,13 @@ class EventValidator:
         Returns:
             List of error messages
         """
-        raise NotImplementedError("Error collection not implemented")
+        errors = []
+        if event_type not in EVENT_SCHEMAS:
+            return [f"Unknown event type: {event_type}"]
+        schema = EVENT_SCHEMAS[event_type]
+        required = schema.get("required_fields", [])
+        errors.extend(self.validate_required_fields(data, required))
+        return errors
 
     def validate_required_fields(self, data: Dict[str, Any], required_fields: List[str]) -> List[str]:
         """
@@ -177,4 +188,4 @@ class EventValidator:
         Returns:
             List of missing field names
         """
-        raise NotImplementedError("Required field validation not implemented")
+        return [f for f in required_fields if f not in data]

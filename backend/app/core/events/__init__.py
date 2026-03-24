@@ -7,8 +7,8 @@ This package provides:
 - Event persistence and replay
 """
 
-from .event_bus import EventBus
-from .event_types import EventType, Event
+from .event_bus import EventBus, Event
+from .event_types import EventType
 from .event_store import EventStore
 
 __all__ = ['EventBus', 'EventType', 'Event', 'EventStore']

@@ -9,6 +9,7 @@ The EventStore is responsible for:
 
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
+import uuid
 import logging
 
 logger = logging.getLogger(__name__)
@@ -48,8 +49,16 @@ class StoredEvent:
         self.stored_at = stored_at
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert stored event to dictionary."""
-        raise NotImplementedError("Serialization not implemented")
+        """Serialize stored event to dict."""
+        return {
+            "event_id": self.event_id,
+            "event_type": self.event_type,
+            "data": self.data,
+            "session_id": self.session_id,
+            "source_module": self.source_module,
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "stored_at": self.stored_at.isoformat() if self.stored_at else None,
+        }
 
 
 class EventStore:
@@ -65,11 +74,12 @@ class EventStore:
 
     def __init__(self):
         """Initialize the event store."""
+        self._events: Dict[str, StoredEvent] = {}
         self.logger = logging.getLogger(__name__)
 
     async def store_event(self, event: Any) -> StoredEvent:
         """
-        Store an event.
+        Store a single event, return StoredEvent with generated event_id.
 
         Args:
             event: Event to store
@@ -77,11 +87,23 @@ class EventStore:
         Returns:
             StoredEvent instance
         """
-        raise NotImplementedError("Event storage not implemented")
+        event_id = str(uuid.uuid4())
+        stored_at = datetime.utcnow()
+        stored = StoredEvent(
+            event_id=event_id,
+            event_type=event.event_type,
+            data=event.data,
+            session_id=event.session_id,
+            source_module=event.source_module,
+            timestamp=event.timestamp,
+            stored_at=stored_at,
+        )
+        self._events[event_id] = stored
+        return stored
 
     async def store_batch(self, events: List[Any]) -> List[StoredEvent]:
         """
-        Store multiple events in batch.
+        Store multiple events.
 
         Args:
             events: List of events to store
@@ -89,11 +111,11 @@ class EventStore:
         Returns:
             List of StoredEvent instances
         """
-        raise NotImplementedError("Batch storage not implemented")
+        return [await self.store_event(e) for e in events]
 
     async def get_event(self, event_id: str) -> Optional[StoredEvent]:
         """
-        Get an event by ID.
+        Get single event by ID.
 
         Args:
             event_id: Event identifier
@@ -101,17 +123,17 @@ class EventStore:
         Returns:
             StoredEvent if found, None otherwise
         """
-        raise NotImplementedError("Event retrieval not implemented")
+        return self._events.get(event_id)
 
     async def get_events_by_session(
         self,
         session_id: str,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
-        event_types: Optional[List[str]] = None
+        event_types: Optional[List[str]] = None,
     ) -> List[StoredEvent]:
         """
-        Get events for a session.
+        Filter events by session_id, optional time range and type filter.
 
         Args:
             session_id: Session identifier
@@ -122,15 +144,22 @@ class EventStore:
         Returns:
             List of StoredEvent instances
         """
-        raise NotImplementedError("Session event query not implemented")
+        results = [e for e in self._events.values() if e.session_id == session_id]
+        if start_time:
+            results = [e for e in results if e.timestamp and e.timestamp >= start_time]
+        if end_time:
+            results = [e for e in results if e.timestamp and e.timestamp <= end_time]
+        if event_types:
+            results = [e for e in results if e.event_type in event_types]
+        return sorted(results, key=lambda e: e.timestamp or datetime.min)
 
     async def get_events_by_type(
         self,
         event_type: str,
-        limit: int = 100
+        limit: int = 100,
     ) -> List[StoredEvent]:
         """
-        Get events by type.
+        Get events by type, with limit.
 
         Args:
             event_type: Event type to query
@@ -139,16 +168,18 @@ class EventStore:
         Returns:
             List of StoredEvent instances
         """
-        raise NotImplementedError("Type event query not implemented")
+        results = [e for e in self._events.values() if e.event_type == event_type]
+        results = sorted(results, key=lambda e: e.timestamp or datetime.min, reverse=True)
+        return results[:limit]
 
     async def get_events_by_module(
         self,
         module_id: str,
         start_time: Optional[datetime] = None,
-        end_time: Optional[datetime] = None
+        end_time: Optional[datetime] = None,
     ) -> List[StoredEvent]:
         """
-        Get events published by a module.
+        Get events by source module.
 
         Args:
             module_id: Module identifier
@@ -158,12 +189,17 @@ class EventStore:
         Returns:
             List of StoredEvent instances
         """
-        raise NotImplementedError("Module event query not implemented")
+        results = [e for e in self._events.values() if e.source_module == module_id]
+        if start_time:
+            results = [e for e in results if e.timestamp and e.timestamp >= start_time]
+        if end_time:
+            results = [e for e in results if e.timestamp and e.timestamp <= end_time]
+        return sorted(results, key=lambda e: e.timestamp or datetime.min)
 
     async def replay_session(
         self,
         session_id: str,
-        from_time: Optional[datetime] = None
+        from_time: Optional[datetime] = None,
     ) -> List[Any]:
         """
         Replay all events for a session.
@@ -175,11 +211,16 @@ class EventStore:
         Returns:
             List of replayed events
         """
-        raise NotImplementedError("Session replay not implemented")
+        events = await self.get_events_by_session(session_id, start_time=from_time)
+        return [e for e in events]
 
-    async def delete_events(self, session_id: Optional[str] = None, older_than: Optional[datetime] = None) -> int:
+    async def delete_events(
+        self,
+        session_id: Optional[str] = None,
+        older_than: Optional[datetime] = None,
+    ) -> int:
         """
-        Delete events.
+        Delete events by session_id and/or age. Return count deleted.
 
         Args:
             session_id: Delete events for specific session (optional)
@@ -188,13 +229,22 @@ class EventStore:
         Returns:
             Number of events deleted
         """
-        raise NotImplementedError("Event deletion not implemented")
+        to_delete = []
+        for e in self._events.values():
+            if session_id and e.session_id != session_id:
+                continue
+            if older_than and e.timestamp and e.timestamp > older_than:
+                continue
+            to_delete.append(e.event_id)
+        for eid in to_delete:
+            del self._events[eid]
+        return len(to_delete)
 
     async def get_event_stats(
         self,
         session_id: Optional[str] = None,
         start_time: Optional[datetime] = None,
-        end_time: Optional[datetime] = None
+        end_time: Optional[datetime] = None,
     ) -> Dict[str, Any]:
         """
         Get event statistics.
@@ -205,6 +255,16 @@ class EventStore:
             end_time: End time filter (optional)
 
         Returns:
-            Dictionary of statistics
+            Dictionary with total and by_type
         """
-        raise NotImplementedError("Statistics not implemented")
+        events = list(self._events.values())
+        if session_id:
+            events = [e for e in events if e.session_id == session_id]
+        if start_time:
+            events = [e for e in events if e.timestamp and e.timestamp >= start_time]
+        if end_time:
+            events = [e for e in events if e.timestamp and e.timestamp <= end_time]
+        by_type: Dict[str, int] = {}
+        for e in events:
+            by_type[e.event_type] = by_type.get(e.event_type, 0) + 1
+        return {"total": len(events), "by_type": by_type}
