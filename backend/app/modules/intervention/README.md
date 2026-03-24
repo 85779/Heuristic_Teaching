@@ -145,22 +145,24 @@ class InterventionModule(IModule):
 ## 核心流程
 
 ```
-POST /interventions
+POST /solving/reference  (Module 1)
+    → 生成 solution_steps
+    → 自动存入 SessionState (session_id)
+
+POST /interventions     (Module 2)
     │
     ▼
 ┌─────────────────────────────────────────────┐
 │  InterventionService.generate()                    │
 │                                               │
 │  输入:                                          │
-│    - problem: 题目                             │
-│    - student_work: 学生当前作答（可选）         │
-│    - student_steps: 学生已完成的步骤            │
-│    - solution_steps: Module1生成的参考解法步骤  │
+│    - session_id: 从 SessionState 读取 solving state │
 │    - intensity: 干预强度 (0.0~1.0)             │
-│    - session_id / student_id                    │
+│    - student_work: 学生当前作答（可选）         │
+│    - student_id                                │
 │                                               │
 │  Step 1: BreakpointLocator.locate()            │
-│    → 对比学生steps vs 参考解法steps            │
+│    → 三级语义匹配（关键词/字符串/embedding）   │
 │    → 定位断点位置和类型                        │
 │                                               │
 │  Step 2: BreakpointAnalyzer.analyze()          │
@@ -195,11 +197,35 @@ POST /interventions
 | `STUCK`           | 学生完全没有步骤，无法确定断点 |
 | `NO_BREAKPOINT`   | 学生步骤与参考解法一致，无断点 |
 
-**定位逻辑**：
+**定位逻辑（三级语义匹配）**：
 
-- 逐个对比学生步骤与参考解法步骤
-- 第一个差异点即为断点位置
-- 纯逻辑计算，无需 LLM 调用
+> **旧逻辑**：严格字符串相等（`student_content != expected_content`）  
+> **新逻辑**：三级语义匹配，逐步判断
+
+```
+Step 1: 关键词 Jaccard 重叠（rich keyword content）
+  - overlap > 0.8  → 匹配，继续
+  - overlap < 0.3  → 进入 Step 2
+
+Step 2: 字符串相似度（sparse content fallback）
+  - effective_sim > 0.8  → 匹配，继续
+  - effective_sim < 0.3 → 进入 Step 3
+
+Step 3: WRONG_DIRECTION 判断
+  - keyword < 0.3 AND string_sim < 0.2  → WRONG_DIRECTION（停止）
+  - 否则 → INCOMPLETE（继续扫描）
+
+扫描终止条件：
+  - WRONG_DIRECTION（停止）
+  - student_steps 用尽但 solution_steps 还有 → MISSING_STEP（停止）
+  - 所有步骤匹配 → NO_BREAKPOINT
+```
+
+**关键设计原则**：
+
+- **INCOMPLETE 不停止**：学生某一步不完整时，继续扫描后续步骤，找到真正的断点
+- **双重低才判 WRONG**：只有关键词和字符串都极低时才判 WRONG_DIRECTION
+- **纯逻辑计算**：无需 LLM 调用
 
 ### 2. BreakpointAnalyzer（断点分析）
 
@@ -244,28 +270,16 @@ POST /interventions
 
 **请求体**：
 
-| 字段                | 类型 | 必填 | 说明                                                                         |
-| ------------------- | ---- | ---- | ---------------------------------------------------------------------------- |
-| `student_id`        | str  | ✅   | 学生ID                                                                       |
-| `session_id`        | str  | ✅   | 会话ID                                                                       |
-| `intervention_type` | str  | ❌   | 干预类型，默认 hint                                                          |
-| `context`           | dict | ✅   | 上下文，包含 problem, student_work, student_steps, solution_steps, intensity |
+| 字段                | 类型  | 必填 | 说明                                         |
+| ------------------- | ----- | ---- | -------------------------------------------- |
+| `student_id`        | str   | ❌   | 学生ID                                       |
+| `session_id`        | str   | ✅   | 会话ID（从 SessionState 读取 solving state） |
+| `intervention_type` | str   | ❌   | 干预类型，默认 hint                          |
+| `intensity`         | float | ❌   | 干预强度，默认 0.5                           |
+| `student_work`      | str   | ❌   | 覆盖 SessionState 中的 student_work          |
 
-**context 字段说明**：
-
-```json
-{
-  "problem": "LaTeX 题目",
-  "student_work": "学生当前作答（可选）",
-  "student_steps": [
-    { "step_id": "s1", "step_name": "步骤名", "content": "步骤内容" }
-  ],
-  "solution_steps": [
-    { "step_id": "s1", "step_name": "步骤名", "content": "步骤内容" }
-  ],
-  "intensity": 0.5
-}
-```
+> **注意**：不再需要通过 `context` 传递 `problem`、`solution_steps` 等数据，
+> 这些由 Module 1 生成后自动存入 SessionState，Module 2 通过 `session_id` 读取。
 
 **响应体**：
 
@@ -396,14 +410,12 @@ from app.modules.intervention.service import InterventionService
 
 service = InterventionService()
 
+# v2: 从 SessionState 读取 solving state（session_id 必须）
 intervention = await service.generate(
-    problem="设 $a_0, a_1, \\ldots$ 是正整数序列...",
-    student_work="解：设 a_0 = 1。",
-    student_steps=[{"step_id": "s1", "step_name": "步骤", "content": "内容"}],
-    solution_steps=[{"step_id": "s1", "step_name": "步骤", "content": "内容"}],
-    intensity=0.5,
     session_id="sess_001",
+    intensity=0.5,
     student_id="student_001",
+    student_work="解：设 a_0 = 1。",  # 可选：覆盖 SessionState 中的 student_work
 )
 
 print(intervention.content)
@@ -417,8 +429,12 @@ print(intervention.metadata["hint_level"])
 cd backend
 python -m pytest tests/modules/test_intervention/ -v
 
+# 运行干预 + 连接集成测试
+python -m pytest tests/modules/test_intervention/ tests/modules/test_integration/ -v
+
 # 手动 E2E 测试（需要真实 API Key）
 python tests/modules/test_intervention/manual_test.py
+python tests/modules/test_intervention/manual_test_comprehensive.py
 ```
 
 详见 [`tests/modules/test_intervention/README.md`](../tests/modules/test_intervention/README.md)
@@ -476,13 +492,13 @@ def intervention_service():
 
 ## 与 Module 1 的关系
 
-- Module 2 订阅 Module 1 发布的事件（`solving.stuck_detected`, `solving.error_detected`, `solving.step_completed`）
-- Module 1 生成的 `solution_steps` 是 Module 2 定位断点的参考
-- 学生步骤来自 SessionState 或 Module 1 的逐步反馈
+- Module 1 的 `SolvingService.generate(request, session_id="xxx")` 生成参考解法后，自动将 solving state 存入 SessionState
+- Module 2 的 `InterventionService.generate(session_id="xxx", intensity=0.5)` 从 SessionState 读取 solving state，执行断点定位 → 分析 → 提示生成
+- 不再需要通过请求参数传递 `problem`、`solution_steps` 等数据
 
 ## 后续扩展方向
 
 1. **强度自动调节**：根据学生历史接受率动态调整 intensity
-2. **语义级断点匹配**：用 embedding 相似度而非字符串匹配判断断点
+2. **✅ 语义级断点匹配**：用关键词 Jaccard + 字符串相似度替代字符串匹配（已实现）
 3. **多轮干预闭环**：学生接受/拒绝后自动生成下一轮提示
 4. **MongoDB 持久化**：将干预记录存入数据库用于分析

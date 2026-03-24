@@ -20,10 +20,17 @@ sys.modules['app.infrastructure.database.repositories.base_repo'] = type(sys)('b
 sys.modules['app.infrastructure.database.repositories.session_repo'] = type(sys)('session_repo')
 
 # Stub llm module
+class _StubMessage:
+    def __init__(self, role: str, content: str):
+        self.role = role
+        self.content = content
+    def to_dict(self):
+        return {"role": self.role, "content": self.content}
+
 sys.modules['app.infrastructure.llm'] = type(sys)('llm')
 sys.modules['app.infrastructure.llm.base_client'] = type(sys)('base_client')
 sys.modules['app.infrastructure.llm.base_client'].BaseLLMClient = object
-sys.modules['app.infrastructure.llm.base_client'].Message = object
+sys.modules['app.infrastructure.llm.base_client'].Message = _StubMessage
 sys.modules['app.infrastructure.llm.openai_client'] = type(sys)('openai_client')
 sys.modules['app.infrastructure.llm.anthropic_client'] = type(sys)('anthropic_client')
 sys.modules['app.infrastructure.llm.dashscope_client'] = type(sys)('dashscope_client')

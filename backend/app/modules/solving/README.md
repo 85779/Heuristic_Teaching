@@ -2,6 +2,48 @@
 
 解题模块，接收 LaTeX 题目（可选学生已作答内容），评估学生解答正确性，返回结构化的参考解法或错误反馈。
 
+## 与 Module 2 (Intervention) 的连接
+
+**Module 1 生成参考解法后，自动存入 SessionState，Module 2 读取并生成干预提示。**
+
+```
+POST /solving/reference
+    │
+    ▼
+SolvingService.generate(request, session_id="sess_001")
+    │
+    ├─→ 存储到 SessionState:
+    │     state_manager.set_module_state("sess_001", "solving", {
+    │         "problem": ...,
+    │         "student_work": ...,
+    │         "student_steps": [...],
+    │         "solution_steps": [...],
+    │     })
+    │
+    └─→ 返回 SolvingResponse (参考解法)
+
+POST /interventions
+    │
+    ▼
+InterventionService.generate(session_id="sess_001", intensity=0.5)
+    │
+    └─→ 从 SessionState 读取 solving state
+        → 执行断点定位 → 断点分析 → 提示生成
+```
+
+**`generate()` 方法签名更新**（v2）：
+
+```python
+async def generate(
+    self,
+    request: SolvingRequest,
+    session_id: Optional[str] = None,   # 新增：存入 SessionState
+) -> SolvingResponse:
+```
+
+- 若提供 `session_id`：生成后将 solving state 存入 SessionState
+- 若不提供：向后兼容，不存状态
+
 ## 模块结构
 
 ```
@@ -277,7 +319,11 @@ request = SolvingRequest(
     student_work=None,
 )
 
+# 不传 session_id：不存入 SessionState（向后兼容）
 response = await service.generate(request)
+
+# 传 session_id：自动存入 SessionState，供 Module 2 使用
+response = await service.generate(request, session_id="sess_001")
 # response.solution.steps → [TeachingStep(step_id="s1", ...), ...]
 
 # 有学生作答 → 评估正确性或继续生成
@@ -285,7 +331,7 @@ request = SolvingRequest(
     problem="...",
     student_work="设 a_0 = 1，令 a_{n+1} = b_n × (n+2)。则 b_n = n+1。",
 )
-response = await service.generate(request)
+response = await service.generate(request, session_id="sess_001")
 # response.evaluation.is_correct → True/False
 ```
 

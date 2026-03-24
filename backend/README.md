@@ -35,7 +35,7 @@ backend/
 | 模块     | 名称               | 状态      |
 | -------- | ------------------ | --------- |
 | Module 1 | 组织化解主治线生成 | ✅ 已实现 |
-| Module 2 | 错误干预           | 🔨 开发中 |
+| Module 2 | 错误干预           | ✅ 已实现 |
 | Module 3 | 学习推荐           | 🔨 开发中 |
 | Module 4 | 学生画像           | 🔨 开发中 |
 | Module 5 | 教学策略           | 🔨 开发中 |
@@ -148,6 +148,9 @@ python -m pytest tests/ -v --ignore=tests/e2e
 # 带覆盖率
 python -m pytest tests/ --cov=app --cov-report=term-missing
 ```
+
+> **集成测试**：`tests/modules/test_integration/test_solving_intervention_connection.py`
+> — 验证 Module 1 (Solving) → SessionState → Module 2 (Intervention) 的完整连接
 
 ## 技术栈
 

@@ -23,29 +23,32 @@ python tests/modules/test_intervention/manual_test.py
 
 ```
 tests/modules/test_intervention/
-├── __init__.py              # 模块标记
-├── conftest.py              # pytest fixtures 和基础设施 stubs
-├── test_locator.py           # BreakpointLocator 单元测试
-├── test_generator.py         # HintGenerator 单元测试
-├── test_service.py           # InterventionService 单元测试
-├── manual_test.py            # 手动 E2E 测试（需 API Key）
-└── README.md                 # 本文件
+├── __init__.py                        # 模块标记
+├── conftest.py                        # pytest fixtures 和基础设施 stubs
+├── test_locator.py                    # BreakpointLocator 单元测试（6 个）
+├── test_generator.py                  # HintGenerator 单元测试（4 个）
+├── test_service.py                    # InterventionService 单元测试（3 个）
+├── manual_test.py                    # 手动 E2E 测试（需 API Key）
+├── manual_test_comprehensive.py        # 全面 E2E 测试（4 场景 × 3 强度，12 个 LLM 调用）
+└── README.md                          # 本文件
 ```
 
 ## 测试覆盖
 
 | 测试文件            | 测试内容                         | 测试数 |
 | ------------------- | -------------------------------- | ------ |
-| `test_locator.py`   | BreakpointLocator 断点定位逻辑   | 6      |
+| `test_locator.py`   | BreakpointLocator 三级语义匹配   | 6      |
 | `test_generator.py` | HintGenerator 强度判断和生成逻辑 | 4      |
 | `test_service.py`   | InterventionService 总控流程     | 3      |
 | **合计**            |                                  | **13** |
+
+> 集成测试见 `tests/modules/test_integration/test_solving_intervention_connection.py`（6 个）
 
 ## 测试详情
 
 ### test_locator.py
 
-测试 BreakpointLocator 的断点定位逻辑：
+测试 BreakpointLocator 的三级语义匹配逻辑：
 
 | 测试函数                             | 场景                       | 期望结果                |
 | ------------------------------------ | -------------------------- | ----------------------- |
@@ -55,6 +58,8 @@ tests/modules/test_intervention/
 | `test_empty_student_steps`           | 学生未提供任何步骤         | `MISSING_STEP` at pos 0 |
 | `test_student_beyond_solution`       | 学生步骤超过参考解法       | `NO_BREAKPOINT`         |
 | `test_multiple_correct_then_missing` | 学生完成前N步后缺失第N+1步 | `MISSING_STEP`          |
+
+**语义匹配 vs 字符串匹配**：新测试使用数学内容（如"设 a_0 = 1"）验证语义匹配正确区分 INCOMPLETE 和 WRONG_DIRECTION。
 
 ### test_generator.py
 
@@ -78,6 +83,8 @@ tests/modules/test_intervention/
 | `test_record_outcome_accepted`       | 记录干预结果              | status → `ACCEPTED`                |
 
 ## conftest.py Fixtures
+
+> 注意：motor、Message 等已 stubbed，测试不依赖真实数据库或 LLM。
 
 ```python
 @pytest.fixture
@@ -106,20 +113,35 @@ def intervention_service():
 
 手动测试脚本，测试完整的干预流程：
 
-```
-测试场景：
-- 学生已完成第一步（理解问题）
-- 学生缺失第二步
+### manual_test.py（基础场景）
 
+测试单个场景：学生缺失关键构造步骤。
+
+```
 测试流程：
 1. BreakpointLocator 定位断点
 2. BreakpointAnalyzer 分析跨越需要什么（LLM）
 3. HintGenerator 生成 3 种强度的提示（LLM）
 
-测试输出：
-- 断点位置和类型
-- 断点分析结果（所需知识、关键联系、可选路径、难度）
-- 3 种强度的提示内容（surface/middle/deep）
+输出：断点分析 + surface/middle/deep 三种提示
+```
+
+### manual_test_comprehensive.py（全面测试矩阵）
+
+测试 4 场景 × 3 强度 = 12 个组合，验证所有断点类型的定位和提示生成。
+
+```
+场景：
+1. MISSING_STEP — 学生缺少关键步骤
+2. WRONG_DIRECTION — 学生思路偏离
+3. INCOMPLETE_STEP — 学生步骤不完整
+4. STUCK — 学生完全卡住无步骤
+
+强度：surface (0.2) / middle (0.5) / deep (0.8)
+
+输出：
+- 各场景各强度的断点类型、LLM 分析结果、提示内容
+- SUMMARY 汇总表
 ```
 
 ### 使用方法
@@ -128,8 +150,11 @@ def intervention_service():
 # 设置 API Key
 export DASHSCOPE_API_KEY=sk-xxxxxxxx
 
-# 运行手动测试
+# 运行基础手动测试
 python tests/modules/test_intervention/manual_test.py
+
+# 运行全面 E2E 测试（4×3=12 场景）
+python tests/modules/test_intervention/manual_test_comprehensive.py
 ```
 
 ## Mock 说明

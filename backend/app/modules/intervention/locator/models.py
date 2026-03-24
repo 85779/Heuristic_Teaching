@@ -20,3 +20,19 @@ class BreakpointLocation:
     expected_step_content: str           # Content of the next expected step
     gap_description: str                 # Human-readable description of the gap
     student_last_step: Optional[str]     # The student's last completed step (if any)
+
+
+@dataclass
+class MatchResult:
+    """Result of comparing a student step against a reference step."""
+    # Similarity scores (0.0 to 1.0)
+    keyword_overlap: float               # Jaccard overlap of math keywords
+    embedding_similarity: float          # Cosine similarity of embeddings (1.0 if not computed)
+
+    # Classification
+    breakpoint_type: BreakpointType
+    gap_description: str
+
+    # Debug info
+    student_content: str
+    expected_content: str

@@ -32,12 +32,16 @@ def test_missing_step(breakpoint_locator):
 
 
 def test_wrong_direction(breakpoint_locator):
-    """Student step differs from solution → WRONG_DIRECTION."""
+    """Student step differs from solution → WRONG_DIRECTION.
+
+    Uses math content with very low string/keyword overlap to ensure
+    WRONG_DIRECTION is triggered (sim < OVERLAP_REJECT threshold).
+    """
     student = [
-        TeachingStep(step_id="s1", step_name="Step 1", content="Something completely different"),
+        TeachingStep(step_id="s1", step_name="Step 1", content=r"设 a_0 = 1，令 a_1 = 2，则 b_0 = 1"),
     ]
     solution = [
-        TeachingStep(step_id="s1", step_name="Step 1", content="Do this"),
+        TeachingStep(step_id="s1", step_name="Step 1", content="求函数的导数"),
     ]
     result = breakpoint_locator.locate(student, solution)
     assert result.breakpoint_type == BreakpointType.WRONG_DIRECTION
