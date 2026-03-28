@@ -435,6 +435,7 @@ class HintGeneratorV2:
         student_input: str,
         expected_step: str,
         student_steps: List[Dict[str, Any]],
+        enable_thinking: bool = False,
     ) -> str:
         """Generate a hint for the given level.
 
@@ -444,6 +445,7 @@ class HintGeneratorV2:
             student_input: Student's current input
             expected_step: Expected next step
             student_steps: Student's completed steps
+            enable_thinking: Enable deep thinking mode (qwen3.5-plus only)
 
         Returns:
             Generated hint content string
@@ -461,6 +463,7 @@ class HintGeneratorV2:
             messages=[Message(role="user", content=prompt)],
             temperature=0.7,
             max_tokens=512,
+            enable_thinking=enable_thinking,
         )
 
         # Try to parse JSON response

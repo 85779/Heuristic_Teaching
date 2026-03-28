@@ -100,6 +100,7 @@ class HintGenerator:
         response = await llm_client.chat(
             messages=[Message(role="user", content=prompt)],
             temperature=0.7,
+            max_tokens=512,
         )
         
         # Step 4: Parse response

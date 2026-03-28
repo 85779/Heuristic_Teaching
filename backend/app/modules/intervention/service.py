@@ -51,11 +51,12 @@ class InterventionService:
       5. OutputGuardrail     → validate output
     """
 
-    def __init__(self, context: Optional["ModuleContext"] = None):
+    def __init__(self, context: Optional["ModuleContext"] = None, enable_thinking: bool = False):
         """Initialize the intervention service.
 
         Args:
             context: Module context (optional, for accessing other modules/state)
+            enable_thinking: Enable deep thinking mode for qwen3.5-plus (default: False)
         """
         self._context = context
         self._context_manager = ContextManager()
@@ -64,6 +65,7 @@ class InterventionService:
         self._decider = SubTypeDecider()
         self._generator = HintGeneratorV2()
         self._guardrail = OutputGuardrail()
+        self._enable_thinking = enable_thinking
         # In-memory store for completed interventions
         self._interventions: Dict[str, Intervention] = {}
 
@@ -177,6 +179,7 @@ class InterventionService:
             student_input=student_input or student_work,
             expected_step=breakpoint_location.expected_step_content,
             student_steps=student_steps,
+            enable_thinking=self._enable_thinking,
         )
 
         # Step 6: Run OutputGuardrail (Node 5)
@@ -517,6 +520,7 @@ class InterventionService:
             student_input=ctx.student_input or student_work,
             expected_step=breakpoint_location.expected_step_content,
             student_steps=student_steps,
+            enable_thinking=self._enable_thinking,
         )
 
         # Guardrail check
@@ -582,22 +586,143 @@ class InterventionService:
     ) -> InterventionResponse:
         """Handle student making progress (accepted).
 
+        When student provides new content that differs from their previous input,
+        we treat it as PROGRESSED. However, we must re-run BreakpointLocator
+        to check if they've moved past the old breakpoint or encountered a NEW
+        one at a different position.
+
         Args:
             ctx: InterventionContext
             session_id: Session identifier
             student_input: Student's new input
 
         Returns:
-            InterventionResponse
+            InterventionResponse — continues with new hint if new breakpoint found,
+            or ends if student has resolved the breakpoint.
         """
-        # Update student steps (in practice, Module 1 would update this)
-        # For now, we'll just end the intervention as successful
+        # Step 1: Update student_steps in context with new input
+        # (In production, Module 1 would do this; here we append as a new step)
+        solving_state = self._load_solving_state(session_id)
+        if solving_state:
+            student_steps = solving_state.get("student_steps", [])
+            solution_steps = solving_state.get("solution_steps", [])
+            problem_context = solving_state.get("problem", "")
+            student_work = solving_state.get("student_work", "")
+
+            # Append new student input as a step
+            new_step = {
+                "step_id": f"s{len(student_steps) + 1}",
+                "step_name": "学生推进",
+                "content": student_input,
+            }
+            updated_student_steps = student_steps + [new_step]
+
+            # Update in-memory context
+            ctx.student_steps = updated_student_steps
+
+            # Step 2: Re-run BreakpointLocator to check for new breakpoint
+            breakpoint_location = await self._locate_breakpoint(
+                updated_student_steps, solution_steps
+            )
+            self._context_manager.update_breakpoint_location(session_id, breakpoint_location)
+
+            # Check breakpoint type safely
+            breakpoint_type = breakpoint_location.breakpoint_type
+            if hasattr(breakpoint_type, 'value'):
+                breakpoint_type = breakpoint_type.value
+
+            # Step 3: If new breakpoint found, continue intervention
+            if breakpoint_type != "NO_BREAKPOINT":
+                # Re-run dimension router for the new breakpoint
+                dimension_result = await self._router.route(
+                    student_input=student_input,
+                    expected_step=breakpoint_location.expected_step_content,
+                    breakpoint_type=breakpoint_type,
+                    intervention_memory=ctx.intervention_memory,
+                    problem_context=problem_context,
+                )
+                self._context_manager.update_dimension_result(session_id, dimension_result)
+
+                # Re-run sub-type decider
+                sub_type_result = await self._decider.decide(
+                    dimension=dimension_result.dimension,
+                    student_input=student_input,
+                    expected_step=breakpoint_location.expected_step_content,
+                    intervention_memory=ctx.intervention_memory,
+                    frontend_signal=None,
+                    current_level=ctx.current_level,
+                    problem_context=problem_context,
+                )
+                self._context_manager.update_sub_type_result(session_id, sub_type_result)
+
+                # Generate new hint
+                hint_content = await self._generator.generate(
+                    level=sub_type_result.sub_type,
+                    problem_context=problem_context,
+                    student_input=student_input,
+                    expected_step=breakpoint_location.expected_step_content,
+                    student_steps=updated_student_steps,
+                    enable_thinking=self._enable_thinking,
+                )
+
+                # Guardrail check
+                guardrail_result = await self._guardrail.check(
+                    content=hint_content,
+                    level=sub_type_result.sub_type.value,
+                )
+                if not guardrail_result.passed:
+                    hint_content = guardrail_result.revised_content or self._fallback_hint(
+                        level=sub_type_result.sub_type,
+                        problem_context=problem_context,
+                        expected_step=breakpoint_location.expected_step_content,
+                    )
+
+                # Record
+                self._context_manager.record_intervention(
+                    session_id=session_id,
+                    student_q=student_input,
+                    system_a=hint_content,
+                    prompt_level=sub_type_result.sub_type.value,
+                    prompt_content=f"level={sub_type_result.sub_type.value}",
+                    student_response=StudentResponseEnum.ACCEPTED,
+                )
+
+                # Create intervention
+                intervention = Intervention(
+                    id=f"int_{uuid.uuid4().hex[:8]}",
+                    student_id=ctx.student_id,
+                    session_id=session_id,
+                    intervention_type=InterventionType.HINT,
+                    status=InterventionStatus.SUGGESTED,
+                    content=hint_content,
+                    intensity=0.5,
+                    metadata={
+                        "breakpoint_location": breakpoint_location.gap_description,
+                        "breakpoint_type": breakpoint_type,
+                        "dimension": dimension_result.dimension.value,
+                        "prompt_level": sub_type_result.sub_type.value,
+                        "reasoning": sub_type_result.reasoning,
+                        "turn": self._context_manager.get_turn_count(session_id),
+                        "mode": "continue_after_progress",
+                    },
+                )
+                self._interventions[intervention.id] = intervention
+                await self._persist_intervention(intervention)
+
+                return InterventionResponse(
+                    success=True,
+                    intervention=intervention,
+                    message=f"学生已推进到下一步，继续干预（新断点: {breakpoint_type} @ pos {breakpoint_location.breakpoint_position}）",
+                    breakpoint_location=self._location_to_dict(breakpoint_location),
+                )
+
+        # Step 4: No new breakpoint found → student has resolved the original or completed
         ctx.status = InterventionStatus.COMPLETED
 
         return InterventionResponse(
             success=True,
             intervention=None,
-            message="学生已成功推进，干预结束",
+            message="学生已成功推进，原断点已解除，干预结束",
             breakpoint_location=None,
         )
 
@@ -677,6 +802,7 @@ class InterventionService:
             student_input=student_input or ctx.student_input or student_work,
             expected_step=breakpoint_location.expected_step_content,
             student_steps=student_steps,
+            enable_thinking=self._enable_thinking,
         )
 
         # Guardrail check
