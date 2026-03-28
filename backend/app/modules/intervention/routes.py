@@ -1,7 +1,21 @@
-"""API routes for the intervention module."""
+"""API routes for the intervention module (v2).
+
+New endpoints for v2 flow:
+  POST /interventions          - Create intervention
+  POST /interventions/feedback - Process student feedback
+  POST /interventions/end      - End intervention (frontend END)
+  POST /interventions/escalate - Force escalate (frontend ESCALATE)
+"""
 
 from fastapi import APIRouter, HTTPException, Depends
-from app.modules.intervention.models import InterventionRequest, InterventionResponse, Intervention
+from app.modules.intervention.models import (
+    InterventionRequest,
+    InterventionResponse,
+    Intervention,
+    FeedbackRequest,
+    EndRequest,
+    EscalateRequest,
+)
 from app.modules.intervention.service import InterventionService
 
 router = APIRouter()
@@ -23,39 +37,88 @@ def set_service(service: InterventionService) -> None:
     _service = service
 
 
+# =============================================================================
+# Core Endpoints (v2)
+# =============================================================================
+
 @router.post("/interventions", response_model=InterventionResponse)
 async def create_intervention(
     request: InterventionRequest,
     service: InterventionService = Depends(get_service),
 ) -> InterventionResponse:
-    """Create a new learning intervention.
+    """Create a new intervention (first turn or new session).
 
     Args:
-        request: Intervention request with student context
+        request: InterventionRequest with session_id, student_id, student_input
         service: Intervention service instance
 
     Returns:
-        InterventionResponse: Operation result with intervention data
+        InterventionResponse with generated intervention
     """
-    try:
-        intervention = await service.generate(
-            session_id=request.session_id,
-            student_work=request.context.get("student_work"),
-            intensity=request.context.get("intensity", 0.5),
-            student_id=request.student_id,
-        )
-        return InterventionResponse(
-            success=True,
-            intervention=intervention,
-            message="Intervention generated successfully",
-        )
-    except Exception as e:
-        return InterventionResponse(
-            success=False,
-            intervention=None,
-            message=f"Failed to generate intervention: {str(e)}",
-        )
+    # The new v2 service uses student_input from request directly
+    return await service.create_intervention(request)
 
+
+@router.post("/interventions/feedback", response_model=InterventionResponse)
+async def process_feedback(
+    request: FeedbackRequest,
+    service: InterventionService = Depends(get_service),
+) -> InterventionResponse:
+    """Process student feedback (accepted/not_progressed).
+
+    Args:
+        request: FeedbackRequest with session_id, student_input, frontend_signal
+        service: Intervention service instance
+
+    Returns:
+        InterventionResponse with new intervention (if needed)
+    """
+    return await service.process_feedback(request)
+
+
+@router.post("/interventions/end", response_model=InterventionResponse)
+async def end_intervention(
+    request: EndRequest,
+    service: InterventionService = Depends(get_service),
+) -> InterventionResponse:
+    """End intervention (frontend END signal).
+
+    Args:
+        request: EndRequest with session_id and optional reason
+        service: Intervention service instance
+
+    Returns:
+        InterventionResponse confirming end
+    """
+    return await service.end_intervention(
+        session_id=request.session_id,
+        reason=request.reason,
+    )
+
+
+@router.post("/interventions/escalate", response_model=InterventionResponse)
+async def escalate_intervention(
+    request: EscalateRequest,
+    service: InterventionService = Depends(get_service),
+) -> InterventionResponse:
+    """Force escalate intervention (frontend ESCALATE signal).
+
+    Args:
+        request: EscalateRequest with session_id and optional reason
+        service: Intervention service instance
+
+    Returns:
+        InterventionResponse with escalated intervention
+    """
+    return await service.escalate_intervention(
+        session_id=request.session_id,
+        reason=request.reason,
+    )
+
+
+# =============================================================================
+# Legacy Endpoints (kept for backward compatibility)
+# =============================================================================
 
 @router.get("/interventions/{intervention_id}", response_model=InterventionResponse)
 async def get_intervention(
@@ -69,7 +132,7 @@ async def get_intervention(
         service: Intervention service instance
 
     Returns:
-        InterventionResponse: Operation result with intervention data
+        InterventionResponse with intervention data
     """
     intervention = service._interventions.get(intervention_id)
     if not intervention:
@@ -86,14 +149,16 @@ async def accept_intervention(
     intervention_id: str,
     service: InterventionService = Depends(get_service),
 ) -> InterventionResponse:
-    """Mark an intervention as accepted by the student.
+    """Mark an intervention as accepted by the student (legacy).
+
+    Note: In v2, use POST /interventions/feedback instead.
 
     Args:
         intervention_id: Intervention identifier
         service: Intervention service instance
 
     Returns:
-        InterventionResponse: Operation result
+        InterventionResponse
     """
     await service.record_intervention_outcome(intervention_id, "accepted")
     intervention = service._interventions.get(intervention_id)
@@ -109,14 +174,16 @@ async def dismiss_intervention(
     intervention_id: str,
     service: InterventionService = Depends(get_service),
 ) -> InterventionResponse:
-    """Mark an intervention as dismissed by the student.
+    """Mark an intervention as dismissed by the student (legacy).
+
+    Note: In v2, use POST /interventions/feedback with frontend_signal=ESCALATE instead.
 
     Args:
         intervention_id: Intervention identifier
         service: Intervention service instance
 
     Returns:
-        InterventionResponse: Operation result
+        InterventionResponse
     """
     await service.record_intervention_outcome(intervention_id, "dismissed")
     intervention = service._interventions.get(intervention_id)

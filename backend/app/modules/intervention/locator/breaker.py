@@ -343,7 +343,7 @@ class BreakpointLocator:
 
         return MatchResult(
             keyword_overlap=overlap,
-            embedding_similarity=cos_sim,
+            embedding_similarity=effective_sim,
             breakpoint_type=bpt,
             gap_description=gap,
             student_content=student_content,

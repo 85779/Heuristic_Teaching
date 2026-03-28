@@ -4,8 +4,14 @@ MongoDB connection manager.
 Manages MongoDB database connections and provides connection pooling.
 """
 
+import logging
 from typing import Optional
+
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+
+from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class MongoDBConnection:
@@ -23,31 +29,56 @@ class MongoDBConnection:
 
     async def connect(
         self,
-        connection_string: str,
-        database_name: str,
+        connection_string: Optional[str] = None,
+        database_name: Optional[str] = None,
         **kwargs
     ) -> None:
         """
         Establish connection to MongoDB.
 
         Args:
-            connection_string: MongoDB connection URI
-            database_name: Database name to use
-            **kwargs: Additional connection options (max_pool_size, etc.)
-
-        Raises:
-            NotImplementedError: Method not yet implemented
+            connection_string: MongoDB connection URI (defaults to settings.MONGODB_URI)
+            database_name: Database name to use (defaults to settings.MONGODB_DB_NAME)
+            **kwargs: Additional connection options (maxPoolSize, minPoolSize, etc.)
         """
-        raise NotImplementedError("MongoDB connection not yet implemented")
+        if self._client is not None:
+            logger.warning("MongoDB client already connected, skipping connect")
+            return
+
+        uri = connection_string or settings.MONGODB_URI
+        db_name = database_name or settings.MONGODB_DB_NAME
+
+        # Set connection pool options with defaults
+        connection_options = {
+            "maxPoolSize": kwargs.pop("maxPoolSize", 100),
+            "minPoolSize": kwargs.pop("minPoolSize", 10),
+        }
+        # Merge any additional kwargs
+        connection_options.update(kwargs)
+
+        try:
+            self._client = AsyncIOMotorClient(uri, **connection_options)
+            self._database = self._client[db_name]
+            logger.info(f"MongoDB connected to {db_name}")
+        except Exception as e:
+            logger.error(f"Failed to connect to MongoDB: {e}")
+            self._client = None
+            self._database = None
+            raise
 
     async def disconnect(self) -> None:
         """
         Close MongoDB connection.
-
-        Raises:
-            NotImplementedError: Method not yet implemented
         """
-        raise NotImplementedError("MongoDB disconnection not yet implemented")
+        if self._client is not None:
+            try:
+                self._client.close()
+                logger.info("MongoDB disconnected")
+            except Exception as e:
+                logger.error(f"Error closing MongoDB connection: {e}")
+            finally:
+                self._client = None
+                self._database = None
 
     @property
     def database(self) -> AsyncIOMotorDatabase:
@@ -56,11 +87,10 @@ class MongoDBConnection:
 
         Returns:
             AsyncIOMotorDatabase: The database instance
-
-        Raises:
-            NotImplementedError: Property not yet implemented
         """
-        raise NotImplementedError("Database property not yet implemented")
+        if self._database is None:
+            raise RuntimeError("MongoDB not connected. Call connect() first.")
+        return self._database
 
     @property
     def is_connected(self) -> bool:
@@ -69,11 +99,8 @@ class MongoDBConnection:
 
         Returns:
             bool: True if connected, False otherwise
-
-        Raises:
-            NotImplementedError: Property not yet implemented
         """
-        raise NotImplementedError("Connection status check not yet implemented")
+        return self._client is not None
 
     async def health_check(self) -> bool:
         """
@@ -81,11 +108,15 @@ class MongoDBConnection:
 
         Returns:
             bool: True if healthy, False otherwise
-
-        Raises:
-            NotImplementedError: Method not yet implemented
         """
-        raise NotImplementedError("Health check not yet implemented")
+        if self._client is None or self._database is None:
+            return False
+        try:
+            await self._database.command("ping")
+            return True
+        except Exception as e:
+            logger.warning(f"MongoDB health check failed: {e}")
+            return False
 
 
 # Singleton instance

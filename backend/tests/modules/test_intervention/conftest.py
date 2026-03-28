@@ -42,6 +42,11 @@ stub_llm_base.BaseLLMClient = type('BaseLLMClient', (), {})
 stub_llm_base.Message = StubMessage
 sys.modules['app.infrastructure.llm.base_client'] = stub_llm_base
 
+# Stub dashscope_client
+stub_dashscope = type(sys)('app.infrastructure.llm.dashscope_client')
+stub_dashscope.DashScopeClient = type('DashScopeClient', (), {})
+sys.modules['app.infrastructure.llm.dashscope_client'] = stub_dashscope
+
 # Stub app.infrastructure.cache
 stub_cache = type(sys)('app.infrastructure.cache')
 stub_cache.RedisCache = type('RedisCache', (), {})

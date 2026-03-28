@@ -1,54 +1,64 @@
 # Intervention Module Tests
 
-干预模块的测试套件，验证 Module 2（断点分层递进干预系统）的核心功能。
+干预模块的测试套件，验证 Module 2 v2（五节点双维度干预系统）的核心功能。
 
 ## 运行测试
 
 ```bash
-# 运行所有干预模块测试
+# 运行所有干预模块测试（87 个）
 cd backend
 python -m pytest tests/modules/test_intervention/ -v
 
 # 运行指定测试文件
 python -m pytest tests/modules/test_intervention/test_locator.py -v
-python -m pytest tests/modules/test_intervention/test_generator.py -v
-python -m pytest tests/modules/test_intervention/test_service.py -v
+python -m pytest tests/modules/test_intervention/test_context_manager.py -v
+python -m pytest tests/modules/test_intervention/test_router_node2a.py -v
+python -m pytest tests/modules/test_intervention/test_decider_node2b.py -v
+python -m pytest tests/modules/test_intervention/test_generator_node4.py -v
+python -m pytest tests/modules/test_intervention/test_guardrail_node5.py -v
+python -m pytest tests/modules/test_intervention/test_service_v2_flow.py -v
 
 # 手动 E2E 测试（需要真实 API Key）
 export DASHSCOPE_API_KEY=your_key_here
 python tests/modules/test_intervention/manual_test.py
+python tests/modules/test_intervention/manual_test_comprehensive.py
 ```
 
 ## 测试结构
 
 ```
 tests/modules/test_intervention/
-├── __init__.py                        # 模块标记
+├── __init__.py
 ├── conftest.py                        # pytest fixtures 和基础设施 stubs
-├── test_locator.py                    # BreakpointLocator 单元测试（6 个）
-├── test_generator.py                  # HintGenerator 单元测试（4 个）
-├── test_service.py                    # InterventionService 单元测试（3 个）
+│
+├── test_locator.py                    # 节点1测试：BreakpointLocator（6个）
+├── test_context_manager.py             # ContextManager 测试（16个）
+├── test_router_node2a.py              # 节点2a测试：DimensionRouter（6个）
+├── test_decider_node2b.py            # 节点2b测试：SubTypeDecider（14个）
+├── test_generator_node4.py            # 节点4测试：HintGeneratorV2（16个）
+├── test_guardrail_node5.py           # 节点5测试：OutputGuardrail（12个）
+├── test_service_v2_flow.py            # v2 service 完整流程（14个）
+│
 ├── manual_test.py                    # 手动 E2E 测试（需 API Key）
-├── manual_test_comprehensive.py        # 全面 E2E 测试（4 场景 × 3 强度，12 个 LLM 调用）
 └── README.md                          # 本文件
 ```
 
-## 测试覆盖
+## 测试覆盖（87 个）
 
-| 测试文件            | 测试内容                         | 测试数 |
-| ------------------- | -------------------------------- | ------ |
-| `test_locator.py`   | BreakpointLocator 三级语义匹配   | 6      |
-| `test_generator.py` | HintGenerator 强度判断和生成逻辑 | 4      |
-| `test_service.py`   | InterventionService 总控流程     | 3      |
-| **合计**            |                                  | **13** |
-
-> 集成测试见 `tests/modules/test_integration/test_solving_intervention_connection.py`（6 个）
+| 测试文件                  | 测试内容                       | 测试数 |
+| ------------------------- | ------------------------------ | ------ |
+| `test_locator.py`         | BreakpointLocator 三级语义匹配 | 6      |
+| `test_context_manager.py` | ContextManager 状态管理        | 16     |
+| `test_router_node2a.py`   | DimensionRouter 维度路由       | 6      |
+| `test_decider_node2b.py`  | SubTypeDecider 子类型决策      | 14     |
+| `test_generator_node4.py` | HintGeneratorV2 提示生成       | 16     |
+| `test_guardrail_node5.py` | OutputGuardrail 安全检查       | 12     |
+| `test_service_v2_flow.py` | v2 service 完整流程            | 14     |
+| **合计**                  |                                | **87** |
 
 ## 测试详情
 
-### test_locator.py
-
-测试 BreakpointLocator 的三级语义匹配逻辑：
+### test_locator.py — 节点1：断点定位
 
 | 测试函数                             | 场景                       | 期望结果                |
 | ------------------------------------ | -------------------------- | ----------------------- |
@@ -59,109 +69,89 @@ tests/modules/test_intervention/
 | `test_student_beyond_solution`       | 学生步骤超过参考解法       | `NO_BREAKPOINT`         |
 | `test_multiple_correct_then_missing` | 学生完成前N步后缺失第N+1步 | `MISSING_STEP`          |
 
-**语义匹配 vs 字符串匹配**：新测试使用数学内容（如"设 a_0 = 1"）验证语义匹配正确区分 INCOMPLETE 和 WRONG_DIRECTION。
+### test_context_manager.py — 状态管理
 
-### test_generator.py
+| 测试类                   | 测试内容                                  | 测试数 |
+| ------------------------ | ----------------------------------------- | ------ |
+| `TestInitContext`        | 初始化上下文                              | 3      |
+| `TestEscalation`         | 升级逻辑（R1→R2, M1→M2 等）               | 4      |
+| `TestInterventionMemory` | 干预历史记录                              | 4      |
+| `TestFrontendSignals`    | 前端信号处理（PROGRESSED/NOT_PROGRESSED） | 5      |
 
-测试 HintGenerator 的强度判断和生成逻辑：
+### test_router_node2a.py — 节点2a：维度路由
 
-| 测试函数                                  | 场景                  | 期望结果                        |
-| ----------------------------------------- | --------------------- | ------------------------------- |
-| `test_determine_level_surface`            | intensity < 0.4       | 返回 "surface"                  |
-| `test_determine_level_middle`             | 0.4 ≤ intensity < 0.7 | 返回 "middle"                   |
-| `test_determine_level_deep`               | intensity ≥ 0.7       | 返回 "deep"                     |
-| `test_generate_returns_correct_structure` | 生成提示返回正确结构  | `GeneratedHint` with all fields |
+| 测试函数                             | 场景                 | 期望结果           |
+| ------------------------------------ | -------------------- | ------------------ |
+| `test_missing_step_resource`         | MISSING_STEP 断点    | RESOURCE 维度      |
+| `test_wrong_direction_metacognitive` | WRONG_DIRECTION 断点 | METACOGNITIVE 维度 |
+| `test_incomplete_step_resource`      | INCOMPLETE_STEP 断点 | RESOURCE 维度      |
+| `test_stuck_dimension`               | STUCK 断点           | RESOURCE 维度      |
+| `test_confidence_scores`             | 置信度评分合理性     | 0.0-1.0 之间       |
+| `test_reasoning_provided`            | reasoning 字段非空   | 有推理说明         |
 
-### test_service.py
+### test_decider_node2b.py — 节点2b：子类型决策
 
-测试 InterventionService 的总控流程和状态管理：
+| 测试类                    | 测试内容             | 测试数 |
+| ------------------------- | -------------------- | ------ |
+| `TestResourceLevels`      | R1-R4 级别判断       | 4      |
+| `TestMetacognitiveLevels` | M1-M5 级别判断       | 5      |
+| `TestEscalationDecision`  | 升级/维持/终止决策   | 3      |
+| `TestFrontendSignals`     | 前端信号对级别的影响 | 2      |
 
-| 测试函数                             | 场景                      | 期望结果                           |
-| ------------------------------------ | ------------------------- | ---------------------------------- |
-| `test_generate_returns_intervention` | 总控流程返回 Intervention | `Intervention` with correct fields |
-| `test_deliver_intervention`          | 送达干预更新状态          | status → `DELIVERED`               |
-| `test_record_outcome_accepted`       | 记录干预结果              | status → `ACCEPTED`                |
+### test_generator_node4.py — 节点4：提示生成
+
+| 测试类                 | 测试内容                    | 测试数 |
+| ---------------------- | --------------------------- | ------ |
+| `TestLevelMapping`     | 强度到 R1-R4/M1-M5 的映射   | 9      |
+| `TestHintGeneration`   | 各级别提示内容生成          | 4      |
+| `TestGuardrailTrigger` | 触发 OutputGuardrail 的生成 | 3      |
+
+### test_guardrail_node5.py — 节点5：输出守卫
+
+| 测试函数                        | 场景                    | 期望结果          |
+| ------------------------------- | ----------------------- | ----------------- |
+| `test_safe_content_passes`      | 安全内容通过            | passed=True       |
+| `test_answer_keyword_blocked`   | 包含"答案是"被拦截      | passed=False      |
+| `test_proof_keyword_blocked`    | 包含"得证"被拦截        | passed=False      |
+| `test_partial_answer_blocked`   | 具体数值答案被拦截      | passed=False      |
+| `test_deep_hints_more_lenient`  | deep 级别提示更宽松     | passed=True       |
+| `test_fallback_content_safe`    | fallback 内容安全       | passed=True       |
+| `test_multiple_answer_patterns` | 多种答案模式都能被拦截  | 全部 passed=False |
+| `test_whitespace_robustness`    | 带空格的模式也能被检测  | 全部 passed=False |
+| `test_chinese_punctuation`      | 中文标点变体检测        | 全部 passed=False |
+| `test_unsafe_triggers_fallback` | 不安全内容触发 fallback | 使用 fallback     |
+| `test_fallback_content_neutral` | fallback 内容中性安全   | 无答案关键词      |
+| `test_level_affects_strictness` | 级别影响严格程度        | deep 最宽松       |
+
+### test_service_v2_flow.py — v2 service 完整流程
+
+| 测试类                     | 测试内容                              | 测试数 |
+| -------------------------- | ------------------------------------- | ------ |
+| `TestCreateIntervention`   | 创建干预流程                          | 3      |
+| `TestProcessFeedback`      | 反馈处理（PROGRESSED/NOT_PROGRESSED） | 3      |
+| `TestEndIntervention`      | 结束干预                              | 1      |
+| `TestEscalateIntervention` | 升级干预                              | 2      |
+| `TestHelperMethods`        | 辅助方法（\_location_to_dict 等）     | 5      |
 
 ## conftest.py Fixtures
 
-> 注意：motor、Message 等已 stubbed，测试不依赖真实数据库或 LLM。
+> 注意：motor、Message、DashScopeClient 等已 stubbed，测试不依赖真实数据库或 LLM。
 
-```python
-@pytest.fixture
-def breakpoint_locator():
-    """Fresh BreakpointLocator instance."""
-    from app.modules.intervention.locator.breaker import BreakpointLocator
-    return BreakpointLocator()
-
-@pytest.fixture
-def mock_breakpoint_analyzer():
-    """Mock BreakpointAnalyzer with canned analysis."""
-    ...
-
-@pytest.fixture
-def mock_hint_generator():
-    """Mock HintGenerator with canned hint."""
-    ...
-
-@pytest.fixture
-def intervention_service():
-    """Fresh InterventionService with mocked sub-modules."""
-    ...
-```
-
-## 手动测试 (manual_test.py)
-
-手动测试脚本，测试完整的干预流程：
-
-### manual_test.py（基础场景）
-
-测试单个场景：学生缺失关键构造步骤。
-
-```
-测试流程：
-1. BreakpointLocator 定位断点
-2. BreakpointAnalyzer 分析跨越需要什么（LLM）
-3. HintGenerator 生成 3 种强度的提示（LLM）
-
-输出：断点分析 + surface/middle/deep 三种提示
-```
-
-### manual_test_comprehensive.py（全面测试矩阵）
-
-测试 4 场景 × 3 强度 = 12 个组合，验证所有断点类型的定位和提示生成。
-
-```
-场景：
-1. MISSING_STEP — 学生缺少关键步骤
-2. WRONG_DIRECTION — 学生思路偏离
-3. INCOMPLETE_STEP — 学生步骤不完整
-4. STUCK — 学生完全卡住无步骤
-
-强度：surface (0.2) / middle (0.5) / deep (0.8)
-
-输出：
-- 各场景各强度的断点类型、LLM 分析结果、提示内容
-- SUMMARY 汇总表
-```
-
-### 使用方法
-
-```bash
-# 设置 API Key
-export DASHSCOPE_API_KEY=sk-xxxxxxxx
-
-# 运行基础手动测试
-python tests/modules/test_intervention/manual_test.py
-
-# 运行全面 E2E 测试（4×3=12 场景）
-python tests/modules/test_intervention/manual_test_comprehensive.py
-```
+| Fixture              | 类型                | 说明                               |
+| -------------------- | ------------------- | ---------------------------------- |
+| `breakpoint_locator` | BreakpointLocator   | fresh 实例                         |
+| `context_manager`    | ContextManager      | fresh 实例                         |
+| `dimension_router`   | DimensionRouter     | fresh 实例                         |
+| `sub_type_decider`   | SubTypeDecider      | fresh 实例                         |
+| `hint_generator_v2`  | HintGeneratorV2     | fresh 实例                         |
+| `output_guardrail`   | OutputGuardrail     | fresh 实例                         |
+| `service_with_mocks` | InterventionService | 装配好的 service（带 mock 子模块） |
 
 ## Mock 说明
 
 - LLM 调用全部 mock，不产生真实 API 请求
 - 使用 `unittest.mock.AsyncMock` 模拟异步 LLM 响应
-- motor (MongoDB driver) 已 stubbed，不依赖数据库
+- motor (MongoDB driver)、DashScopeClient 已 stubbed，不依赖数据库或外部 API
 
 ## 扩展测试
 
@@ -174,4 +164,18 @@ def test_your_scenario(breakpoint_locator):
     solution = [...]
     result = breakpoint_locator.locate(student, solution)
     assert result.breakpoint_type == BreakpointType.MISSING_STEP
+
+# test_decider_node2b.py
+async def test_your_escalation(sub_type_decider):
+    result = await sub_type_decider.decide(
+        dimension=DimensionEnum.RESOURCE,
+        student_input="学生仍然卡住",
+        expected_step="构造辅助量",
+        intervention_memory=[],
+        frontend_signal=FrontendSignalEnum.NOT_PROGRESSED,
+        current_level="R1",
+        problem_context="...",
+    )
+    assert result.escalation_decision.action == EscalationAction.ESCALATE
+    assert result.sub_type == "R2"
 ```
