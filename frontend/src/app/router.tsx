@@ -1,10 +1,24 @@
-import React from "react";
+// Router configuration
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
+import { HomePage } from "../pages/HomePage";
+import { DemoPage } from "../pages/DemoPage";
+import { StudentPage } from "../pages/StudentPage";
+import { ClassPage } from "../pages/ClassPage";
+import { KnowledgePage } from "../pages/KnowledgePage";
+import { AppLayout } from "../components/layout/AppLayout";
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <AppLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "demo", element: <DemoPage /> },
+      { path: "student/:id", element: <StudentPage /> },
+      { path: "class", element: <ClassPage /> },
+      { path: "knowledge", element: <KnowledgePage /> },
+    ],
   },
 ]);
+
+export { router };

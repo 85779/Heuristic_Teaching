@@ -1,7 +1,7 @@
 
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║          Module 2 v2 — Five-Node Pipeline E2E Test Report                   ║
-║  Generated: 2026-03-28T21:05:24.306669                                          ║
+║  Generated: 2026-03-30T16:22:54.197894                                          ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
 ▶ 测试场景
@@ -28,23 +28,23 @@
 ================================================================================
   TURN 1 — Create Intervention
 ================================================================================
-  ⏱  总耗时: 8.18s
+  ⏱  总耗时: 6.81s
   ✓  Success: True
   💬 Message: Generated R1 hint
 
   📦 Intervention
-     ID:          int_f14c522f
+     ID:          int_4ec77523
      Type:        hint
      Status:      suggested
      Intensity:   0.5
-     Content:     思考如何逐步覆盖所有正整数，确保不重复也不遗漏。...
+     Content:     考虑如何逐步覆盖所有正整数，确保不重复也不遗漏。...
      Metadata:    {
     "breakpoint_location": "学生在第 3 步缺失",
     "breakpoint_type": "missing_step",
     "dimension": "Resource",
     "prompt_level": "R1",
-    "hint_direction": "引导学生观察题目中已有的结构和规律，尝试从已知的部分入手。",
-    "reasoning": "学生完全不知道如何下手，缺乏基本的解题思路。此时应先通过线索唤醒，引导其关注题目中显眼的结构或模式。",
+    "hint_direction": "引导学生观察题目中可能存在的结构或模式，例如数列、递推关系等。",
+    "reasoning": "学生完全不知道如何下手，缺乏基本的思路引导。当前状态属于完全没有思路，因此应选择最低强度的干预，仅提供线索唤醒。",
     "escalation_action": "maintain",
     "new_level": "R1",
     "turn": 1
@@ -61,17 +61,17 @@
      Status:        active
      Turn Count:   1
 
-  TURN 1 TOTAL: 8.18s
+  TURN 1 TOTAL: 6.81s
 
 ================================================================================
   TURN 2 — Feedback: NOT_PROGRESSED (Escalate)
 ================================================================================
-  ⏱  总耗时: 1.59s
+  ⏱  总耗时: 1.33s
   ✓  Success: True
   💬 Message: Generated escalated R2 hint
 
   📦 Intervention (Escalated)
-     ID:          int_f6cbac30
+     ID:          int_8f1f2be7
      Level:      R2
      Dimension:  Resource
      Content:    考虑使用数学归纳法构造序列，确保每一步覆盖新的自然数。...
@@ -83,21 +83,21 @@
      Turn Count:    2
      Memory Turns:  2
 
-  TURN 2 TOTAL: 1.59s
+  TURN 2 TOTAL: 1.33s
 
 ================================================================================
   TURN 3 — Feedback: PROGRESSED (Maintain)
 ================================================================================
-  ⏱  总耗时: 12.25s
+  ⏱  总耗时: 7.84s
   ✓  Success: True
   💬 Message: 学生已推进到下一步，继续干预（新断点: wrong_direction @ pos 2）
 
   📦 Intervention (Maintained)
-     ID:          int_2fbed7e1
+     ID:          int_ce3a9596
      Level:      R3
-     Content:    尝试从已知条件出发，先求出某个中间量。...
+     Content:    下一步应考虑如何构造 a_{n+1}，使得 b_n = gcd(a_n, a_{n+1}) 覆盖下一个未使用的自然数。...
 
-  TURN 3 TOTAL: 12.25s
+  TURN 3 TOTAL: 7.84s
 
 ================================================================================
   SUMMARY
@@ -108,26 +108,26 @@
   节点                                     耗时         占比      是否LLM
   ------------------------------ ---------- ---------- ----------
   ① BreakpointLocator                  <1ms                  ⚡ 规则
-  ② DimensionRouter (LLM)              2.0s                 ✅ LLM
-  ③ SubTypeDecider (LLM)               2.5s                 ✅ LLM
-  ④ HintGeneratorV2 (LLM)              3.3s                 ✅ LLM
-  ⑤ OutputGuardrail                    0.4s                  ⚡ 规则
+  ② DimensionRouter (LLM)              1.7s                 ✅ LLM
+  ③ SubTypeDecider (LLM)               2.0s                 ✅ LLM
+  ④ HintGeneratorV2 (LLM)              2.7s                 ✅ LLM
+  ⑤ OutputGuardrail                    0.3s                  ⚡ 规则
 
-  总流程耗时:                         22.75s
-  Turn 1:                        8.18s
-  Turn 2:                        1.59s
-  Turn 3:                        12.25s
+  总流程耗时:                         16.73s
+  Turn 1:                        6.81s
+  Turn 2:                        1.33s
+  Turn 3:                        7.84s
 
   干预记忆 (Intervention Memory):
     Turn 1 | Level: R1 | Response: not_progressed
       Q: 学生不知道归纳构造怎么下手...
-      A: 思考如何逐步覆盖所有正整数，确保不重复也不遗漏。...
+      A: 考虑如何逐步覆盖所有正整数，确保不重复也不遗漏。...
     Turn 2 | Level: R2 | Response: not_progressed
       Q: 还是不懂为什么要用质数...
       A: 考虑使用数学归纳法构造序列，确保每一步覆盖新的自然数。...
     Turn 3 | Level: R3 | Response: accepted
       Q: 学生开始接受提示，有所进展...
-      A: 尝试从已知条件出发，先求出某个中间量。...
+      A: 下一步应考虑如何构造 a_{n+1}，使得 b_n = gcd(a_n, a_{...
 
   干预级别递进路径:
     Turn 1 → NOT_PROGRESSED
@@ -141,5 +141,5 @@
     ✅ 级别递进 (escalation) 逻辑正常
     ✅ MongoDB 持久化降级正常（无 MongoDB 时继续运行）
 
-  总耗时: 22.75s
+  总耗时: 16.73s
 

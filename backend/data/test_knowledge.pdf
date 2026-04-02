@@ -1,0 +1,45 @@
+%PDF-1.4
+1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj
+2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj
+3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj
+4 0 obj << /Length 220 >>
+stream
+BT
+/F1 24 Tf
+100 700 Td
+(High School Math Knowledge Base) Tj
+/F1 12 Tf
+0 -30 Td
+(Chapter 1: Quadratic Equations ax^2+bx+c=0) Tj
+0 -20 Td
+(Root formula: x = (-b +/- sqrt(b^2-4ac)) / (2a)) Tj
+0 -20 Td
+(Discriminant: delta = b^2 - 4ac) Tj
+0 -20 Td
+(If delta > 0: two distinct real roots) Tj
+0 -20 Td
+(If delta = 0: two equal real roots) Tj
+0 -20 Td
+(If delta < 0: two complex conjugate roots) Tj
+0 -30 Td
+(Chapter 2: Trigonometry) Tj
+0 -20 Td
+(Basic identity: sin^2(theta) + cos^2(theta) = 1) Tj
+0 -20 Td
+(Tan definition: tan(theta) = sin(theta)/cos(theta)) Tj
+ET
+endstream
+endobj
+5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000266 00000 n
+0000000538 00000 n
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+615
+%%EOF

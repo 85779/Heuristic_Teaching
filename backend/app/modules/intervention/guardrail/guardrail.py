@@ -1,12 +1,15 @@
 """Node 5: Output Guardrail - 输出审查"""
 
+from __future__ import annotations
+
 import json
 import os
 import re
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from dataclasses import dataclass
 
-from app.infrastructure.llm.dashscope_client import DashScopeClient
+if TYPE_CHECKING:
+    from app.infrastructure.llm.dashscope_client import DashScopeClient
 from app.infrastructure.llm.base_client import Message
 
 from .prompts import RULES, build_guardrail_prompt
@@ -35,9 +38,10 @@ class OutputGuardrail:
         """
         self._llm_client = llm_client
 
-    def _get_llm_client(self) -> DashScopeClient:
+    def _get_llm_client(self) -> "DashScopeClient":
         """Get or create LLM client."""
         if self._llm_client is None:
+            from app.infrastructure.llm.dashscope_client import DashScopeClient
             api_key = os.getenv("DASHSCOPE_API_KEY")
             if not api_key:
                 raise ValueError("DASHSCOPE_API_KEY not set")

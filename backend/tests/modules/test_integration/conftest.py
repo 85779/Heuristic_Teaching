@@ -3,6 +3,9 @@ import sys
 import os
 import pytest
 
+# Set required env vars before any imports
+os.environ.setdefault("DASHSCOPE_API_KEY", "test-key-for-integration")
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
 # Stub motor
@@ -27,6 +30,21 @@ class _StubMessage:
     def to_dict(self):
         return {"role": self.role, "content": self.content}
 
+class _StubDashScopeClient:
+    """Mock DashScopeClient that can be instantiated."""
+    def __init__(self, api_key=None, model=None, **kwargs):
+        self.api_key = api_key
+        self.model = model
+
+    async def chat(self, *args, **kwargs):
+        return "mocked response"
+
+    async def health_check(self):
+        return True
+
+    async def close(self):
+        pass
+
 sys.modules['app.infrastructure.llm'] = type(sys)('llm')
 sys.modules['app.infrastructure.llm.base_client'] = type(sys)('base_client')
 sys.modules['app.infrastructure.llm.base_client'].BaseLLMClient = object
@@ -34,6 +52,7 @@ sys.modules['app.infrastructure.llm.base_client'].Message = _StubMessage
 sys.modules['app.infrastructure.llm.openai_client'] = type(sys)('openai_client')
 sys.modules['app.infrastructure.llm.anthropic_client'] = type(sys)('anthropic_client')
 sys.modules['app.infrastructure.llm.dashscope_client'] = type(sys)('dashscope_client')
+sys.modules['app.infrastructure.llm.dashscope_client'].DashScopeClient = _StubDashScopeClient
 
 # Stub cache module
 sys.modules['app.infrastructure.cache'] = type(sys)('cache')

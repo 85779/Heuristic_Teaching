@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "version": "0.1",
+    "description": "高中数学解题方法词典",
+    "status": "draft"
+  },
+  "methods": [
+    {
+      "method_id": "M_换元法",
+      "name": "换元法",
+      "description": "将复杂表达式中的某个部分用一个新变量替换，使问题简化。常见场景：复合函数、含根号表达式、分式函数",
+      "examples": [
+        "已知 f(√x+1)=x-3√x，令 t=√x+1 则 x=(t-1)²",
+        "分式函数 y=(x-1)/(x²-x+1)，令 t=x-1 转化为 y=t/(t²+t+1)"
+      ],
+      "applicable_kps": ["KP_3_13", "KP_3_17", "KP_3_18"]
+    },
+    {
+      "method_id": "M_待定系数法",
+      "name": "待定系数法",
+      "description": "已知函数类型（如一次、二次函数、指数函数等），设出一般形式，根据条件列方程求系数",
+      "examples": [
+        "已知 f(x) 是一次函数，且 f(f(x))=4x+3，设 f(x)=ax+b 代入求解"
+      ],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_方程法",
+      "name": "方程法",
+      "description": "利用已知条件建立方程，通过解方程得到未知参数的值",
+      "examples": ["f(x)=2f(-x)+x 与 f(-x)=2f(x)-x 联立解出 f(x)"],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_判别式法",
+      "name": "判别式法",
+      "description": "利用一元二次方程的判别式 Δ=b²-4ac 研究函数最值、方程根的情况。对于 y=(ax+b)/(cx+d) 型分式函数，可转化为关于 x 的一元二次方程用判别式法求 y 的范围",
+      "examples": [
+        "将 y=(x-1)/(x²-x+1) 变形为 yx²-(y+1)x+y+1=0，由 Δ≥0 求 y 的范围"
+      ],
+      "applicable_kps": ["KP_3_16", "KP_2_02", "KP_2_04"]
+    },
+    {
+      "method_id": "M_数形结合",
+      "name": "数形结合",
+      "description": "将代数问题转化为几何问题（如利用函数图像、向量几何意义），或将几何问题代数化",
+      "examples": [
+        "集合的包含关系用数轴或Venn图分析",
+        "复数问题利用复平面向量几何意义"
+      ],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_分类讨论",
+      "name": "分类讨论",
+      "description": "当问题涉及含参情况或多个可能分支时，按参数范围或情况分类逐一讨论，最后合并结果",
+      "examples": [
+        "含参集合的包含关系：需讨论参数正负、是否为空集",
+        "绝对值不等式：按符号拆分类讨论"
+      ],
+      "applicable_kps": ["KP_1_03", "KP_1_06"]
+    },
+    {
+      "method_id": "M_等价转化",
+      "name": "等价转化",
+      "description": "将复杂命题或不等式等价变形为更简单的形式，保持真值不变",
+      "examples": [
+        "|x-1|<1 等价于 -1<x-1<1 等价于 0<x<2",
+        "x²-x-6<0 等价于 (x+2)(x-3)<0 等价于 -2<x<3"
+      ],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_构造法",
+      "name": "构造法",
+      "description": "根据问题特点，人为构造一个辅助量、辅助函数或辅助图形来简化或解决问题",
+      "examples": [
+        "构造对偶式：a+√b 型问题常构造其共轭形式",
+        "由已知集合关系构造新集合"
+      ],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_归纳猜想",
+      "name": "归纳猜想",
+      "description": "通过观察前几项或几个特例，发现规律并猜想一般结论，然后用数学归纳法证明",
+      "examples": ["数列问题：先算出前几项，猜想通项公式"],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_数学归纳法",
+      "name": "数学归纳法",
+      "description": "证明关于正整数 n 的命题：(1) 证明 n=1 时成立；(2) 假设 n=k 时成立，证明 n=k+1 时成立",
+      "formula": null,
+      "examples": [],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_韦达定理",
+      "name": "韦达定理",
+      "description": "一元二次方程 ax²+bx+c=0 中，x₁+x₂=-b/a，x₁x₂=c/a。常用于整体代入求值或求参数",
+      "formula": "x₁+x₂=-b/a；x₁x₂=c/a",
+      "examples": ["由韦达定理建立方程求参数"],
+      "applicable_kps": ["KP_2_05"]
+    },
+    {
+      "method_id": "M_赋值法",
+      "name": "赋值法",
+      "description": "在抽象函数或条件等式中，给变量赋予特殊值（0、1、-1等）来得到有用信息",
+      "examples": [
+        "已知 f(x-y)=f(x)-f(y)，令 y=x 得 f(0)=0，令 x=0 得 f(-y)=-f(y）"
+      ],
+      "applicable_kps": []
+    },
+    {
+      "method_id": "M_同除法",
+      "name": "同除法",
+      "description": "在分式函数求最值时，将分子分母同时除以某个表达式，转化为常见不等式模型",
+      "examples": ["y=(x-1)/(x²-x+1) 同除以 x-1 得 y=1/(x+1/(x-1))"],
+      "applicable_kps": ["KP_3_16"]
+    }
+  ]
+}

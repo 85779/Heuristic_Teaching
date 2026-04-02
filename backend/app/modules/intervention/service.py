@@ -6,6 +6,7 @@ Five-node intervention system:
   3. SubTypeDecider     (Node 2b, LLM: level decision + escalation)
   4. HintGeneratorV2    (Node 4, LLM: R1-R4 / M1-M5 hint generation)
   5. OutputGuardrail    (Node 5, rule + LLM: output validation)
+  + RAG (Module 6): Optional knowledge retrieval before hint generation
 """
 
 import uuid
@@ -38,6 +39,8 @@ from .models import (
 
 if TYPE_CHECKING:
     from app.core.context import ModuleContext
+    from app.modules.knowledge_base.service import RAGService
+    from app.modules.knowledge_base.models import KGChunk
 
 
 class InterventionService:
@@ -47,16 +50,22 @@ class InterventionService:
       1. BreakpointLocator  → locate breakpoint
       2. DimensionRouter    → classify R/M
       3. SubTypeDecider     → decide level + escalation
-      4. HintGeneratorV2    → generate hint
+      4. HintGeneratorV2    → generate hint (+ optional RAG knowledge)
       5. OutputGuardrail     → validate output
     """
 
-    def __init__(self, context: Optional["ModuleContext"] = None, enable_thinking: bool = False):
+    def __init__(
+        self,
+        context: Optional["ModuleContext"] = None,
+        enable_thinking: bool = False,
+        rag_service: Optional["RAGService"] = None,
+    ):
         """Initialize the intervention service.
 
         Args:
             context: Module context (optional, for accessing other modules/state)
             enable_thinking: Enable deep thinking mode for qwen3.5-plus (default: False)
+            rag_service: Optional RAG service for knowledge retrieval (default: None)
         """
         self._context = context
         self._context_manager = ContextManager()
@@ -66,6 +75,7 @@ class InterventionService:
         self._generator = HintGeneratorV2()
         self._guardrail = OutputGuardrail()
         self._enable_thinking = enable_thinking
+        self._rag_service = rag_service
         # In-memory store for completed interventions
         self._interventions: Dict[str, Intervention] = {}
 
@@ -172,7 +182,13 @@ class InterventionService:
         )
         self._context_manager.update_sub_type_result(session_id, sub_type_result)
 
-        # Step 5: Run HintGeneratorV2 (Node 4)
+        # Step 5: Retrieve knowledge from RAG (Module 6)
+        knowledge_context = await self._retrieve_knowledge(
+            problem_context=problem_context,
+            expected_step=breakpoint_location.expected_step_content,
+        )
+
+        # Step 6: Run HintGeneratorV2 (Node 4)
         hint_content = await self._generator.generate(
             level=sub_type_result.sub_type,
             problem_context=problem_context,
@@ -180,6 +196,7 @@ class InterventionService:
             expected_step=breakpoint_location.expected_step_content,
             student_steps=student_steps,
             enable_thinking=self._enable_thinking,
+            knowledge_context=knowledge_context,
         )
 
         # Step 6: Run OutputGuardrail (Node 5)
@@ -407,6 +424,65 @@ class InterventionService:
         except Exception:
             return None
 
+    def _format_knowledge_context(
+        self,
+        chunks: List["KGChunk"],
+    ) -> str:
+        """Format retrieved knowledge chunks as a context string.
+
+        Args:
+            chunks: List of KGChunk objects from RAG retrieval.
+
+        Returns:
+            Formatted knowledge context string for prompt injection.
+        """
+        if not chunks:
+            return ""
+
+        context_parts = []
+        for i, chunk in enumerate(chunks[:3], 1):
+            content = chunk.content
+            metadata = chunk.metadata or {}
+            chapter = metadata.get("chapter", "")
+            chunk_type = metadata.get("type", "知识点")
+            header = f"【知识点 {i}】（{chunk_type}）"
+            if chapter:
+                header += f" — {chapter}"
+            context_parts.append(f"{header}\n{content}")
+
+        return "\n\n".join(context_parts)
+
+    async def _retrieve_knowledge(
+        self,
+        problem_context: str,
+        expected_step: str,
+        top_k: int = 3,
+    ) -> str:
+        """Retrieve relevant knowledge chunks from RAG service.
+
+        Args:
+            problem_context: Problem text for retrieval query.
+            expected_step: Expected next step for targeted retrieval.
+            top_k: Number of chunks to retrieve (default: 3).
+
+        Returns:
+            Formatted knowledge context string, or empty string if RAG unavailable.
+        """
+        if self._rag_service is None:
+            return ""
+
+        try:
+            # Combine problem and expected step as query for better retrieval
+            query = f"{problem_context}\n\n下一步: {expected_step}"
+            chunks = await self._rag_service.retrieve(
+                query=query,
+                top_k=top_k,
+            )
+            return self._format_knowledge_context(chunks)
+        except Exception:
+            # RAG failures should not break the intervention flow
+            return ""
+
     async def _locate_breakpoint(
         self,
         student_steps: List[Dict[str, Any]],
@@ -513,6 +589,12 @@ class InterventionService:
         else:
             dimension = DimensionEnum.METACOGNITIVE
 
+        # Retrieve knowledge from RAG
+        knowledge_context = await self._retrieve_knowledge(
+            problem_context=problem_context,
+            expected_step=breakpoint_location.expected_step_content,
+        )
+
         # Generate hint at current level
         hint_content = await self._generator.generate(
             level=current_level,
@@ -521,6 +603,7 @@ class InterventionService:
             expected_step=breakpoint_location.expected_step_content,
             student_steps=student_steps,
             enable_thinking=self._enable_thinking,
+            knowledge_context=knowledge_context,
         )
 
         # Guardrail check
@@ -655,6 +738,12 @@ class InterventionService:
                 )
                 self._context_manager.update_sub_type_result(session_id, sub_type_result)
 
+                # Retrieve knowledge from RAG
+                knowledge_context = await self._retrieve_knowledge(
+                    problem_context=problem_context,
+                    expected_step=breakpoint_location.expected_step_content,
+                )
+
                 # Generate new hint
                 hint_content = await self._generator.generate(
                     level=sub_type_result.sub_type,
@@ -663,6 +752,7 @@ class InterventionService:
                     expected_step=breakpoint_location.expected_step_content,
                     student_steps=updated_student_steps,
                     enable_thinking=self._enable_thinking,
+                    knowledge_context=knowledge_context,
                 )
 
                 # Guardrail check
@@ -795,6 +885,12 @@ class InterventionService:
         # Update sub_type_result with new level
         self._context_manager.update_sub_type_result(session_id, sub_type_result)
 
+        # Retrieve knowledge from RAG
+        knowledge_context = await self._retrieve_knowledge(
+            problem_context=problem_context,
+            expected_step=breakpoint_location.expected_step_content,
+        )
+
         # Generate hint at new level
         hint_content = await self._generator.generate(
             level=sub_type_result.sub_type,
@@ -803,6 +899,7 @@ class InterventionService:
             expected_step=breakpoint_location.expected_step_content,
             student_steps=student_steps,
             enable_thinking=self._enable_thinking,
+            knowledge_context=knowledge_context,
         )
 
         # Guardrail check

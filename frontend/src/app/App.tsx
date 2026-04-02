@@ -1,12 +1,9 @@
 import React from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
 const App: React.FC = () => {
-  return (
-    <div className="app">
-      <h1>Math Tutor</h1>
-      <p>高中数学教辅系统</p>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

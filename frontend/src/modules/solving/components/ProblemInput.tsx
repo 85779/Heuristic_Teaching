@@ -4,7 +4,7 @@ interface ProblemInputProps {
   // Props will be added here
 }
 
-export const ProblemInput: React.FC<ProblemInputProps> = (props) => {
+export const ProblemInput: React.FC<ProblemInputProps> = (_props) => {
   return (
     <div className="problem-input">
       {/* Problem input UI will go here */}

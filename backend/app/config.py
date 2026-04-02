@@ -2,6 +2,9 @@
 全局配置
 """
 
+from dotenv import load_dotenv
+load_dotenv()  # 确保 .env 在任何地方读取 DASHSCOPE_API_KEY 之前加载
+
 from pydantic_settings import BaseSettings
 from typing import Optional
 

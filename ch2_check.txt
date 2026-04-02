@@ -1,0 +1,90 @@
+KP_2_01: [knowledge] name=不等式的基本性质
+  content: 对称性：a>b⇔b<a；传递性：a>b且b>c⇒a>c；可加性：a>b⇒a+c>b+c；可乘性：a>b且c>0⇒ac>bc；同向可加性；同向同正可乘性
+  formula: a>b且c>0⇒ac>bc；a>b>0且c>d>0⇒ac>bd
+  prereqs: []
+
+KP_2_02: [method] name=一元二次不等式的解法
+  content: 解一元二次不等式：先解对应方程，再根据二次项系数和判别式判断图象位置，写出解集
+  formula: Δ>0时：ax²+bx+c>0解集为{x|x<x₁或x>x₂}；Δ=0时：解集为{x|x≠-b/(2a)}
+  prereqs: []
+
+KP_2_03: [method] name=二次函数与方程、不等式的综合
+  content: 二次函数y=ax²+bx+c的图象与x轴的交点情况决定了对应方程和不等式的解，根据Δ、对称轴、端点值分析
+  formula: Δ>0有两个交点；Δ=0有一个切点；Δ<0无交点
+  prereqs: []
+
+KP_2_04: [method] name=根据方程根的分布求参数
+  content: 根据一元二次方程在某区间上根的情况求参：若只说有根则参变分离；若规定根的个数则考虑判别式、对称轴、端点值
+  formula: 参变分离：对参数一侧求值域
+  prereqs: []
+
+KP_2_05: [method] name=韦达定理
+  content: 一元二次方程ax²+bx+c=0的两根x₁、x₂满足：x₁+x₂=-b/a，x₁x₂=c/a。常用于整体代入求值或求参数
+  formula: x₁+x₂=-b/a；x₁x₂=c/a
+  prereqs: ['KP_2_04']
+
+KP_2_06: [method] name=作差比较法与作商比较法
+  content: 比较两数（或两式）大小的通法：作差化简后判断符号；作商后判断与1的大小关系（需保证同号）
+  formula: a-b>0⇔a>b；a÷b>1(b>0)⇔a>b
+  prereqs: []
+
+KP_2_07: [method] name=基本不等式与最值
+  content: 均值不等式：a+b≥2√ab（a,b>0），当且仅当a=b时取等。用于求两正数之和的最小值或乘积的最大值
+  formula: a+b≥2√ab；a²+b²≥2ab
+  prereqs: []
+
+KP_2_08: [knowledge] name=柯西不等式
+  content: 二维柯西不等式：(x₁²+y₁²)(x₂²+y₂²)≥(x₁x₂+y₁y₂)²，当且仅当x₁y₂=x₂y₁时取等；三维形式类似。用于求平方和结构的最值问题。
+  formula: null
+  prereqs: []
+
+KP_2_09: [method] name=柯西不等式的应用
+  content: 用柯西不等式求最值的核心在于凑出柯西形式和凑定值，涉及Ax²+By²+Cz²与ax+by+cz类型的最值问题。
+  formula: null
+  prereqs: ['KP_2_08']
+
+KP_2_10: [knowledge] name=权方和不等式
+  content: 权方和不等式：x,y>0时，a²/x + b²/y ≥ (a+b)²/(x+y)，当且仅当a/x=b/y时取等。用于速求分式和的最值。
+  formula: null
+  prereqs: ['KP_2_07']
+
+KP_2_11: [method] name=权方和不等式的应用
+  content: 利用权方和不等式求分式和的最值，若分子分母能凑出定值则直接使用，否则化为更优良的结构分析。
+  formula: null
+  prereqs: ['KP_2_10', 'KP_2_07']
+
+KP_2_12: [method] name=三角换元法求最值
+  content: 涉及平方和或平方差为常数的最值问题可用三角换元：x²+y²=r²时令x=rcosθ, y=rsinθ；x²-y²=r²时令x=r/cosθ, y=rtanθ。
+  formula: null
+  prereqs: ['KP_2_07']
+
+KP_2_13: [method] name=基本不等式：和定求积的最大值
+  content: 已知两正数之和为定值，求其乘积的最大值：用均值不等式ab≤((a+b)/2)²，隐藏和定的条件也需要发现或凑出来。
+  formula: null
+  prereqs: ['KP_2_07']
+
+KP_2_14: [method] name=基本不等式：积定求和的最小值
+  content: 已知两正数之积为定值，求其和的最小值：用均值不等式a+b≥2√ab，若积不是定值则先凑成定值再用。
+  formula: null
+  prereqs: ['KP_2_07']
+
+KP_2_15: [method] name=基本不等式：1的代换技巧
+  content: 型如已知a+b=定值，求k/a + m/b的最小值，可将1替换为a+b凑出积为定值再用均值不等式，是基本不等式求最值的核心模型。
+  formula: null
+  prereqs: ['KP_2_14']
+
+KP_2_16: [method] name=基本不等式：消元思想
+  content: 当已知等式容易反解出某变量时，代入目标式消元后再用基本不等式。消元后可能还需凑定值。
+  formula: null
+  prereqs: ['KP_2_14']
+
+KP_2_17: [method] name=基本不等式：齐次化思想
+  content: 分式型最值问题若分子分母不齐次，可结合已知条件将分子分母齐次化，化为a·(y/x)+b·(x/y)这种积为定值的形式。
+  formula: null
+  prereqs: ['KP_2_14', 'KP_2_15']
+
+KP_2_18: [method] name=基本不等式：统一结构思想与多次使用
+  content: 统一结构思想：若等式中已有求最值的结构，将其与其它部分统一；多次使用：每次使用减少未知数，最后确保取等条件同时满足。
+  formula: null
+  prereqs: ['KP_2_16', 'KP_2_17']
+

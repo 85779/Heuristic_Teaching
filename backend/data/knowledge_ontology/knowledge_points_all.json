@@ -1,0 +1,2538 @@
+{
+  "metadata": {
+    "version": "0.2",
+    "description": "高中数学知识点本体 - 12章完整版",
+    "source": "merged_manual/*.md",
+    "status": "draft",
+    "total_kps": 175
+  },
+  "knowledge_points": [
+    {
+      "kp_id": "KP_1_01",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "集合中元素的性质",
+      "type": "knowledge",
+      "content": "集合中元素具有确定性（元素明确指定）、互异性（元素不重复）、无序性（排列顺序不影响）",
+      "formula": null,
+      "related_types": [
+        "类型Ⅰ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_1_02",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "集合间的基本关系",
+      "type": "knowledge",
+      "content": "子集：若A中所有元素都在B中，则A⊆B；真子集：A⊆B且A≠B；集合相等：A⊆B且B⊆A",
+      "formula": "子集: A⊆B；真子集: A⊂neq B；相等: A=B",
+      "related_types": [
+        "类型Ⅰ",
+        "类型Ⅲ"
+      ],
+      "prerequisites": [
+        "KP_1_01"
+      ]
+    },
+    {
+      "kp_id": "KP_1_03",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "子集个数的计算",
+      "type": "method",
+      "content": "含有n个元素的集合，其子集个数按如下规律计算",
+      "formula": "子集: 2^n；非空子集: 2^n-1；真子集: 2^n-1；非空真子集: 2^n-2（n≥1）",
+      "related_types": [
+        "类型Ⅳ"
+      ],
+      "prerequisites": [
+        "KP_1_01",
+        "KP_1_02"
+      ]
+    },
+    {
+      "kp_id": "KP_1_04",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "集合的基本运算",
+      "type": "method",
+      "content": "并集：A∪B为所有属于A或属于B的元素；交集：A∩B为同时属于A和B的元素；补集：C_U A为全集中不属于A的元素",
+      "formula": "A∪B={x|x∈A或x∈B}；A∩B={x|x∈A且x∈B}；C_UA={x|x∈U且x∉A}",
+      "related_types": [
+        "类型Ⅰ",
+        "类型Ⅴ"
+      ],
+      "prerequisites": [
+        "KP_1_02"
+      ]
+    },
+    {
+      "kp_id": "KP_1_05",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "集合相等的证明",
+      "type": "method",
+      "content": "证明集合相等的方法：证明A⊆B且B⊆A；或列出两个集合的所有元素进行比较",
+      "formula": null,
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_1_02"
+      ]
+    },
+    {
+      "kp_id": "KP_1_06",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "根据集合间的包含关系求参数",
+      "type": "method",
+      "content": "根据集合间的包含关系求参数的方法：画出数轴分析端点，注意空集的情况需单独讨论",
+      "formula": "若A⊆B，则A的范围是B的子集",
+      "related_types": [
+        "类型Ⅲ"
+      ],
+      "prerequisites": [
+        "KP_1_02"
+      ]
+    },
+    {
+      "kp_id": "KP_1_07",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "name": "Venn图法解集合问题",
+      "type": "method",
+      "content": "利用Venn图直观表示集合关系，常用于解决交集、并集、补集的综合性问题，以及文氏图计数问题",
+      "formula": null,
+      "related_types": [
+        "类型Ⅵ"
+      ],
+      "prerequisites": [
+        "KP_1_02",
+        "KP_1_04"
+      ]
+    },
+    {
+      "kp_id": "KP_1_08",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "name": "充分条件与必要条件的判断",
+      "type": "knowledge",
+      "content": "若命题「若p则q」为真，则p是q的充分条件，q是p的必要条件。判断方法：看p能否推出q，q能否推出p",
+      "formula": "p⇒q且q⇒p时为充要条件；p⇒q且q⇏p时为充分不必要条件",
+      "related_types": [
+        "类型1"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_1_09",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "name": "集合角度理解充分必要条件",
+      "type": "knowledge",
+      "content": "从集合角度看：若A⊆B，则x∈A是x∈B的充分不必要条件。简称「小可推大，大不推小」",
+      "formula": "小集合 ⇒ 大集合",
+      "related_types": [
+        "类型1",
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_1_08",
+        "KP_1_02"
+      ]
+    },
+    {
+      "kp_id": "KP_1_10",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "name": "含有一个量词的命题的否定",
+      "type": "method",
+      "content": "全称量词命题「∀x∈M，p(x)」的否定为「∃x∈M，¬p(x)」；存在量词命题「∃x∈M，p(x)」的否定为「∀x∈M，¬p(x)」",
+      "formula": "∀变∃，∃变∀，同时否定结论",
+      "related_types": [
+        "类型III"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_1_11",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "name": "全称量词与存在量词命题的真假判断",
+      "type": "method",
+      "content": "判断全称量词命题为真需所有情况都成立，判断为假只需找一反例；判断存在量词命题为真只需找一情况成立，判断为假需证明所有情况都不成立",
+      "formula": null,
+      "related_types": [
+        "类型IV",
+        "类型V"
+      ],
+      "prerequisites": [
+        "KP_1_10"
+      ]
+    },
+    {
+      "kp_id": "KP_1_12",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "name": "由命题真假求参数",
+      "type": "method",
+      "content": "根据命题的真假反求参数范围：先将命题翻译为数学语言，再利用等价变形或数形结合求解",
+      "formula": null,
+      "related_types": [
+        "类型Ⅱ",
+        "类型V"
+      ],
+      "prerequisites": [
+        "KP_1_08",
+        "KP_1_11"
+      ]
+    },
+    {
+      "kp_id": "KP_1_13",
+      "chapter": 1,
+      "chapter_name": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "name": "命题及其否定的真假关系",
+      "type": "knowledge",
+      "content": "命题p与该命题的否定的真假性必定相反：p为真则¬p为假，p为假则¬p为真。该结论常用于反证法及由命题为假反求参数的问题中。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_1_10"
+      ]
+    },
+    {
+      "kp_id": "KP_2_01",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "不等式的基本性质",
+      "type": "knowledge",
+      "content": "对称性：a>b⇔b<a；传递性：a>b且b>c⇒a>c；可加性：a>b⇒a+c>b+c；可乘性：a>b且c>0⇒ac>bc；同向可加性；同向同正可乘性",
+      "formula": "a>b且c>0⇒ac>bc；a>b>0且c>d>0⇒ac>bd",
+      "related_types": [
+        "类型Ⅰ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_02",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "一元二次不等式的解法",
+      "type": "method",
+      "content": "解一元二次不等式：先解对应方程，再根据二次项系数和判别式判断图象位置，写出解集",
+      "formula": "Δ>0时：ax²+bx+c>0解集为{x|x<x₁或x>x₂}；Δ=0时：解集为{x|x≠-b/(2a)}",
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_03",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "二次函数与方程、不等式的综合",
+      "type": "method",
+      "content": "二次函数y=ax²+bx+c的图象与x轴的交点情况决定了对应方程和不等式的解，根据Δ、对称轴、端点值分析",
+      "formula": "Δ>0有两个交点；Δ=0有一个切点；Δ<0无交点",
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_04",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "根据方程根的分布求参数",
+      "type": "method",
+      "content": "根据一元二次方程在某区间上根的情况求参：若只说有根则参变分离；若规定根的个数则考虑判别式、对称轴、端点值",
+      "formula": "参变分离：对参数一侧求值域",
+      "related_types": [
+        "类型Ⅲ",
+        "类型Ⅳ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_05",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "韦达定理",
+      "type": "method",
+      "content": "一元二次方程ax²+bx+c=0的两根x₁、x₂满足：x₁+x₂=-b/a，x₁x₂=c/a。常用于整体代入求值或求参数",
+      "formula": "x₁+x₂=-b/a；x₁x₂=c/a",
+      "related_types": [
+        "类型Ⅴ"
+      ],
+      "prerequisites": [
+        "KP_2_04"
+      ]
+    },
+    {
+      "kp_id": "KP_2_06",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "作差比较法与作商比较法",
+      "type": "method",
+      "content": "比较两数（或两式）大小的通法：作差化简后判断符号；作商后判断与1的大小关系（需保证同号）",
+      "formula": "a-b>0⇔a>b；a÷b>1(b>0)⇔a>b",
+      "related_types": [
+        "类型Ⅰ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_07",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "name": "基本不等式与最值",
+      "type": "method",
+      "content": "均值不等式：a+b≥2√ab（a,b>0），当且仅当a=b时取等。用于求两正数之和的最小值或乘积的最大值",
+      "formula": "a+b≥2√ab；a²+b²≥2ab",
+      "related_types": [
+        "类型Ⅵ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_08",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "柯西不等式",
+      "type": "knowledge",
+      "content": "二维柯西不等式：(x₁²+y₁²)(x₂²+y₂²)≥(x₁x₂+y₁y₂)²，当且仅当x₁y₂=x₂y₁时取等；三维形式类似。用于求平方和结构的最值问题。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_2_09",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "柯西不等式的应用",
+      "type": "method",
+      "content": "用柯西不等式求最值的核心在于凑出柯西形式和凑定值，涉及Ax²+By²+Cz²与ax+by+cz类型的最值问题。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_08"
+      ]
+    },
+    {
+      "kp_id": "KP_2_10",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "权方和不等式",
+      "type": "knowledge",
+      "content": "权方和不等式：x,y>0时，a²/x + b²/y ≥ (a+b)²/(x+y)，当且仅当a/x=b/y时取等。用于速求分式和的最值。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_07"
+      ]
+    },
+    {
+      "kp_id": "KP_2_11",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "权方和不等式的应用",
+      "type": "method",
+      "content": "利用权方和不等式求分式和的最值，若分子分母能凑出定值则直接使用，否则化为更优良的结构分析。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_10",
+        "KP_2_07"
+      ]
+    },
+    {
+      "kp_id": "KP_2_12",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "三角换元法求最值",
+      "type": "method",
+      "content": "涉及平方和或平方差为常数的最值问题可用三角换元：x²+y²=r²时令x=rcosθ, y=rsinθ；x²-y²=r²时令x=r/cosθ, y=rtanθ。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_07"
+      ]
+    },
+    {
+      "kp_id": "KP_2_13",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "基本不等式：和定求积的最大值",
+      "type": "method",
+      "content": "已知两正数之和为定值，求其乘积的最大值：用均值不等式ab≤((a+b)/2)²，隐藏和定的条件也需要发现或凑出来。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_07"
+      ]
+    },
+    {
+      "kp_id": "KP_2_14",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "基本不等式：积定求和的最小值",
+      "type": "method",
+      "content": "已知两正数之积为定值，求其和的最小值：用均值不等式a+b≥2√ab，若积不是定值则先凑成定值再用。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_07"
+      ]
+    },
+    {
+      "kp_id": "KP_2_15",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "基本不等式：1的代换技巧",
+      "type": "method",
+      "content": "型如已知a+b=定值，求k/a + m/b的最小值，可将1替换为a+b凑出积为定值再用均值不等式，是基本不等式求最值的核心模型。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_14"
+      ]
+    },
+    {
+      "kp_id": "KP_2_16",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "基本不等式：消元思想",
+      "type": "method",
+      "content": "当已知等式容易反解出某变量时，代入目标式消元后再用基本不等式。消元后可能还需凑定值。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_14"
+      ]
+    },
+    {
+      "kp_id": "KP_2_17",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "基本不等式：齐次化思想",
+      "type": "method",
+      "content": "分式型最值问题若分子分母不齐次，可结合已知条件将分子分母齐次化，化为a·(y/x)+b·(x/y)这种积为定值的形式。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_14",
+        "KP_2_15"
+      ]
+    },
+    {
+      "kp_id": "KP_2_18",
+      "chapter": 2,
+      "chapter_name": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "name": "基本不等式：统一结构思想与多次使用",
+      "type": "method",
+      "content": "统一结构思想：若等式中已有求最值的结构，将其与其它部分统一；多次使用：每次使用减少未知数，最后确保取等条件同时满足。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_2_16",
+        "KP_2_17"
+      ]
+    },
+    {
+      "kp_id": "KP_3_13",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块5 零点与不等式",
+      "name": "函数零点小题策略：直接法与等价变形法",
+      "type": "method",
+      "content": "不含参的函数零点问题有两种常用处理方法：1. 直接令f(x)=0解方程；2. 等价变形成g(x)=h(x)，转化为两函数图象交点个数问题。变形原则是便于作图分析。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_26"
+      ]
+    },
+    {
+      "kp_id": "KP_3_14",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块5 零点与不等式",
+      "name": "函数零点含参问题：全分离与半分离",
+      "type": "method",
+      "content": "含参函数零点问题有两种核心方法：全分离——将方程f(x)=0等价变形成a=g(x)，研究水平直线y=a与y=g(x)图象交点；半分离——当全分离不易时，将方程变形为f(x)=g(a,x)，分析图形运动过程。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_26",
+        "KP_3_30"
+      ]
+    },
+    {
+      "kp_id": "KP_3_15",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块5 零点与不等式",
+      "name": "含参不等式恒成立问题解法",
+      "type": "method",
+      "content": "含参不等式恒成立问题的处理方法：1. 全分离：a≤f(x)型，转化为求f(x)最值；2. 半分离：分析图形运动。存在性条件：∃x使a<f(x)成立⟺a<f(x)_max；∀x使a<f(x)成立⟺a<f(x)_min。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_32"
+      ]
+    },
+    {
+      "kp_id": "KP_3_16",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块5 零点与不等式",
+      "name": "经典切线放缩不等式",
+      "type": "knowledge",
+      "content": "高考常用切线放缩不等式：e^x≥x+1，e^x≥ex，ln x≤x-1，ln(x+1)≤x，ln x≤(1/e)x。这些不等式在零点、不等式证明中有重要应用。",
+      "formula": "e^x≥x+1，e^x≥ex，ln x≤x-1，ln(x+1)≤x",
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_32"
+      ]
+    },
+    {
+      "kp_id": "KP_3_17",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块6 复合函数综合",
+      "name": "复合函数方程的换元法",
+      "type": "method",
+      "content": "含有f(f(x))、f(g(x))结构的复合函数方程，用换元法求解：设内层函数为t，将双层方程化为两个单层方程处理。注意分析t的取值范围和对应x的个数。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_26",
+        "KP_3_35"
+      ]
+    },
+    {
+      "kp_id": "KP_3_18",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块6 复合函数综合",
+      "name": "复合函数不等式的换元法",
+      "type": "method",
+      "content": "含有f(f(x))、f(g(x))结构的复合函数不等式，同样用换元法：设内层函数为t，将双层不等式化为两个单层不等式来求解。核心技巧是将内层整体换元，转化为两个简单结构分析。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_17"
+      ]
+    },
+    {
+      "kp_id": "KP_3_19",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块7 函数构造思想",
+      "name": "原函数构造：加减法构造",
+      "type": "method",
+      "content": "由含f'(x)的不等式构造原函数的方法：xf'(x)+f(x)构造F(x)=xf(x)；xf'(x)-f(x)构造F(x)=f(x)/x；xf'(x)+2f(x)构造F(x)=x²f(x)；f(x)+f'(x)构造F(x)=e^xf(x)。",
+      "formula": "F'(x)=xf(x)+f(x)⇒F(x)=xf(x)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_27",
+        "KP_3_32"
+      ]
+    },
+    {
+      "kp_id": "KP_3_20",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块7 函数构造思想",
+      "name": "原函数构造：乘除法与指数调节构造",
+      "type": "method",
+      "content": "原函数构造进阶形式：xf'(x)-2f(x)构造F(x)=f(x)/x²；f'(x)-f(x)构造F(x)=f(x)/e^x；f'(x)sinx+f(x)cosx构造F(x)=f(x)sinx。口诀：加减构造积与商，指数调节e^mx。",
+      "formula": "F'(x)=f(x)/e^x⇒F(x)=f(x)/e^x",
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_19"
+      ]
+    },
+    {
+      "kp_id": "KP_3_21",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块7 函数构造思想",
+      "name": "同构：指数对数基础模型",
+      "type": "method",
+      "content": "同构是通过等价变形使方程或不等式两端结构一致，常见同构模型：e^x±x与x±lnx可相互转化；xe^x与xlnx可相互转化；e^x/x与x/lnx可相互转化。利用恒等式x=e^(lnx)实现指数对数结构统一。",
+      "formula": "e^x+x=e^(lne^x)+lne^x=n(e^x)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_30",
+        "KP_3_31"
+      ]
+    },
+    {
+      "kp_id": "KP_3_22",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块7 函数构造思想",
+      "name": "同构：简单变形与指对共生同构",
+      "type": "method",
+      "content": "同构操作方法：1.简单变形同构：将参数分离后调整结构；2.利用x=e^(lnx)化局部统一；3.指对共生式同构，如e^x≥ln(x+a)+a可化为e^x+x与x+lnx的同构问题。",
+      "formula": "xe^x=e^(lnx)·e^x=e^(lnx+x)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_21"
+      ]
+    },
+    {
+      "kp_id": "KP_3_23",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块7 函数构造思想",
+      "name": "构造函数比大小：基于结构与数字",
+      "type": "method",
+      "content": "比较大小时构造函数的两种思路：1.基于结构——数据形式相同时，直接构造或简单变形后构造同一函数比较；2.基于数字——某个数字重复出现时，将该数字换元为x构造函数。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_26",
+        "KP_3_32"
+      ]
+    },
+    {
+      "kp_id": "KP_3_24",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块7 函数构造思想",
+      "name": "糖水不等式与泰勒展开估算",
+      "type": "method",
+      "content": "比较大小的进阶方法：1.糖水不等式：a>b>0，c>0时，b/a<(b+c)/(a+c)；2.泰勒展开估算：e^x≈1+x+x²/2，ln(1+x)≈x-x²/2+x³/3，仅在|x|较小时近似效果好。",
+      "formula": "b/a<(b+c)/(a+c)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_27"
+      ]
+    },
+    {
+      "kp_id": "KP_3_25",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块8 导数综合大题",
+      "name": "隐零点问题处理方法",
+      "type": "method",
+      "content": "隐零点问题：当f'(x)零点无法直接求出时，先论证零点存在性，再设零点为x₀，用f'(x₀)=0化简f(x₀)的表达式，将问题转化为单变量函数求最值或证明不等式。核心是消元——用零点条件消去参数。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_27",
+        "KP_3_32"
+      ]
+    },
+    {
+      "kp_id": "KP_3_26",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "name": "函数的概念与三要素",
+      "type": "knowledge",
+      "content": "函数定义：设A、B为非空数集，按某种对应法则f，对于A中的每个元素x，在B中有唯一确定的元素y与之对应。定义域、解析式、值域为函数三要素。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_3_27",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "name": "函数的单调性及其判断",
+      "type": "knowledge",
+      "content": "单调性：增函数与减函数的定义；单调性的运算规律；复合函数的单调性（同增异减）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_3_28",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "name": "函数的奇偶性及其应用",
+      "type": "knowledge",
+      "content": "奇函数：f(-x)=-f(x)，图象关于原点对称；偶函数：f(-x)=f(x)，图象关于y轴对称。奇偶性运算规律：奇±奇=奇，偶±偶=偶，奇×奇=偶，奇×偶=奇。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_26"
+      ]
+    },
+    {
+      "kp_id": "KP_3_29",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "name": "函数的对称性与周期性",
+      "type": "knowledge",
+      "content": "函数周期性：存在T≠0使f(x+T)=f(x)，T的最小正值称为最小正周期。函数对称性：轴对称（f(a+x)=f(a-x)）和中心对称。常见周期函数模型。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_27"
+      ]
+    },
+    {
+      "kp_id": "KP_3_30",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块3 指数函数与对数函数",
+      "name": "指数运算与指数函数",
+      "type": "knowledge",
+      "content": "指数运算律：a^m·a^n=a^(m+n)；(a^m)^n=a^(mn)；a^0=1；a^(-n)=1/a^n。指数函数y=a^x（a>0且a≠1）的图象与性质：a>1时单调递增，0<a<1时单调递减。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_3_31",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块3 指数函数与对数函数",
+      "name": "对数运算与对数函数",
+      "type": "knowledge",
+      "content": "对数定义：a^b=c⇔log_a c=b；对数运算律：log_a(MN)=log_a M+log_a N；log_a(M/N)=log_a M-log_a N；log_a M^n=n·log_a M。对数函数y=log_a x的图象与性质。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_30"
+      ]
+    },
+    {
+      "kp_id": "KP_3_32",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块4 导数及其应用",
+      "name": "导数基础与切线",
+      "type": "method",
+      "content": "导数定义：f'(x)=lim(Δx→0)[f(x+Δx)-f(x)]/Δx；基本求导公式；(uv)'=u'v+uv'。求曲线的切线方程：在点(x₀,y₀)处切线斜率为f'(x₀)，切线方程为y-y₀=f'(x₀)(x-x₀)。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_3_33",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块4 导数及其应用",
+      "name": "无参函数的单调性与极值",
+      "type": "method",
+      "content": "利用导数判断函数单调性：f'(x)>0则f(x)递增；f'(x)<0则f(x)递减。极值：f'(x)=0的根两侧导数异号；求最值：比较极值点函数值与端点函数值。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_32"
+      ]
+    },
+    {
+      "kp_id": "KP_3_34",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块4 导数及其应用",
+      "name": "带参函数的单调性讨论",
+      "type": "method",
+      "content": "含参函数单调区间的分类讨论：需根据参数范围讨论导数零点与区间端点的关系，常见讨论点包括参数正负、参数与端点大小比较等。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_33"
+      ]
+    },
+    {
+      "kp_id": "KP_3_35",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块4 导数及其应用",
+      "name": "分段函数基础",
+      "type": "method",
+      "content": "分段函数求值：按自变量所在区间代入对应解析式；根据分段函数单调性求参数：保证每段单调且在分段点处左段最大值≤右段最小值（或左段最小值≥右段最大值）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_3_27"
+      ]
+    },
+    {
+      "kp_id": "KP_3_36",
+      "chapter": 3,
+      "chapter_name": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "name": "抽象函数赋值法",
+      "type": "method",
+      "content": "利用条件等式给变量赋值求函数值或判断性质：令x=y得f(0)类结论；令y=x或y=-x建立方程组；令x=0得f(-y)类关系。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_4_01",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "name": "三角函数的定义",
+      "type": "knowledge",
+      "content": "在单位圆或一般圆中定义三角函数：sinα=y/r，cosα=x/r，tanα=y/x。已知终边上一点坐标可求三角函数值",
+      "formula": "sinα=y/r；cosα=x/r；tanα=y/x（x≠0）；r=√(x²+y²)",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_4_02",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "name": "同角三角函数的基本关系",
+      "type": "knowledge",
+      "content": "同角三角函数三大关系：sin²α+cos²α=1；tanα=sinα/cosα；1+tan²α=sec²α。用于知一求二",
+      "formula": "sin²α+cos²α=1；tanα=sinα/cosα",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_01"
+      ]
+    },
+    {
+      "kp_id": "KP_4_03",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "name": "诱导公式",
+      "type": "method",
+      "content": "利用终边相同或关于坐标轴对称的角的关系化简求值。核心口诀：奇变偶不变，符号看象限",
+      "formula": "sin(π/2-α)=cosα；cos(π/2+α)=-sinα；sin(π+α)=-sinα",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_02"
+      ]
+    },
+    {
+      "kp_id": "KP_4_04",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "name": "两角和差的三角函数",
+      "type": "method",
+      "content": "两角和差公式：sin(α±β)=sinαcosβ±cosαsinβ；cos(α±β)=cosαcosβ∓sinαsinβ；tan(α±β)=(tanα±tanβ)/(1∓tanαtanβ)",
+      "formula": "sin(α±β)=sinαcosβ±cosαsinβ；cos(α±β)=cosαcosβ∔sinαsinβ",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_03"
+      ]
+    },
+    {
+      "kp_id": "KP_4_05",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "name": "二倍角公式",
+      "type": "method",
+      "content": "二倍角公式：sin2α=2sinαcosα；cos2α=cos²α-sin²α=2cos²α-1=1-2sin²α；tan2α=2tanα/(1-tan²α)",
+      "formula": "sin2α=2sinαcosα；cos2α=cos²α-sin²α",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_03"
+      ]
+    },
+    {
+      "kp_id": "KP_4_06",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "name": "三角恒等变换的常用技巧",
+      "type": "method",
+      "content": "辅助角公式（asinθ+bcosθ=√(a²+b²)sin(θ+φ)）；降幂公式；万能公式；asinθ+bcosθ化简",
+      "formula": "asinθ+bcosθ=√(a²+b²)sin(θ+φ)，其中cosφ=a/√(a²+b²)，sinφ=b/√(a²+b²)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_01",
+        "KP_4_02"
+      ]
+    },
+    {
+      "kp_id": "KP_4_07",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "name": "三角函数的图象变换",
+      "type": "method",
+      "content": "y=Asin(ωx+φ)的图象：由y=sinx经过相位变换（左右平移|φ|个单位）、周期变换（横坐标变为1/ω）、振幅变换（纵坐标变为A）得到",
+      "formula": "左加右减（φ），横坐标伸缩1/ω（周期T=2π/|ω|），振幅|A|",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_06"
+      ]
+    },
+    {
+      "kp_id": "KP_4_08",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "name": "正弦型函数的性质",
+      "type": "knowledge",
+      "content": "y=Asin(ωx+φ)的性质：定义域R；值域[-|A|,|A|]；对称轴；对称中心",
+      "formula": "周期T=2π/|ω|",
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_05",
+        "KP_4_06"
+      ]
+    },
+    {
+      "kp_id": "KP_4_09",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "name": "正弦型函数的最值问题",
+      "type": "method",
+      "content": "y=Asin(ωx+φ)及y=Asin(ωx+φ)+B的最值分析：若x∈R，值域为[-|A|,|A|]；若x有范围限制，需先求ωx+φ的范围，再结合正弦函数单调性求最值。含参最值问题需对参数分类讨论。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_07"
+      ]
+    },
+    {
+      "kp_id": "KP_4_10",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "name": "已知三角函数值求角",
+      "type": "method",
+      "content": "已知sinα=t求α：先判断α所在象限，若α∈[-π/2,π/2]则α=arcsin t；若α∈[0,2π)且不在[-π/2,π/2]范围，则需用诱导公式转化或综合考虑arcsin与arccos、arctan的选择。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_03"
+      ]
+    },
+    {
+      "kp_id": "KP_4_11",
+      "chapter": 4,
+      "chapter_name": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "name": "解三角形与三角函数的综合应用",
+      "type": "method",
+      "content": "三角形中sinA+sinB+sinC、cosA+cosB+cosC等的性质证明；正弦定理、余弦定理与三角恒等变换的综合应用；内角和A+B+C=π的应用技巧。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_4_02",
+        "KP_4_03"
+      ]
+    },
+    {
+      "kp_id": "KP_5_01",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "正弦定理",
+      "type": "knowledge",
+      "content": "正弦定理：a/sinA=b/sinB=c/sinC=2R，其中R为三角形外接圆半径。用于已知两边一对角求第三边，或已知两角及一边求边",
+      "formula": "a/sinA=b/sinB=c/sinC=2R",
+      "related_types": [
+        "类型Ⅰ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_5_02",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "余弦定理",
+      "type": "knowledge",
+      "content": "余弦定理：a²=b²+c²-2bc·cosA；已知三边求角，或已知两边及一角求第三边",
+      "formula": "cosA=(b²+c²-a²)/(2bc)",
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_5_03",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "解三角形的基本方法",
+      "type": "method",
+      "content": "已知两边一角用余弦定理；已知两角一边用正弦定理+内角和定理；已知三边用余弦定理；涉及面积用面积公式S=½ab·sinC",
+      "formula": "S=½absinC=½bcsinA=½acsinB",
+      "related_types": [
+        "类型Ⅰ",
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_5_01",
+        "KP_5_02"
+      ]
+    },
+    {
+      "kp_id": "KP_5_04",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块2 三角形面积与内切圆",
+      "name": "三角形面积公式",
+      "type": "method",
+      "content": "三角形面积公式：S=½absinC=½bcsinA=½acsinB；海伦公式：S=√[p(p-a)(p-b)(p-c)]，其中p=(a+b+c)/2",
+      "formula": "S=½absinC；海伦公式：S=√[p(p-a)(p-b)(p-c)]",
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_03"
+      ]
+    },
+    {
+      "kp_id": "KP_5_05",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "三角形内切圆与外接圆",
+      "type": "knowledge",
+      "content": "三角形内切圆半径r=2S/L（S为面积，L为周长）；外接圆半径R=abc/(4S)。特殊三角形的内切圆和外接圆半径有公式可记。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_04"
+      ]
+    },
+    {
+      "kp_id": "KP_5_06",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "正余弦定理的综合应用",
+      "type": "method",
+      "content": "综合运用正弦定理和余弦定理解决复杂解三角形问题：注意边角互化的时机，什么时候用正弦定理、什么时候用余弦定理。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_01",
+        "KP_5_02"
+      ]
+    },
+    {
+      "kp_id": "KP_5_07",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "解三角形的实际应用题",
+      "type": "method",
+      "content": "测量、航海、几何测量等实际问题建模与求解：画图建模型，将实际问题几何化，用正余弦定理求解。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_01",
+        "KP_5_02",
+        "KP_5_03"
+      ]
+    },
+    {
+      "kp_id": "KP_5_08",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "解三角形中的范围最值问题",
+      "type": "method",
+      "content": "解三角形中边长、角度、面积的取值范围与最值问题：常用均值不等式、余弦定理的边角互化、或利用函数思想转化为单变量问题。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_03",
+        "KP_2_07"
+      ]
+    },
+    {
+      "kp_id": "KP_5_09",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "射影定理",
+      "type": "knowledge",
+      "content": "射影定理（第一余弦定理）：a=b·cosC+c·cosB，b=a·cosC+c·cosA，c=a·cosB+b·cosA。用于边角关系的简洁表达。",
+      "formula": "a=b·cosC+c·cosB",
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_02"
+      ]
+    },
+    {
+      "kp_id": "KP_5_10",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "三角形各种线的计算",
+      "type": "method",
+      "content": "三角形中线长公式：m_a=½√(2b²+2c²-a²)；角平分线长公式；高线的计算方法（利用面积S=½ah）。",
+      "formula": "m_a=½√(2b²+2c²-a²)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_01",
+        "KP_5_02",
+        "KP_5_03"
+      ]
+    },
+    {
+      "kp_id": "KP_5_11",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "三角函数与解三角形综合",
+      "type": "method",
+      "content": "三角恒等变换与解三角形相结合的综合问题：利用正余弦定理化边为角或化角为边，结合三角恒等变换公式求解。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_01",
+        "KP_5_02",
+        "KP_5_03",
+        "KP_5_06",
+        "KP_4_04"
+      ]
+    },
+    {
+      "kp_id": "KP_5_12",
+      "chapter": 5,
+      "chapter_name": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "name": "三角形形状的判定",
+      "type": "method",
+      "content": "根据边角关系判定三角形为等腰、直角、等边、钝角等形状：常用余弦定理判断角的大小，或用边关系如a²+b²<c²判定钝角。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_5_01",
+        "KP_5_02",
+        "KP_5_03",
+        "KP_5_06"
+      ]
+    },
+    {
+      "kp_id": "KP_6_01",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "name": "向量的概念与线性运算",
+      "type": "knowledge",
+      "content": "向量：既有大小又有方向的量。向量的加减法（平行四边形法则、三角形法则）；数乘向量λa；向量的坐标表示",
+      "formula": "→AB+→BC=→AC；λ→a的方向：λ>0同向，λ<0反向",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_6_02",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "name": "向量的坐标运算",
+      "type": "method",
+      "content": "向量的坐标表示：→a=(x₁,y₁)，→b=(x₂,y₂)，则→a±→b=(x₁±x₂,y₁±y₂)；λ→a=(λx₁,λy₁)；→AB=(x₂-x₁,y₂-y₁)",
+      "formula": "→a+→b=(x₁+x₂,y₁+y₂)；|→a|=√(x₁²+y₁²)",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_6_03",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "name": "向量的数量积",
+      "type": "knowledge",
+      "content": "向量的数量积（点积）：→a·→b=|→a||→b|cosθ。坐标形式：→a=(x₁,y₁)，→b=(x₂,y₂)，则→a·→b=x₁x₂+y₁y₂",
+      "formula": "→a·→b=|→a||→b|cosθ=x₁x₂+y₁y₂",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_02"
+      ]
+    },
+    {
+      "kp_id": "KP_6_04",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "name": "向量法解几何问题",
+      "type": "method",
+      "content": "用向量方法处理平面几何问题：平行⇔向量共线（→a=λ→b）；垂直⇔数量积为零（→a·→b=0）；求夹角⇔cosθ=(→a·→b)/(|→a||→b|)",
+      "formula": "→a∥→b⇔→a=λ→b；→a⊥→b⇔→a·→b=0",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_02"
+      ]
+    },
+    {
+      "kp_id": "KP_6_05",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "name": "向量的平行与共线",
+      "type": "knowledge",
+      "content": "向量共线的判定：→a∥→b⇔→a=λ→b（λ为实数）；坐标形式：→a=(x₁,y₁)，→b=(x₂,y₂)，则→a∥→b⇔x₁y₂-x₂y₁=0。方向相同或相反均为共线。",
+      "formula": "→a∥→b⇔x₁y₂-x₂y₁=0",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_02"
+      ]
+    },
+    {
+      "kp_id": "KP_6_06",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "name": "向量的垂直",
+      "type": "knowledge",
+      "content": "向量垂直的判定：→a⊥→b⇔→a·→b=0；坐标形式：→a=(x₁,y₁)，→b=(x₂,y₂)，则→a⊥→b⇔x₁x₂+y₁y₂=0。",
+      "formula": "→a⊥→b⇔x₁x₂+y₁y₂=0",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_01",
+        "KP_6_04"
+      ]
+    },
+    {
+      "kp_id": "KP_6_07",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "name": "平面向量基本定理",
+      "type": "knowledge",
+      "content": "平面向量基本定理：如果→e₁、→e₂是平面内不共线的向量，那么该平面内任意向量→a都有唯一的一对实数λ₁、λ₂，使→a=λ₁→e₁+λ₂→e₂。→e₁、→e₂称为基底。",
+      "formula": "→a=λ₁→e₁+λ₂→e₂",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_05",
+        "KP_5_01"
+      ]
+    },
+    {
+      "kp_id": "KP_6_08",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "name": "向量的坐标表示",
+      "type": "method",
+      "content": "向量的坐标表示：→a=(x,y)表示向量在坐标轴上的投影。已知两点A(x₁,y₁)、B(x₂,y₂)，则→AB=(x₂-x₁,y₂-y₁)。建系方法：用坐标法处理向量几何问题时，建立合适的直角坐标系是解题关键。",
+      "formula": "→AB=(x₂-x₁,y₂-y₁)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_05",
+        "KP_6_06"
+      ]
+    },
+    {
+      "kp_id": "KP_6_09",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "name": "用坐标法解决平行垂直问题",
+      "type": "method",
+      "content": "利用向量的坐标运算判定平行与垂直：平行→x₁y₂-x₂y₁=0；垂直→x₁x₂+y₁y₂=0。建系后用坐标运算替代几何推导，避免添加辅助线。",
+      "formula": "平行→x₁y₂-x₂y₁=0；垂直→x₁x₂+y₁y₂=0",
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_03",
+        "KP_6_04"
+      ]
+    },
+    {
+      "kp_id": "KP_6_10",
+      "chapter": 6,
+      "chapter_name": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "name": "平面向量的应用综合",
+      "type": "method",
+      "content": "向量在实际问题和综合几何问题中的综合应用：极化恒等式解决共起点向量的数量积问题；投影法求数量积；拆解法选择基底表示向量。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_6_05",
+        "KP_5_02"
+      ]
+    },
+    {
+      "kp_id": "KP_7_01",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "复数的概念",
+      "type": "knowledge",
+      "content": "复数：形如a+bi（a,b∈R）的数，其中i²=-1。a为实部，b为虚部。分类：b=0为实数；b≠0为虚数；a=0且b≠0为纯虚数",
+      "formula": "i²=-1；z=a+bi（a∈R，b∈R）；z为纯虚数⇔a=0且b≠0",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_7_02",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "复数的四则运算",
+      "type": "method",
+      "content": "复数加减：实部虚部分别加减；乘法：(a+bi)(c+di)=(ac-bd)+(ad+bc)i；除法：分子分母同乘分母的共轭复数",
+      "formula": "(a+bi)(c+di)=(ac-bd)+(ad+bc)i",
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_01"
+      ]
+    },
+    {
+      "kp_id": "KP_7_03",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "复数的几何意义",
+      "type": "knowledge",
+      "content": "复数与复平面的点一一对应；复数与向量一一对应；复数的模：|z|=√(a²+b²)；共轭复数：z=a+bi，z̄=a-bi；z·z̄=|z|²",
+      "formula": "|z|=√(a²+b²)；z·z̄=|z|²",
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_01"
+      ]
+    },
+    {
+      "kp_id": "KP_7_04",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "共轭复数",
+      "type": "knowledge",
+      "content": "共轭复数：z=a+bi的共轭复数为z̄=a-bi。性质：z·z̄=|z|²=|a+bi|²=a²+b²；z+z̄=2a（实数）；z-z̄=2bi（纯虚数或0）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_01"
+      ]
+    },
+    {
+      "kp_id": "KP_7_05",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "复数模的运算性质",
+      "type": "knowledge",
+      "content": "复数模的运算性质：|z₁z₂|=|z₁|·|z₂|；|z₁/z₂|=|z₁|/|z₂|；|z|²≠z²（注意与实数模运算的区别）。常用于求复数模的最值问题。",
+      "formula": "|z₁z₂|=|z₁|·|z₂|；|z₁/z₂|=|z₁|/|z₂|",
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_01"
+      ]
+    },
+    {
+      "kp_id": "KP_7_06",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "i的幂的周期性",
+      "type": "knowledge",
+      "content": "虚数单位i的幂呈4为周期的循环：i^{4k}=1，i^{4k+1}=i，i^{4k+2}=-1，i^{4k+3}=-i（k∈Z）。利用这个规律可以将高次幂化为低次幂计算。",
+      "formula": "i⁴ᵏ=1，i⁴ᵏ⁺¹=i，i⁴ᵏ⁺²=-1，i⁴ᵏ⁺³=-i",
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_01"
+      ]
+    },
+    {
+      "kp_id": "KP_7_07",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "复数的几何意义应用",
+      "type": "method",
+      "content": "复数对应向量的夹角计算：设z₁对应向量→a，z₂对应向量→b，则cosθ=(→a·→b)/(|→a||→b|)。复数模的最值问题可利用 |z|-|z₀|≤|z-z₀|≤|z|+|z₀| 转化。",
+      "formula": "cosθ=(→a·→b)/(|→a||→b|)；|z|-|z₀|≤|z-z₀|≤|z|+|z₀|",
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_02"
+      ]
+    },
+    {
+      "kp_id": "KP_7_08",
+      "chapter": 7,
+      "chapter_name": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "name": "复数方程求解",
+      "type": "method",
+      "content": "设代数形式z=a+bi建立方程组求复数：实部相等、虚部相等。若方程次数较高，可先因式分解降次。注意复数范围内方程解的个数与实数范围的差异。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_7_03"
+      ]
+    },
+    {
+      "kp_id": "KP_8_01",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "name": "等差数列的通项与前n项和",
+      "type": "method",
+      "content": "等差数列：a_{n+1}-a_n=d（常数）。通项公式：a_n=a_1+(n-1)d；前n项和：S_n=n(a_1+a_n)/2=na_1+n(n-1)d/2",
+      "formula": "a_n=a_1+(n-1)d；S_n=n(a_1+a_n)/2",
+      "related_types": [
+        "类型Ⅰ",
+        "类型Ⅱ"
+      ],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_8_02",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "name": "等比数列的通项与前n项和",
+      "type": "method",
+      "content": "等比数列：a_{n+1}/a_n=q（常数）。通项公式：a_n=a_1q^{n-1}；前n项和：S_n=a_1(1-q^n)/(1-q)（q≠1）",
+      "formula": "a_n=a_1q^{n-1}；S_n={na_1,q=1；a_1(1-q^n)/(1-q),q≠1}",
+      "related_types": [
+        "类型Ⅲ",
+        "类型Ⅳ"
+      ],
+      "prerequisites": [
+        "KP_8_01"
+      ]
+    },
+    {
+      "kp_id": "KP_8_03",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "name": "等差数列与等比数列的判定",
+      "type": "method",
+      "content": "等差判定：a_{n+1}-a_n为常数；或2a_{n+1}=a_n+a_{n+2}。等比判定：a_{n+1}/a_n为常数（非零）；或a_{n+1}·a_{n-1}=a_n²",
+      "formula": "等差⇔2a_{n+1}=a_n+a_{n+2}；等比⇔a_{n+1}·a_{n-1}=a_n²",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_8_04",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块2 数列求和方法",
+      "name": "数列求和的常用方法",
+      "type": "method",
+      "content": "错位相减法（等差×等比）；裂项相消法（分式裂项）；分组求和法（拆分为等差+等比）；倒序相加法",
+      "formula": "错位相减：S_n=a₁(b₁+b₂+...+bₙ)，其中{bₙ}等比",
+      "related_types": [
+        "类型Ⅴ",
+        "类型Ⅵ"
+      ],
+      "prerequisites": [
+        "KP_8_03"
+      ]
+    },
+    {
+      "kp_id": "KP_8_05",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "name": "递推数列求通项",
+      "type": "method",
+      "content": "由递推式求通项：累加法（a_{n+1}=a_n+f(n)）；累乘法（a_{n+1}=a_n·f(n)）；构造法（化为等差/等比）；特征根法（线性递推）",
+      "formula": "累加：a_n=a₁+∑(f(k))；累乘：a_n=a₁·∏(f(k))",
+      "related_types": [
+        "类型Ⅶ"
+      ],
+      "prerequisites": [
+        "KP_8_01",
+        "KP_8_03"
+      ]
+    },
+    {
+      "kp_id": "KP_8_06",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "name": "数学归纳法",
+      "type": "method",
+      "content": "证明关于正整数n的命题：(1)验证n=1时成立；(2)假设n=k时成立，证明n=k+1时成立",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_01",
+        "KP_8_03"
+      ]
+    },
+    {
+      "kp_id": "KP_8_07",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "name": "数列的单调性与最值",
+      "type": "method",
+      "content": "数列单调性判断方法：作差法（a_{n+1}-a_n的符号）或作商法（a_{n+1}/a_n与1比较）；数列最大最小项的求法：比较相邻项或利用单调性。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_01",
+        "KP_8_03"
+      ]
+    },
+    {
+      "kp_id": "KP_8_08",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "name": "数列的有界性",
+      "type": "knowledge",
+      "content": "数列有界性：存在常数M使a_n≤M恒成立。有界与单调性结合判断数列极限的存在性；有界数列不一定单调，但收敛数列一定有界。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_01"
+      ]
+    },
+    {
+      "kp_id": "KP_8_09",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块2 数列求和方法",
+      "name": "a_n与S_n的关系",
+      "type": "method",
+      "content": "已知S_n求a_n的通法：a_n=S_n-S_{n-1}（n≥2），注意验证a₁=S₁。a_n与S_n相互转化技巧：若已知含a_n和S_n的等式，可构造方程组求解。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_01"
+      ]
+    },
+    {
+      "kp_id": "KP_8_10",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "name": "构造特殊数列",
+      "type": "method",
+      "content": "通过待定系数法构造等差或等比数列来求解递推式：形如a_{n+1}=pa_n+q的递推式，设a_{n+1}-A=p(a_n-A)构造等比数列。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_01"
+      ]
+    },
+    {
+      "kp_id": "KP_8_11",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块2 数列求和方法",
+      "name": "数列求和的进阶方法",
+      "type": "method",
+      "content": "非常规裂项（分母为复合函数、分式裂项后相消）；分组求和的复杂形式（等差+等比混合）；添项去项使数列化为可求和形式。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_06"
+      ]
+    },
+    {
+      "kp_id": "KP_8_12",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "name": "数列放缩技巧",
+      "type": "method",
+      "content": "数列不等式证明中的放缩技巧：丢项放缩（保留前n项放大剩余）；糖水不等式放缩（a/b < (a+c)/(b+c)）；构造裂项形式进行放缩求和。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_01",
+        "KP_8_02"
+      ]
+    },
+    {
+      "kp_id": "KP_8_13",
+      "chapter": 8,
+      "chapter_name": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "name": "数学归纳法的应用",
+      "type": "method",
+      "content": "数学归纳法在数列证明、综合大题中的灵活应用：不仅证等式，还可证不等式、证明整除、证明数列单调有界等。注意归纳假设的用法和结论的推导。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_8_02",
+        "KP_8_12"
+      ]
+    },
+    {
+      "kp_id": "KP_9_05",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "规则几何体的结构特征",
+      "type": "knowledge",
+      "content": "正棱锥（底面为正多边形，顶点在底面投影为正多边形中心）、正四面体（侧棱与底面边长相等，四面均为正三角形）、正棱台（正棱锥被平行于底面的平面截得）、圆台（圆锥被平行于底面的平面截得）的定义及其性质。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_9_06",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "内切球问题",
+      "type": "method",
+      "content": "涉及内切球半径的计算，关键在于选取经过切点和几何体高（或轴）的截面来分析。对于三棱锥，内切球半径可用等体积法 R=3V/S 求得。",
+      "formula": "R=3V/S",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_05"
+      ]
+    },
+    {
+      "kp_id": "KP_9_07",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "外接球问题的四大模型",
+      "type": "method",
+      "content": "外接球问题有四大模型：①长方体模型（长宽高分别为a,b,c的长方体外接球半径R=½√(a²+b²+c²)，适用于有三条两两垂直的棱的三棱锥、对棱相等模型）；②圆柱模型（底面半径r，高h，满足r²+(h/2)²=R²，适用于线面垂直的三棱锥、直三棱柱）；③圆锥模型（高h，底面半径r，满足|h-R|²+r²=R²，适用于侧棱相等的棱锥）；④台体模型（上下底面半径r₁,r₂，高h，满足√(R²-r₁²)±√(R²-r₂²)=h）。通法：过某个面的外心作该面的垂线，球心在此垂线上，由球心到各顶点距离相等建立方程。",
+      "formula": "R=½√(a²+b²+c²)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_05"
+      ]
+    },
+    {
+      "kp_id": "KP_9_08",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "斜二测画法",
+      "type": "method",
+      "content": "斜二测画法是画水平放置的平面图形直观图的方法：①在原图中取互相垂直的x轴、y轴，画直观图时画成x'轴与y'轴，使∠x'O'y'=45°或135°；②平行于x轴的线段长度不变，平行于y轴的线段长度变为原来的一半；③原图与直观图的面积关系为S=2√2S'。",
+      "formula": "S=2√2S'",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_9_09",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "最短路径问题",
+      "type": "method",
+      "content": "空间中最短路径问题，常将几何体展开为平面，到平面上分析最短路径。常见于圆锥、圆柱等旋转体的侧面展开。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_08"
+      ]
+    },
+    {
+      "kp_id": "KP_9_10",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "等体积法",
+      "type": "method",
+      "content": "等体积法有两种应用：①转换顶点求体积，当直接计算某三棱锥体积不方便时，可考虑转换顶点；②求点到平面的距离，若能求得平面面积及以该平面为底的另一个三棱锥的体积，则可求出高。公式：V=⅓S·h。",
+      "formula": "V=⅓Sh",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_05"
+      ]
+    },
+    {
+      "kp_id": "KP_9_11",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "name": "多面体的截面问题",
+      "type": "method",
+      "content": "作多面体截面的两种方法：①平行线法（直接作对侧直线的平行线来扩大截面）；②延长线法（延长表面的线，找它与棱的交点来扩大截面）。关键是根据题目条件选取适当截面，把空间计算问题向平面转化。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_05"
+      ]
+    },
+    {
+      "kp_id": "KP_9_12",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块2 位置关系的判定",
+      "name": "平行关系证明思路",
+      "type": "method",
+      "content": "证线面平行的三大辅助线思路：①找平行四边形（在面内作与已知直线平行的直线）；②两个重要图形（点线位于面两侧时连接端点与面上一点；点线位于面同侧时同理）；③造面面平行（通过证面面平行来证线面平行）。常用线面平行、面面平行的性质定理。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_14"
+      ]
+    },
+    {
+      "kp_id": "KP_9_13",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块2 位置关系的判定",
+      "name": "垂直关系证明思路",
+      "type": "method",
+      "content": "证明垂直关系的思路：①证线面垂直（核心是找线，需证明直线垂直于平面内两条相交直线）；②证线线垂直（异面直线垂直可转化为证线面垂直，或用三垂线定理）；③证面面垂直（核心是证线面垂直，过面上一点作交线的垂线得线面垂直）；④已知面面垂直时，过面内一点作交线的垂线，得到线面垂直。逆推法是通法。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_12",
+        "KP_9_14"
+      ]
+    },
+    {
+      "kp_id": "KP_9_14",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块2 位置关系的判定",
+      "name": "空间点、线、面的位置关系",
+      "type": "knowledge",
+      "content": "平面与平面平行的充要条件是一个平面内有两条相交直线与另一个平面平行。面面平行的判定定理：若一个平面内的两条相交直线分别平行于另一个平面，则这两个平面平行。线面平行的判定需要直线不在平面内且与平面内直线平行。涉及面面关系时常借助常见几何体（如正方体）来辅助判断反例。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_9_15",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "name": "空间向量的基本运算",
+      "type": "knowledge",
+      "content": "空间向量基本运算：加减法、数乘、共线（a=λb）、数量积（a·b=0时a⊥b）、模长公式、夹角余弦公式、两点连线向量坐标公式、投影向量计算公式。法向量的计算步骤：①求出平面内两个不共线的向量；②设法向量n=(x,y,z)，由n·AB=0和n·AC=0建立方程组；③对其中一个变量赋值求出另外两个。",
+      "formula": "cos⟨a,b⟩=a·b/(|a||b|)",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_9_16",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "name": "用空间向量证平行与垂直",
+      "type": "method",
+      "content": "用空间向量证明平行垂直的方法：①证线线平行：方向向量平行；②证线面平行：直线方向向量与平面法向量数量积为0；③证面面平行：两平面法向量平行；④证线线垂直：方向向量数量积为0；⑤证线面垂直：直线方向向量与平面内两个不共线向量数量积均为0；⑥证面面垂直：两平面法向量数量积为0。",
+      "formula": "a·b=0⇔a⊥b",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_15"
+      ]
+    },
+    {
+      "kp_id": "KP_9_17",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "name": "用空间向量求空间角",
+      "type": "method",
+      "content": "用空间向量求空间角：①线线角：cosθ=|u·v|/(|u||v|)；②线面角：sinθ=|s·n|/(|s||n|)；③二面角：cosθ=±(m·n)/(|m||n|)，若求正弦则取正值；若求余弦需判断二面角钝锐，可将两法向量取为一内一外，其夹角即为二面角。",
+      "formula": "sinθ=|s·n|/(|s||n|)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_15"
+      ]
+    },
+    {
+      "kp_id": "KP_9_18",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "name": "用空间向量求距离",
+      "type": "method",
+      "content": "用空间向量求距离：①点到直线的距离：设P为直线l外一点，A在直线l上，u为单位方向向量，则距离d=√(|AP|²-(AP·u)²)；②点到平面的距离：d=|PA·n|/|n|。当线面平行或面面平行时，直线到平面的距离、平行平面间的距离都可按点到平面的距离来算。",
+      "formula": "d=|PA·n|/|n|",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_15"
+      ]
+    },
+    {
+      "kp_id": "KP_9_19",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块4 综合提升篇",
+      "name": "动态问题探究",
+      "type": "method",
+      "content": "动态问题探究方法：①动态平行垂直判断（过定点作与定平面平行的平面，找动点轨迹；若直线垂直于定直线，过定点作与该直线垂直的平面）；②空间轨迹为球（到定点距离等于定长的点的轨迹是球面；两定点张角为直角的点的轨迹是以这两点连线为直径的球面）；③翻折问题核心（分析翻折前后不变的几何关系；抓住与折痕垂直的直线，将空间计算转换到平面）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_12",
+        "KP_9_13"
+      ]
+    },
+    {
+      "kp_id": "KP_9_20",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "module": "模块4 综合提升篇",
+      "name": "空间角度计算综合",
+      "type": "method",
+      "content": "空间角度计算方法：①线线角通过平移使其相交，在三角形中用余弦定理计算；②线面角两种方法（作垂线找垂足求线面角；或用等体积法求距离，再按sinθ=d/PA计算）；③二面角核心是作平面角，常用三垂线法（过一面内一点作另一面的垂线，找到垂足，再过该点作棱的垂线，连接即得平面角）。",
+      "formula": "sinθ=d/PA",
+      "related_types": [],
+      "prerequisites": [
+        "KP_9_08",
+        "KP_9_09"
+      ]
+    },
+    {
+      "kp_id": "KP_9_21",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "name": "几何体的表面积与体积",
+      "type": "knowledge",
+      "content": "棱柱：V=Sh；棱锥：V=Sh；棱台：V=⅓(S+S'+√SS')h；圆柱：V=πr²h，侧面积=2πrh；圆锥：V=⅓πr²h，侧面积=πrl；球：V=4/3πR³，表面积=4πR²。",
+      "module": "模块1 立体图形的结构探究",
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_9_22",
+      "chapter": 9,
+      "chapter_name": "第9章 立体几何、空间向量",
+      "name": "空间向量综合（建系）",
+      "type": "method",
+      "content": "空间直角坐标系的建立方法及向量法综合解题流程：选择互相垂直的三条直线建系→求各点坐标→用向量坐标运算证平行垂直求角度距离。关键是建系位置的选择（如利用面面垂直建立z轴）。",
+      "module": "模块3 空间向量及其应用",
+      "prerequisites": [
+        "KP_9_15"
+      ]
+    },
+    {
+      "kp_id": "KP_10_01",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块1 直线与圆",
+      "name": "直线方程的各种形式",
+      "type": "method",
+      "content": "直线方程：点斜式y-y₁=k(x-x₁)；斜截式y=kx+b；两点式；(y-y₁)/(y₂-y₁)=(x-x₁)/(x₂-x₁)；一般式Ax+By+C=0",
+      "formula": "点斜式：y-y₁=k(x-x₁)；一般式：Ax+By+C=0",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_10_02",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块1 直线与圆",
+      "name": "直线与圆的位置关系",
+      "type": "method",
+      "content": "直线与圆的位置关系：d<R（相交）；d=R（相切）；d>R（相离）。判断方法：比较圆心到直线的距离d与半径R",
+      "formula": "d=|Ax₀+By₀+C|/√(A²+B²)；相交⇔d<R；相切⇔d=R；相离⇔d>R",
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_01"
+      ]
+    },
+    {
+      "kp_id": "KP_10_03",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块2 椭圆、双曲线、抛物线",
+      "name": "椭圆的标准方程与性质",
+      "type": "knowledge",
+      "content": "椭圆：到两焦点距离之和为常数2a（2a>2c）。标准方程：x²/a²+y²/b²=1（a>b>0）；离心率e=c/a<1；c²=a²-b²",
+      "formula": "x²/a²+y²/b²=1（a>b>0）；c²=a²-b²；e=c/a",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_10_04",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块2 椭圆、双曲线、抛物线",
+      "name": "双曲线的标准方程与性质",
+      "type": "knowledge",
+      "content": "双曲线：到两焦点距离之差为常数2a。标准方程：x²/a²-y²/b²=1；离心率e=c/a>1；渐近线：y=±(b/a)x",
+      "formula": "x²/a²-y²/b²=1；c²=a²+b²；e=c/a>1；渐近线：y=±(b/a)x",
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_03"
+      ]
+    },
+    {
+      "kp_id": "KP_10_05",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块2 椭圆、双曲线、抛物线",
+      "name": "抛物线的标准方程与性质",
+      "type": "knowledge",
+      "content": "抛物线：到焦点和准线距离相等。标准方程（焦点在x轴正半轴）：y²=2px；离心率e=1",
+      "formula": "y²=2px；准线：x=-p/2；焦点：(p/2,0)",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_10_06",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "直线与圆锥曲线的位置关系",
+      "type": "method",
+      "content": "直线与圆锥曲线位置关系：代入法——将直线方程代入曲线方程，化为一元二次方程，根据Δ判断：Δ>0（相交）；Δ=0（相切）；Δ<0（相离）",
+      "formula": "Δ>0⇔相交（两交点）；Δ=0⇔相切（一切点）；Δ<0⇔相离（无交点）",
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_01",
+        "KP_10_02"
+      ]
+    },
+    {
+      "kp_id": "KP_10_07",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "圆锥曲线的弦长与中点弦",
+      "type": "method",
+      "content": "弦长公式：|AB|=√[(1+k²)]·|x₁-x₂|。中点弦：设点代入曲线作差，利用中点坐标公式（点差法）",
+      "formula": "|AB|=√[(1+k²)·|x₁-x₂|²]；点差法：中点弦斜率=-b²x₀/(a²y₀)（椭圆）",
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_01",
+        "KP_10_03"
+      ]
+    },
+    {
+      "kp_id": "KP_10_08",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "轨迹方程的求法",
+      "type": "method",
+      "content": "求轨迹方程的常用方法：直接法（用坐标表示动点满足的条件）；代入法（动点依赖已知曲线上的点）；参数法（引入参数消去）；交轨法（两动直线交点的轨迹）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_03",
+        "KP_10_04",
+        "KP_10_05"
+      ]
+    },
+    {
+      "kp_id": "KP_10_09",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "参数方程与普通方程互化",
+      "type": "method",
+      "content": "参数方程化为普通方程：消去参数；普通方程化为参数方程：选择合适的参数（如用角度参数表示圆、椭圆上的点）。互化时注意参数的取值范围对方程定义域的影响。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_03",
+        "KP_10_04",
+        "KP_10_05"
+      ]
+    },
+    {
+      "kp_id": "KP_10_10",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "极坐标方程及其应用",
+      "type": "knowledge",
+      "content": "极坐标与直角坐标的互化公式：x=ρcosθ，y=ρsinθ，ρ²=x²+y²，tanθ=y/x。常用极坐标方程：直线ρcos(θ-φ)=p；圆ρ=2Rcosθ等。",
+      "formula": "x=ρcosθ，y=ρsinθ",
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_01"
+      ]
+    },
+    {
+      "kp_id": "KP_10_11",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "解析几何中的最值问题",
+      "type": "method",
+      "content": "解析几何最值问题的通法：①转化为函数最值（用判别式或基本不等式）；②参数方程法；③圆锥曲线的几何性质（点到焦点的距离和差为定值→用定义）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_06",
+        "KP_10_07"
+      ]
+    },
+    {
+      "kp_id": "KP_10_12",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "解析几何中的定点定值问题",
+      "type": "method",
+      "content": "定点问题：化简整理后令参数系数为零求得定点坐标，或验证某参数值使结果与参数无关。定值问题：计算目标量（如斜率、距离、面积）的表达式，化为与参数无关的常数。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_06",
+        "KP_10_07"
+      ]
+    },
+    {
+      "kp_id": "KP_10_13",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "解析几何中的范围问题",
+      "type": "method",
+      "content": "解析几何范围问题：常见用不等式组限制参数范围；或利用圆锥曲线的范围（如椭圆x∈[-a,a]，y∈[-b,b]）建立不等关系，再结合几何意义求解。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_06",
+        "KP_10_07"
+      ]
+    },
+    {
+      "kp_id": "KP_10_14",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "直线与椭圆/双曲线/抛物线的综合问题",
+      "type": "method",
+      "content": "直线与椭圆、双曲线、抛物线的综合题：联立方程组→化简为关于x或y的一元二次方程→用韦达定理求弦长、中点、斜率等。不同曲线注意判别式Δ的范围差异（椭圆Δ>0与直线有交点）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_07"
+      ]
+    },
+    {
+      "kp_id": "KP_10_15",
+      "chapter": 10,
+      "chapter_name": "第10章 解析几何",
+      "module": "模块3 直线与圆锥曲线",
+      "name": "圆锥曲线的轨迹方程",
+      "type": "method",
+      "content": "圆锥曲线的轨迹方程：用圆锥曲线的定义（到两焦点距离之和/差为定值）建立方程；或代入法（设动点坐标代入已知曲线方程）。注意轨迹方程中变量的取值范围。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_10_03",
+        "KP_10_04",
+        "KP_10_05"
+      ]
+    },
+    {
+      "kp_id": "KP_11_04",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "两个计数原理的简单应用",
+      "type": "method",
+      "content": "分类加法计数原理与分步乘法计数原理的简单应用：分析题目分清楚何时分类（互斥独立方案）何时分步（缺一不可的连续步骤），做到分类标准清晰，分步层次清楚，不重不漏",
+      "formula": "加法：N=m₁+m₂+...；乘法：N=m₁×m₂×...",
+      "related_types": [
+        "类型Ⅰ"
+      ],
+      "prerequisites": [
+        "KP_11_16"
+      ]
+    },
+    {
+      "kp_id": "KP_11_05",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "特殊元素优先考虑",
+      "type": "method",
+      "content": "有限制条件的排列组合问题中，常先把有特殊要求的元素安排好，再排其它没有要求的元素。分类时优先考虑特殊元素或特殊位置",
+      "formula": null,
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_11_04"
+      ]
+    },
+    {
+      "kp_id": "KP_11_06",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "元素相邻问题（捆绑法）",
+      "type": "method",
+      "content": "若排列时要求某些元素必须相邻，则将这些必须相邻的元素捆绑在一起，看成一个元素，再与其它元素进行排列。需注意捆绑的元素内部可交换顺序",
+      "formula": "捆绑后整体排列数×内部排列数=A_{n-1}^{m-1}×A_m^m",
+      "related_types": [
+        "类型Ⅲ"
+      ],
+      "prerequisites": [
+        "KP_11_05"
+      ]
+    },
+    {
+      "kp_id": "KP_11_07",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "元素不相邻问题（插空法）",
+      "type": "method",
+      "content": "若排列时要求某些元素不能相邻，则先把其它元素排好，再将不能相邻的元素插入到空位中。关键是先排无限制元素，再对受限元素插空",
+      "formula": "插空法：先排A_n^n，再将m个元素插入n+1个空位中的m个",
+      "related_types": [
+        "类型IV"
+      ],
+      "prerequisites": [
+        "KP_11_05"
+      ]
+    },
+    {
+      "kp_id": "KP_11_08",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "分组分派问题",
+      "type": "method",
+      "content": "将m个人安排到n(m>n)项工作，每人只安排一项工作，每项工作至少安排一人。采用先分后排的方法：先把m个人分成n组（注意相同人数的组需要消序），再将n组人员派到n项工作",
+      "formula": "分组数÷A_k^k（k为相同元素个数）；分派数×A_n^n",
+      "related_types": [
+        "类型V"
+      ],
+      "prerequisites": [
+        "KP_11_05"
+      ]
+    },
+    {
+      "kp_id": "KP_11_09",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "排数字问题",
+      "type": "method",
+      "content": "排数字问题画数位依次填入数字。注意三点：①0不能排最高位；②若对奇偶有要求，则考虑最低位数字为奇数数字或偶数数字；③若对数字大小有要求，则先排最高位的数字，因为最高位对数的大小的影响最重",
+      "formula": "最高位选取非0数字：6选1（0-6中）；奇偶分类考虑最低位",
+      "related_types": [
+        "类型VI"
+      ],
+      "prerequisites": [
+        "KP_11_05"
+      ]
+    },
+    {
+      "kp_id": "KP_11_10",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "染色问题（跳格分类）",
+      "type": "method",
+      "content": "染色问题采用跳格分类的方法处理。选择相邻但跳过的位置进行分类讨论，如按A、C相同和A、C不同分类，再分析其他区域的种数",
+      "formula": null,
+      "related_types": [
+        "类型VII"
+      ],
+      "prerequisites": [
+        "KP_11_05"
+      ]
+    },
+    {
+      "kp_id": "KP_11_11",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "二项式展开式通项公式的应用",
+      "type": "method",
+      "content": "求二项展开式中某项的系数或特定项：先写出通项T_{r+1}=C_n^r a^{n-r}b^r，令通项中x的指数等于目标指数，求出r，再反代回通项",
+      "formula": "T_{r+1}=C_n^r a^{n-r}b^r；常数项：令指数=0；系数：取指数部分",
+      "related_types": [
+        "类型Ⅰ"
+      ],
+      "prerequisites": [
+        "KP_11_17"
+      ]
+    },
+    {
+      "kp_id": "KP_11_12",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "求两项乘积展开式的系数",
+      "type": "method",
+      "content": "求(1-ax)(x+b)^n或(1+x)^m(x+y)^n等乘积展开式中某项的系数。若一项次数低可用乘法分配律拆开分别考虑；若两项次数都高则写出各自通项相乘分析",
+      "formula": "T_{r+1}P_{k+1}=C_n^r C_m^k a^{n-r}b^r x^{n-r+k}",
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_11_11"
+      ]
+    },
+    {
+      "kp_id": "KP_11_13",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "求三项展开式的系数",
+      "type": "method",
+      "content": "三项式(x+y+z)^n的展开：(1)若能化为完全平方或二项式则转化后分析；(2)否则类比二项式展开原理，分析5个因式中x、y、z各取几个能产生目标项",
+      "formula": "枚举法：分析a项、b项、c项各取几个使总指数=目标指数",
+      "related_types": [
+        "类型Ⅲ"
+      ],
+      "prerequisites": [
+        "KP_11_11"
+      ]
+    },
+    {
+      "kp_id": "KP_11_14",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "二项式系数的性质",
+      "type": "knowledge",
+      "content": "二项式系数C(n,0)、C(n,1)...C(n,n)的性质：①对称性C(n,m)=C(n,n-m)；②单调性：中间大两边小，n偶数时第n/2+1项最大，n奇数时第(n+1)/2和(n+3)/2项并列最大；③各项和C(n,0)+C(n,1)+...+C(n,n)=2^n，奇数项和=偶数项和=2^{n-1}",
+      "formula": "C(n,m)=C(n,n-m)；∑C(n,k)=2^n；∑C(n,偶)=∑C(n,奇)=2^{n-1}",
+      "related_types": [
+        "类型Ⅰ",
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_11_11"
+      ]
+    },
+    {
+      "kp_id": "KP_11_15",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "赋值法求系数和",
+      "type": "method",
+      "content": "系数和问题用赋值法：令x=1得所有系数和；若需奇偶项分开，令x=1和x=-1，两式相加得偶数项系数和，相减得奇数项系数和",
+      "formula": "令x=1：∑a_k= f(1)；令x=-1：偶数项和=(f(1)+f(-1))/2，奇数项和=(f(1)-f(-1))/2",
+      "related_types": [
+        "类型Ⅱ"
+      ],
+      "prerequisites": [
+        "KP_11_14"
+      ]
+    },
+    {
+      "kp_id": "KP_11_16",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 两个计数原理",
+      "name": "计数原理基本概念",
+      "type": "knowledge",
+      "content": "分类加法计数原理：完成一件事有n类方案，每类分别有m₁、m₂、...、mₙ种方法，则共有m₁+m₂+...+mₙ种。分步乘法计数原理：完成一件事需n个步骤，每步分别有m₁、m₂、...、mₙ种方法，则共有m₁×m₂×...×mₙ种。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_11_17",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "排列",
+      "type": "method",
+      "content": "排列数公式：A_n^m=n(n-1)(n-2)...(n-m+1)=n!/(n-m)!。从n个不同元素中取出r个排成一列，有顺序。常见问题：排队、排值问题。",
+      "formula": "A_n^m=n!/(n-m)!",
+      "related_types": [],
+      "prerequisites": [
+        "KP_11_16"
+      ]
+    },
+    {
+      "kp_id": "KP_11_18",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "name": "组合",
+      "type": "method",
+      "content": "组合数公式：C_n^m=n!/[m!(n-m)!]（=A_n^m/m!）。从n个不同元素中取出r个成一组，无顺序。组合与排列的区别在于是否考虑顺序。",
+      "formula": "C_n^m=n!/[m!(n-m)!]",
+      "related_types": [],
+      "prerequisites": [
+        "KP_11_17"
+      ]
+    },
+    {
+      "kp_id": "KP_11_19",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "非标准形式的二项式展开",
+      "type": "method",
+      "content": "非标准形式二项式的展开：先化为标准(a+b)^n形式，或用换元法处理如(x+1)^n按(x+a)^n展开的系数问题。注意(a+b)^n≠(a-b)^n直接展开的区别。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_11_11"
+      ]
+    },
+    {
+      "kp_id": "KP_11_20",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "二项式系数的最大值问题",
+      "type": "method",
+      "content": "求二项展开式中系数最大的项：n为偶数时第n/2+1项最大；n为奇数时第(n+1)/2和第(n+3)/2项并列最大；也可用不等式组确定参数范围。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_11_14"
+      ]
+    },
+    {
+      "kp_id": "KP_11_21",
+      "chapter": 11,
+      "chapter_name": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "name": "二项式定理在数论余数问题中的应用",
+      "type": "method",
+      "content": "利用二项式定理求余数：常将数写成(10^k)形式利用二项展开求大数余数；或利用同余性质将问题转化为求二项展开式某项系数。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_11_11"
+      ]
+    },
+    {
+      "kp_id": "KP_12_01",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "古典概型",
+      "type": "knowledge",
+      "content": "古典概型：试验的所有基本事件（等可能性）数目有限。概率P(A)=A包含的基本事件数/所有基本事件总数",
+      "formula": "P(A)=m/n，其中n为总基本事件数，m为A包含的基本事件数",
+      "related_types": [],
+      "prerequisites": []
+    },
+    {
+      "kp_id": "KP_12_02",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "条件概率与相互独立事件",
+      "type": "knowledge",
+      "content": "条件概率：P(B|A)=P(AB)/P(A)。相互独立：A发生不影响B发生的概率，即P(AB)=P(A)P(B)。互斥：A与B不能同时发生，即P(A∪B)=P(A)+P(B)",
+      "formula": "P(B|A)=P(AB)/P(A)；独立⇔P(AB)=P(A)P(B)；互斥⇔P(A∪B)=P(A)+P(B)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_01"
+      ]
+    },
+    {
+      "kp_id": "KP_12_03",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "离散型随机变量及其分布",
+      "type": "knowledge",
+      "content": "离散型随机变量X的分布列：P(X=xᵢ)=pᵢ（i=1,2,...）。期望E(X)=∑xᵢpᵢ；方差D(X)=∑(xᵢ-E(X))²pᵢ",
+      "formula": "E(X)=∑xᵢpᵢ；D(X)=∑(xᵢ-E(X))²pᵢ",
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_02"
+      ]
+    },
+    {
+      "kp_id": "KP_12_04",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "name": "二项分布",
+      "type": "method",
+      "content": "n次独立重复试验中事件A恰好发生k次的概率服从二项分布：X~B(n,p)，P(X=k)=C(n,k)pᵏ(1-p)ⁿ⁻ᵏ",
+      "formula": "X~B(n,p)：P(X=k)=C(n,k)p^k(1-p)^{n-k}；E(X)=np；D(X)=np(1-p)",
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_03"
+      ]
+    },
+    {
+      "kp_id": "KP_12_05",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "排列组合在概率中的应用",
+      "type": "method",
+      "content": "用排列组合方法计算古典概型概率：分子为符合条件的基本事件数（用排列或组合计数），分母为所有基本事件总数。枚举法与组合计数法相结合。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_01",
+        "KP_11_17",
+        "KP_11_18"
+      ]
+    },
+    {
+      "kp_id": "KP_12_06",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "抽样方法综合应用",
+      "type": "method",
+      "content": "简单随机抽样、分层随机抽样的选择原则：个体均匀时用简单随机，个体差异明显时用分层。分层抽样中各层抽取个数的计算：按各层占总体的比例分配。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_01"
+      ]
+    },
+    {
+      "kp_id": "KP_12_07",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "茎叶图",
+      "type": "knowledge",
+      "content": "茎叶图的制作方法：数据分为茎（十位或更高位）和叶（个位），茎相同的数据排同一列。茎叶图可以保留所有原始信息，便于求中位数和计算平均数。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_01"
+      ]
+    },
+    {
+      "kp_id": "KP_12_08",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "频率分布直方图",
+      "type": "method",
+      "content": "频率分布直方图的绘制：先确定组距和组数，计算各组频率=频数/总数。在直方图中，纵轴为频率/组距，各小矩形面积=频率。已知直方图可反求频数和估计数字特征。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_01"
+      ]
+    },
+    {
+      "kp_id": "KP_12_09",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "百分位数与数据集中趋势",
+      "type": "method",
+      "content": "百分位数的计算：将数据排序，第p百分位数位置为(n+1)×p/100，若不为整数则用插值法估算。平均数、中位数、众数的计算及其在数据分析中的意义。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_02"
+      ]
+    },
+    {
+      "kp_id": "KP_12_10",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "name": "方差与标准差的计算应用",
+      "type": "method",
+      "content": "方差公式：D(X)=∑(xᵢ-E(X))²pᵢ；标准差σ=√D(X)。方差性质：D(aX+b)=a²D(X)。利用方差比较两组数据稳定性，或分析数据波动原因。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_02"
+      ]
+    },
+    {
+      "kp_id": "KP_12_11",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "name": "超几何分布",
+      "type": "knowledge",
+      "content": "超几何分布：N件产品中有M件次品，从中不放回抽n件，恰有k件次品的概率P(X=k)=C(M,k)·C(N-M,n-k)/C(N,n)。期望E(X)=n·M/N，与二项分布B(n,p)（p=M/N）期望相同。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_04",
+        "KP_11_17"
+      ]
+    },
+    {
+      "kp_id": "KP_12_12",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "name": "正态分布",
+      "type": "knowledge",
+      "content": "正态分布N(μ,σ²)的概念：概率密度曲线关于x=μ对称。3σ原则：P(μ-σ<X<μ+σ)≈0.6826，P(μ-2σ<X<μ+2σ)≈0.9544，P(μ-3σ<X<μ+3σ)≈0.9974。标准正态分布N(0,1)。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_04"
+      ]
+    },
+    {
+      "kp_id": "KP_12_15",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "name": "概率统计综合问题",
+      "type": "method",
+      "content": "概率统计综合大题的解题策略：条件概率、全概率公式、分布列构建的综合应用。常见题型：比赛问题（用分布列求概率）、质量检测问题（超几何分布）。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_04",
+        "KP_12_10",
+        "KP_11_17"
+      ]
+    },
+    {
+      "kp_id": "KP_12_14",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "name": "二项分布的期望方差推导",
+      "type": "method",
+      "content": "二项分布B(n,p)的期望和方差推导：E(X)=np，D(X)=np(1-p)。可利用期望的线性性质或递推关系推导。已知X~B(n,p)，求E(X)和D(X)。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_04"
+      ]
+    },
+    {
+      "kp_id": "KP_12_13",
+      "chapter": 12,
+      "chapter_name": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "name": "离散型随机变量期望方差的综合应用",
+      "type": "method",
+      "content": "离散型随机变量期望和方差在综合问题中的应用：求复杂分布列的期望方差；利用期望的线性性质E(aX+b)=aE(X)+b；D(aX+b)=a²D(X)简化计算。",
+      "formula": null,
+      "related_types": [],
+      "prerequisites": [
+        "KP_12_04",
+        "KP_12_10"
+      ]
+    }
+  ]
+}

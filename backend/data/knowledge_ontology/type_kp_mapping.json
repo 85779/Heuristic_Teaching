@@ -1,0 +1,1219 @@
+{
+  "metadata": {
+    "version": "0.2",
+    "description": "题目类型到知识点/方法的映射，供 Module 2 注入使用",
+    "status": "draft"
+  },
+  "mappings": [
+    {
+      "type": "类型Ⅰ：集合的概念、集合中元素的性质",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_01",
+        "KP_1_02"
+      ],
+      "methods": [
+        "M_数形结合",
+        "M_分类讨论"
+      ],
+      "description": "考查集合的元素性质和集合间基本关系"
+    },
+    {
+      "type": "类型Ⅱ：根据集合相等求参",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_02",
+        "KP_1_05"
+      ],
+      "methods": [],
+      "description": "通过集合相等建立参数方程"
+    },
+    {
+      "type": "类型Ⅲ：根据集合间的包含关系求参",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_02",
+        "KP_1_06"
+      ],
+      "methods": [
+        "M_数形结合",
+        "M_分类讨论"
+      ],
+      "description": "包含关系求参，需注意空集情况"
+    },
+    {
+      "type": "类型IV：子集个数",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_03"
+      ],
+      "methods": [
+        "M_分类讨论"
+      ],
+      "description": "子集个数的计算，关键是求集合中元素个数"
+    },
+    {
+      "type": "类型V：集合的基本运算",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_04"
+      ],
+      "methods": [
+        "M_数形结合"
+      ],
+      "description": "集合的交、并、补运算"
+    },
+    {
+      "type": "类型VI：Venn图",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_04",
+        "KP_1_07"
+      ],
+      "methods": [
+        "M_数形结合"
+      ],
+      "description": "Venn图解决集合计数问题"
+    },
+    {
+      "type": "类型VII：集合综合题",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块1 集合",
+      "knowledge_points": [
+        "KP_1_01",
+        "KP_1_02",
+        "KP_1_04",
+        "KP_1_05",
+        "KP_1_06"
+      ],
+      "methods": [
+        "M_分类讨论",
+        "M_数形结合"
+      ],
+      "description": "综合性集合问题，方法多样"
+    },
+    {
+      "type": "类型1：判断充分条件、必要条件",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "knowledge_points": [
+        "KP_1_08",
+        "KP_1_09"
+      ],
+      "methods": [],
+      "description": "判断p是q的充分条件还是必要条件"
+    },
+    {
+      "type": "类型Ⅱ：根据充分条件、必要条件求参",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "knowledge_points": [
+        "KP_1_08",
+        "KP_1_12"
+      ],
+      "methods": [],
+      "description": "由充分不必要条件等求参数范围"
+    },
+    {
+      "type": "类型III：全称量词命题、存在量词命题的否定",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "knowledge_points": [
+        "KP_1_10"
+      ],
+      "methods": [],
+      "description": "全称量词与存在量词命题的否定的写法"
+    },
+    {
+      "type": "类型IV：判断全称量词命题、存在量词命题的真假",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "knowledge_points": [
+        "KP_1_11"
+      ],
+      "methods": [],
+      "description": "判断全称量词命题与存在量词命题的真假"
+    },
+    {
+      "type": "类型V：由全称量词命题、存在量词命题的真假求参",
+      "chapter": "第1章 集合与常用逻辑用语",
+      "module": "模块2 常用逻辑用语",
+      "knowledge_points": [
+        "KP_1_11",
+        "KP_1_12"
+      ],
+      "methods": [],
+      "description": "由命题真假反求参数范围"
+    },
+    {
+      "type": "类型Ⅰ：用不等式性质判断不等式是否正确",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "knowledge_points": [
+        "KP_2_01",
+        "KP_2_06"
+      ],
+      "methods": [],
+      "description": "利用不等式基本性质判断不等式关系的正确性"
+    },
+    {
+      "type": "类型Ⅱ：一元二次函数、方程、不等式的关系",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "knowledge_points": [
+        "KP_2_02",
+        "KP_2_03"
+      ],
+      "methods": [],
+      "description": "二次函数与方程、不等式的综合关系分析"
+    },
+    {
+      "type": "类型Ⅲ：一元二次方程在某区间有实根",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "knowledge_points": [
+        "KP_2_04"
+      ],
+      "methods": [
+        "M_判别式法"
+      ],
+      "description": "含参方程在区间内有根，用参变分离法"
+    },
+    {
+      "type": "类型IV：一元二次方程在某区间实根个数已知",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块1 不等式与二次函数",
+      "knowledge_points": [
+        "KP_2_04"
+      ],
+      "methods": [
+        "M_判别式法",
+        "M_数形结合"
+      ],
+      "description": "根据根的个数要求分析判别式、对称轴、端点值"
+    },
+    {
+      "type": "类型Ⅰ：和定求积的最大值的基本方法",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "knowledge_points": [
+        "KP_2_07"
+      ],
+      "methods": [],
+      "description": "已知和为定值，利用基本不等式求积的最大值"
+    },
+    {
+      "type": "类型Ⅱ：积定求和的最小值的基本方法",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "knowledge_points": [
+        "KP_2_07"
+      ],
+      "methods": [],
+      "description": "已知积为定值，利用基本不等式求和的最小值"
+    },
+    {
+      "type": "类型Ⅲ：\"1\"的代换",
+      "chapter": "第2章 一元二次函数、方程与不等式",
+      "module": "模块2 基本不等式",
+      "knowledge_points": [
+        "KP_2_07"
+      ],
+      "methods": [],
+      "description": "通过\"1\"的代换凑出积为定值"
+    },
+    {
+      "type": "类型Ⅰ：求函数的定义域",
+      "chapter": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "knowledge_points": [],
+      "methods": [],
+      "description": "根据解析式有意义建立不等式求定义域"
+    },
+    {
+      "type": "类型Ⅱ：几种求函数解析式的题型",
+      "chapter": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "knowledge_points": [],
+      "methods": [
+        "M_换元法",
+        "M_待定系数法",
+        "M_方程法"
+      ],
+      "description": "换元法、配方法、方程法求函数解析式"
+    },
+    {
+      "type": "类型Ⅲ：一类分式函数的最值问题",
+      "chapter": "第3章 函数与导数",
+      "module": "模块1 函数的概念与性质",
+      "knowledge_points": [],
+      "methods": [
+        "M_同除法",
+        "M_换元法",
+        "M_判别式法"
+      ],
+      "description": "分式函数的最值，用换元法或判别式法求解"
+    },
+    {
+      "type": "类型Ⅰ：单调性奇偶性判断小题",
+      "chapter": "第3章 函数与导数",
+      "module": "模块2 函数的单调性与奇偶性",
+      "knowledge_points": [],
+      "methods": [],
+      "description": "单调性和奇偶性的判断"
+    },
+    {
+      "type": "类型Ⅱ：根据奇偶性求参数的值",
+      "chapter": "第3章 函数与导数",
+      "module": "模块2 函数的单调性与奇偶性",
+      "knowledge_points": [],
+      "methods": [
+        "M_赋值法"
+      ],
+      "description": "由f(-x)=f(x)或f(-x)=-f(x)求参"
+    },
+    {
+      "type": "类型Ⅲ：奇函数+常数结论的应用",
+      "chapter": "第3章 函数与导数",
+      "module": "模块2 函数的单调性与奇偶性",
+      "knowledge_points": [],
+      "methods": [],
+      "description": "利用奇函数加常数的对称性求值或求最值"
+    },
+    {
+      "type": "类型IV：函数值不等式的解法",
+      "chapter": "第3章 函数与导数",
+      "module": "模块2 函数的单调性与奇偶性",
+      "knowledge_points": [],
+      "methods": [],
+      "description": "利用单调性或奇偶性解函数值不等式"
+    },
+    {
+      "type": "类型Ⅰ：sinα、cosα、tanα的相互转换",
+      "chapter": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "knowledge_points": [
+        "KP_4_01",
+        "KP_4_02"
+      ],
+      "methods": [],
+      "description": "利用同角三角函数基本关系实现sin、cos、tan的知一求二"
+    },
+    {
+      "type": "类型Ⅱ：sinα+cosα、sinα-cosα与sinαcosα",
+      "chapter": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "knowledge_points": [
+        "KP_4_02"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "利用平方关系将sinα±cosα与sinαcosα相互转化"
+    },
+    {
+      "type": "类型Ⅲ：sinα和cosα的齐次分式化正切",
+      "chapter": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "knowledge_points": [
+        "KP_4_02"
+      ],
+      "methods": [],
+      "description": "齐次分式上下同除以cosα化为关于tanα的式子"
+    },
+    {
+      "type": "类型1：利用诱导公式化简求值",
+      "chapter": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "knowledge_points": [
+        "KP_4_03"
+      ],
+      "methods": [],
+      "description": "利用奇变偶不变符号看象限化简三角代数式"
+    },
+    {
+      "type": "类型2：用诱导公式解决给值求值问题",
+      "chapter": "第4章 三角函数",
+      "module": "模块1 同角三角函数关系与诱导公式",
+      "knowledge_points": [
+        "KP_4_03"
+      ],
+      "methods": [],
+      "description": "通过诱导公式建立已知角与求值角的联系"
+    },
+    {
+      "type": "类型Ⅰ：正弦、余弦的和差角、二倍角公式的应用",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05"
+      ],
+      "methods": [],
+      "description": "利用和差角、二倍角公式化简求值"
+    },
+    {
+      "type": "类型Ⅱ：正切的和差角、二倍角公式的应用",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05"
+      ],
+      "methods": [],
+      "description": "利用正切和差角、二倍角公式解决求值问题"
+    },
+    {
+      "type": "类型Ⅲ：数字角三角代数式求值",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05"
+      ],
+      "methods": [],
+      "description": "寻找角度间的联系化为特殊角用公式求值"
+    },
+    {
+      "type": "类型IV：辅助角公式的应用",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_06"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "利用辅助角公式求三角函数最值与值域"
+    },
+    {
+      "type": "类型V：积化和差与和差化积公式的应用",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05"
+      ],
+      "methods": [],
+      "description": "利用积化和差与和差化积公式化简求值或证明"
+    },
+    {
+      "type": "类型1：角度统一",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "将多角统一为单角再求解"
+    },
+    {
+      "type": "类型2：名称统一",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05"
+      ],
+      "methods": [],
+      "description": "利用同角关系将三角函数名统一为正弦或余弦"
+    },
+    {
+      "type": "类型3：次数统一",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_05",
+        "KP_4_06"
+      ],
+      "methods": [],
+      "description": "利用升次降次公式统一次数便于化简"
+    },
+    {
+      "type": "类型4：三大统一思想综合应用",
+      "chapter": "第4章 三角函数",
+      "module": "模块2 三角恒等变换",
+      "knowledge_points": [
+        "KP_4_04",
+        "KP_4_05",
+        "KP_4_06"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "综合运用角度、名称、次数统一思想解决问题"
+    },
+    {
+      "type": "类型Ⅰ：化简求解析式",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_06",
+        "KP_4_07"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "通过拆、降合法三角函数解析式化为y=Asin(ωx+φ)+B"
+    },
+    {
+      "type": "类型Ⅱ：由部分图象求解析式",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [],
+      "description": "由最值点、周期、对称性求A、ω、φ"
+    },
+    {
+      "type": "类型Ⅲ：由伸缩比例求周期",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [],
+      "description": "利用横向伸缩的比例关系求周期"
+    },
+    {
+      "type": "类型1：平移变换问题",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_07"
+      ],
+      "methods": [],
+      "description": "由平移规则左加右减确定图象平移量"
+    },
+    {
+      "type": "类型2：伸缩和平移综合变换",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_07"
+      ],
+      "methods": [],
+      "description": "综合横纵坐标伸缩与左右平移确定变换步骤"
+    },
+    {
+      "type": "类型3：翻折变换",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_07"
+      ],
+      "methods": [],
+      "description": "利用翻折变换规则求函数解析式"
+    },
+    {
+      "type": "类型1：整体换元求最值、解不等式",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "设t=ωx+φ整体换元利用y=sint图象求最值或解不等式"
+    },
+    {
+      "type": "类型2：整体换元研究单调区间",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "整体换元后利用y=sint的单调性求复合函数单调区间"
+    },
+    {
+      "type": "类型3：对称轴、对称中心、单调区间综合",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "整体换元结合正弦型函数性质综合分析"
+    },
+    {
+      "type": "类型4：整体换元法分析零点与极值点",
+      "chapter": "第4章 三角函数",
+      "module": "模块3 三角函数的图象与性质",
+      "knowledge_points": [
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "整体换元利用y=sint图象分析零点和极值点"
+    },
+    {
+      "type": "类型1：利用图象比较函数值大小",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_数形结合"
+      ],
+      "description": "结合函数图象直观比较三角函数值大小"
+    },
+    {
+      "type": "类型2：数形结合综合分析",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_数形结合"
+      ],
+      "description": "利用函数图象与性质综合分析求解"
+    },
+    {
+      "type": "类型3：零点、最值点推周期",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_08"
+      ],
+      "methods": [],
+      "description": "由对称轴与零点间距离推导周期"
+    },
+    {
+      "type": "类型4：三角函数的实际应用",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "建立实际问题的三角函数模型求解"
+    },
+    {
+      "type": "类型Ⅰ：绝对值型",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_分类讨论"
+      ],
+      "description": "去绝对值分类讨论研究含绝对值的三角函数"
+    },
+    {
+      "type": "类型Ⅱ：根号型",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [],
+      "description": "去根号化简研究含根号的三角函数"
+    },
+    {
+      "type": "类型Ⅲ：复合函数型",
+      "chapter": "第4章 三角函数",
+      "module": "模块4 三角函数提高篇",
+      "knowledge_points": [
+        "KP_4_07",
+        "KP_4_08"
+      ],
+      "methods": [
+        "M_换元法"
+      ],
+      "description": "换元法研究内层含三角函数的复合函数"
+    },
+    {
+      "type": "类型Ⅰ：正弦定理边角互化",
+      "chapter": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "knowledge_points": [
+        "KP_5_01",
+        "KP_5_03"
+      ],
+      "methods": [],
+      "description": "用正弦定理实现边角互化"
+    },
+    {
+      "type": "类型Ⅱ：用余弦定理解三角形",
+      "chapter": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "knowledge_points": [
+        "KP_5_02",
+        "KP_5_03"
+      ],
+      "methods": [],
+      "description": "已知两边一角或三边，用余弦定理求解"
+    },
+    {
+      "type": "类型Ⅲ：综合应用",
+      "chapter": "第5章 解三角形",
+      "module": "模块1 相关定理的基本应用",
+      "knowledge_points": [
+        "KP_5_02",
+        "KP_5_03"
+      ],
+      "methods": [],
+      "description": "正弦定理与余弦定理的综合应用"
+    },
+    {
+      "type": "类型Ⅰ：共线向量定理的应用",
+      "chapter": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "knowledge_points": [
+        "KP_6_01"
+      ],
+      "methods": [],
+      "description": "利用共线向量定理证明三点共线或求参数"
+    },
+    {
+      "type": "类型Ⅱ：模的常见处理方法",
+      "chapter": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "knowledge_points": [
+        "KP_6_01",
+        "KP_6_02"
+      ],
+      "methods": [],
+      "description": "向量模的处理，优先考虑平方"
+    },
+    {
+      "type": "类型Ⅲ：数量积定义式的应用",
+      "chapter": "第6章 平面向量",
+      "module": "模块1 向量的概念与运算",
+      "knowledge_points": [
+        "KP_6_03"
+      ],
+      "methods": [],
+      "description": "用数量积定义求夹角或判断垂直"
+    },
+    {
+      "type": "类型1：极化恒等式",
+      "chapter": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "knowledge_points": [
+        "KP_6_03",
+        "KP_6_04"
+      ],
+      "methods": [],
+      "description": "极化恒等式解决共起点向量的数量积问题"
+    },
+    {
+      "type": "类型Ⅱ：投影法",
+      "chapter": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "knowledge_points": [
+        "KP_6_03",
+        "KP_6_04"
+      ],
+      "methods": [],
+      "description": "投影法求向量的数量积"
+    },
+    {
+      "type": "类型Ⅲ：拆解法",
+      "chapter": "第6章 平面向量",
+      "module": "模块2 向量的数量积",
+      "knowledge_points": [
+        "KP_6_03",
+        "KP_6_04"
+      ],
+      "methods": [],
+      "description": "选择一组基底表示向量来求数量积"
+    },
+    {
+      "type": "类型Ⅰ：复数的四则运算",
+      "chapter": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "knowledge_points": [
+        "KP_7_01",
+        "KP_7_02"
+      ],
+      "methods": [],
+      "description": "复数的加减乘除运算"
+    },
+    {
+      "type": "类型Ⅱ：复数代数形式的运用",
+      "chapter": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "knowledge_points": [
+        "KP_7_01",
+        "KP_7_02"
+      ],
+      "methods": [],
+      "description": "利用复数相等的条件求参"
+    },
+    {
+      "type": "类型Ⅲ：复数的运算性质",
+      "chapter": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "knowledge_points": [
+        "KP_7_02",
+        "KP_7_03"
+      ],
+      "methods": [],
+      "description": "利用模的性质和共轭复数解题"
+    },
+    {
+      "type": "类型IV：复数的几何意义",
+      "chapter": "第7章 复数",
+      "module": "模块1 复数的概念与运算",
+      "knowledge_points": [
+        "KP_7_03"
+      ],
+      "methods": [
+        "M_数形结合"
+      ],
+      "description": "复数对应点的轨迹或最值问题"
+    },
+    {
+      "type": "类型Ⅰ：等差数列的通项公式与前n项和公式",
+      "chapter": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "knowledge_points": [
+        "KP_8_01"
+      ],
+      "methods": [],
+      "description": "等差数列基本公式的直接应用"
+    },
+    {
+      "type": "类型Ⅱ：等比数列的通项公式与前n项和公式",
+      "chapter": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "knowledge_points": [
+        "KP_8_02"
+      ],
+      "methods": [],
+      "description": "等比数列基本公式的直接应用"
+    },
+    {
+      "type": "类型Ⅲ：等差、等比数列综合题",
+      "chapter": "第8章 数列",
+      "module": "模块1 等差、等比数列问题",
+      "knowledge_points": [
+        "KP_8_01",
+        "KP_8_02",
+        "KP_8_03"
+      ],
+      "methods": [],
+      "description": "等差与等比数列的综合问题"
+    },
+    {
+      "type": "类型Ⅰ：数列求和的常用方法",
+      "chapter": "第8章 数列",
+      "module": "模块2 数列求和方法",
+      "knowledge_points": [
+        "KP_8_04"
+      ],
+      "methods": [],
+      "description": "错位相减法、裂项相消法、分组求和法"
+    },
+    {
+      "type": "类型Ⅱ：错位相减法",
+      "chapter": "第8章 数列",
+      "module": "模块2 数列求和方法",
+      "knowledge_points": [
+        "KP_8_04"
+      ],
+      "methods": [],
+      "description": "等差乘等比型数列求和"
+    },
+    {
+      "type": "类型Ⅲ：裂项相消法",
+      "chapter": "第8章 数列",
+      "module": "模块2 数列求和方法",
+      "knowledge_points": [
+        "KP_8_04"
+      ],
+      "methods": [],
+      "description": "分式型数列求和"
+    },
+    {
+      "type": "类型Ⅶ：递推数列求通项",
+      "chapter": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "knowledge_points": [
+        "KP_8_05"
+      ],
+      "methods": [
+        "M_构造法",
+        "M_归纳猜想"
+      ],
+      "description": "累加法、累乘法、构造法求通项"
+    },
+    {
+      "type": "类型Ⅷ：数学归纳法",
+      "chapter": "第8章 数列",
+      "module": "模块3 递推数列与数学归纳法",
+      "knowledge_points": [
+        "KP_8_06"
+      ],
+      "methods": [
+        "M_数学归纳法"
+      ],
+      "description": "用数学归纳法证明关于正整数n的命题"
+    },
+    {
+      "type": "类型Ⅰ：简单几何体的表面积与体积",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "knowledge_points": [
+        "KP_9_05"
+      ],
+      "methods": [],
+      "description": "棱锥、棱柱、圆柱、圆锥、球的表面积和体积"
+    },
+    {
+      "type": "类型Ⅱ：组合体的表面积与体积",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "knowledge_points": [
+        "KP_9_05",
+        "KP_9_10"
+      ],
+      "methods": [],
+      "description": "组合体的组成分析及体积计算"
+    },
+    {
+      "type": "类型Ⅰ：球的截面研究",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "knowledge_points": [
+        "KP_9_07",
+        "KP_9_06"
+      ],
+      "methods": [],
+      "description": "球的截面圆圆心与球心的关系"
+    },
+    {
+      "type": "类型Ⅱ：锥体的\"定海神针\"——高",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块1 立体图形的结构探究",
+      "knowledge_points": [
+        "KP_9_07",
+        "KP_9_06"
+      ],
+      "methods": [],
+      "description": "抓锥体高来分析空间几何关系"
+    },
+    {
+      "type": "类型Ⅰ：平行关系证明",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块2 位置关系的判定",
+      "knowledge_points": [
+        "KP_9_12",
+        "KP_9_13"
+      ],
+      "methods": [],
+      "description": "线面平行、面面平行的证明思路"
+    },
+    {
+      "type": "类型Ⅱ：垂直关系证明",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块2 位置关系的判定",
+      "knowledge_points": [
+        "KP_9_12",
+        "KP_9_13"
+      ],
+      "methods": [],
+      "description": "线面垂直、面面垂直的证明思路"
+    },
+    {
+      "type": "类型Ⅰ：空间向量的基本运算",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "knowledge_points": [
+        "KP_9_15"
+      ],
+      "methods": [],
+      "description": "空间向量的加减法、数量积、模长、夹角"
+    },
+    {
+      "type": "类型Ⅱ：用空间向量证平行与垂直",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "knowledge_points": [
+        "KP_9_16"
+      ],
+      "methods": [],
+      "description": "用空间向量证明平行、垂直关系"
+    },
+    {
+      "type": "类型Ⅲ：用空间向量求空间角",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "knowledge_points": [
+        "KP_9_17"
+      ],
+      "methods": [],
+      "description": "用空间向量求线线角、线面角、二面角"
+    },
+    {
+      "type": "类型Ⅳ：用空间向量求距离",
+      "chapter": "第9章 立体几何、空间向量",
+      "module": "模块3 空间向量及其应用",
+      "knowledge_points": [
+        "KP_9_18"
+      ],
+      "methods": [],
+      "description": "用空间向量求点到平面距离、异面直线距离"
+    },
+    {
+      "type": "类型1：直线的倾斜角与斜率",
+      "chapter": "第10章 解析几何",
+      "module": "模块1 直线与方程",
+      "knowledge_points": [
+        "KP_10_01"
+      ],
+      "methods": [],
+      "description": "直线的倾斜角与斜率的关系"
+    },
+    {
+      "type": "类型2：斜率的几何意义的运用",
+      "chapter": "第10章 解析几何",
+      "module": "模块1 直线与方程",
+      "knowledge_points": [
+        "KP_10_01"
+      ],
+      "methods": [
+        "M_数形结合"
+      ],
+      "description": "利用斜率的几何意义解决代数问题"
+    },
+    {
+      "type": "类型3：用方向向量解决夹角问题",
+      "chapter": "第10章 解析几何",
+      "module": "模块1 直线与方程",
+      "knowledge_points": [
+        "KP_10_01"
+      ],
+      "methods": [],
+      "description": "用方向向量求直线夹角"
+    },
+    {
+      "type": "类型4：求直线的方程",
+      "chapter": "第10章 解析几何",
+      "module": "模块1 直线与方程",
+      "knowledge_points": [
+        "KP_10_01",
+        "KP_10_02"
+      ],
+      "methods": [],
+      "description": "根据条件求直线方程的各种形式"
+    },
+    {
+      "type": "类型5：直线的平行与垂直",
+      "chapter": "第10章 解析几何",
+      "module": "模块1 直线与方程",
+      "knowledge_points": [
+        "KP_10_02"
+      ],
+      "methods": [],
+      "description": "判断或证明两直线的平行与垂直关系"
+    },
+    {
+      "type": "类型6：距离公式",
+      "chapter": "第10章 解析几何",
+      "module": "模块1 直线与方程",
+      "knowledge_points": [
+        "KP_10_02"
+      ],
+      "methods": [],
+      "description": "点到直线的距离、平行线间的距离、弦长公式"
+    },
+    {
+      "type": "类型1：两个计数原理的简单应用",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_04"
+      ],
+      "methods": [],
+      "description": "分类加法计数原理与分步乘法计数原理"
+    },
+    {
+      "type": "类型2：特殊元素优先考虑",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_05"
+      ],
+      "methods": [],
+      "description": "有限制条件的排列组合问题，特殊元素优先安排"
+    },
+    {
+      "type": "类型3：元素相邻（捆绑法）",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_06"
+      ],
+      "methods": [],
+      "description": "相邻元素捆绑后整体排列"
+    },
+    {
+      "type": "类型4：元素不相邻（插空法）",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_07"
+      ],
+      "methods": [],
+      "description": "不相邻元素插入空位中"
+    },
+    {
+      "type": "类型5：先分后派",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_08"
+      ],
+      "methods": [],
+      "description": "分组后再分配到不同对象"
+    },
+    {
+      "type": "类型6：排数字问题",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_09"
+      ],
+      "methods": [],
+      "description": "数字排列问题，注意0不能排在首位"
+    },
+    {
+      "type": "类型7：染色问题",
+      "chapter": "第11章 计数原理",
+      "module": "模块1 排列与组合",
+      "knowledge_points": [
+        "KP_11_10"
+      ],
+      "methods": [
+        "M_分类讨论"
+      ],
+      "description": "染色问题用跳格分类讨论"
+    },
+    {
+      "type": "类型1：二项式展开式通项公式",
+      "chapter": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "knowledge_points": [
+        "KP_11_11"
+      ],
+      "methods": [],
+      "description": "用通项公式求特定项或系数"
+    },
+    {
+      "type": "类型2：求两项乘积展开式的系数",
+      "chapter": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "knowledge_points": [
+        "KP_11_12",
+        "KP_11_15"
+      ],
+      "methods": [
+        "M_赋值法"
+      ],
+      "description": "求(1+x)^m(x+y)^n型展开式的系数"
+    },
+    {
+      "type": "类型3：求三项展开式的系数",
+      "chapter": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "knowledge_points": [
+        "KP_11_13"
+      ],
+      "methods": [],
+      "description": "三项式的展开系数问题"
+    },
+    {
+      "type": "类型4：二项式系数的性质",
+      "chapter": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "knowledge_points": [
+        "KP_11_14"
+      ],
+      "methods": [],
+      "description": "二项式系数的对称性和单调性"
+    },
+    {
+      "type": "类型5：赋值法求系数和",
+      "chapter": "第11章 计数原理",
+      "module": "模块2 二项式定理",
+      "knowledge_points": [
+        "KP_11_15"
+      ],
+      "methods": [
+        "M_赋值法"
+      ],
+      "description": "用赋值法求展开式各项系数和"
+    },
+    {
+      "type": "类型1：古典概型",
+      "chapter": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "knowledge_points": [
+        "KP_12_01"
+      ],
+      "methods": [],
+      "description": "等可能事件的概率计算"
+    },
+    {
+      "type": "类型2：条件概率与相互独立事件",
+      "chapter": "第12章 概率统计",
+      "module": "模块1 随机事件与概率",
+      "knowledge_points": [
+        "KP_12_02"
+      ],
+      "methods": [],
+      "description": "条件概率与相互独立事件的判断和计算"
+    },
+    {
+      "type": "类型1：离散型随机变量及其分布",
+      "chapter": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "knowledge_points": [
+        "KP_12_03"
+      ],
+      "methods": [],
+      "description": "离散型随机变量的分布列、期望和方差"
+    },
+    {
+      "type": "类型2：二项分布",
+      "chapter": "第12章 概率统计",
+      "module": "模块2 二项分布与正态分布",
+      "knowledge_points": [
+        "KP_12_04"
+      ],
+      "methods": [],
+      "description": "n次独立重复试验的概率模型"
+    }
+  ]
+}

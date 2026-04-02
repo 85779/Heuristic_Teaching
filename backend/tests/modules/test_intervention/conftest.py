@@ -43,8 +43,13 @@ stub_llm_base.Message = StubMessage
 sys.modules['app.infrastructure.llm.base_client'] = stub_llm_base
 
 # Stub dashscope_client
+class _StubDashScopeClientForConftest:
+    """Mock DashScopeClient that accepts any __init__ args."""
+    def __init__(self, *args, **kwargs):
+        pass
+
 stub_dashscope = type(sys)('app.infrastructure.llm.dashscope_client')
-stub_dashscope.DashScopeClient = type('DashScopeClient', (), {})
+stub_dashscope.DashScopeClient = _StubDashScopeClientForConftest
 sys.modules['app.infrastructure.llm.dashscope_client'] = stub_dashscope
 
 # Stub app.infrastructure.cache
