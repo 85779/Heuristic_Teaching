@@ -1,24 +1,15 @@
-// Router configuration
-import { createBrowserRouter } from "react-router-dom";
-import { HomePage } from "../pages/HomePage";
-import { DemoPage } from "../pages/DemoPage";
-import { StudentPage } from "../pages/StudentPage";
-import { ClassPage } from "../pages/ClassPage";
-import { KnowledgePage } from "../pages/KnowledgePage";
-import { AppLayout } from "../components/layout/AppLayout";
+import { createBrowserRouter } from 'react-router-dom';
+import Layout from '../components/layout/AppLayout';
+import Dashboard from '../pages/Dashboard';
+import Study from '../pages/Study';
+import Profile from '../pages/Profile';
+import Teaching from '../pages/Teaching';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <AppLayout />,
-    children: [
-      { index: true, element: <HomePage /> },
-      { path: "demo", element: <DemoPage /> },
-      { path: "student/:id", element: <StudentPage /> },
-      { path: "class", element: <ClassPage /> },
-      { path: "knowledge", element: <KnowledgePage /> },
-    ],
-  },
+export const router = createBrowserRouter([
+  { element: <Layout />, children: [
+    { path: '/', element: <Dashboard /> },
+    { path: '/study', element: <Study /> },
+    { path: '/profile/:id', element: <Profile /> },
+    { path: '/teaching/:id', element: <Teaching /> },
+  ]},
 ]);
-
-export { router };

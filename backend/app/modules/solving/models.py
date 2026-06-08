@@ -84,7 +84,7 @@ class SolvingRequest(BaseModel):
 class SolvingResponse(BaseModel):
     """解题响应"""
     success: bool = Field(..., description="是否成功")
-    evaluation: "EvaluationResult" = Field(..., description="评估结果")
+    evaluation: Optional["EvaluationResult"] = Field(None, description="评估结果(无学生作答时为空)")
     solution: Optional["ReferenceSolution"] = Field(None, description="完整解法(评估通过时)")
     error_feedback: Optional["ErrorFeedback"] = Field(None, description="错误提示(评估未通过时)")
 

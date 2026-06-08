@@ -1,284 +1,206 @@
-# Math Tutor Backend
+# Socrates — 高中数学智能辅导系统
 
-高中数学教辅系统后端，基于 FastAPI + MongoDB 构建。
+后端：FastAPI + MongoDB + DashScope LLM。前端：React + TypeScript + Vite + TailwindCSS。394 个测试全部通过。
 
-## 项目结构
-
-```
-backend/
-├── app/
-│   ├── api/               # API 路由层
-│   ├── core/              # 核心框架（context, events, orchestrator, registry, state）
-│   ├── infrastructure/    # 基础设施层
-│   │   ├── database/      # MongoDB 连接管理
-│   │   └── llm/           # LLM 客户端（DashScope）
-│   ├── modules/           # 业务模块
-│   │   ├── solving/        # Module 1: 组织化解主治线生成
-│   │   ├── intervention/   # Module 2: 错误干预
-│   │   ├── recommendation/ # Module 3: 学习推荐
-│   │   ├── student_model/  # Module 4: 学生画像
-│   │   └── teaching/       # Module 5: 教学策略
-│   ├── shared/             # 共享工具
-│   ├── config.py           # 配置管理
-│   └── main.py            # 应用入口
-├── tests/                 # 测试套件
-│   ├── modules/           # 模块测试
-│   │   ├── test_solving/  # Solving 模块测试
-│   │   └── test_intervention/ # Intervention 模块测试
-│   ├── core/              # 核心框架测试
-│   └── integration/       # 集成测试
-├── prompts/               # 提示词工程
-└── pyproject.toml
-```
-
-## 模块概览
-
-| 模块     | 名称               | 状态      |
-| -------- | ------------------ | --------- |
-| Module 1 | 组织化解主治线生成 | ✅ 已实现 |
-| Module 2 | 错误干预           | ✅ 已实现 |
-| Module 3 | 学习推荐           | 🔨 开发中 |
-| Module 4 | 学生画像           | 🔨 开发中 |
-| Module 5 | 教学策略           | 🔨 开发中 |
+---
 
 ## 快速开始
 
 ```bash
-# 安装依赖
+# 后端
 cd backend
 pip install -e ".[dev]"
+echo "DASHSCOPE_API_KEY=sk-xxx" > .env
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-# 配置环境变量
-cp .env.example .env
-# 编辑 .env，填入 DASHSCOPE_API_KEY
-
-# 运行开发服务器
-uvicorn app.main:app --reload
-
-# 运行测试
-python -m pytest tests/ -v --ignore=tests/e2e
+# 前端
+cd frontend
+npm install
+npx vite --host 0.0.0.0 --port 5173
 ```
 
-## Module 1: Solving（解题模块）
+浏览器打开 `http://localhost:5173`。
 
-### 核心能力
+---
 
-接收 LaTeX 题目（可选学生已作答内容），评估学生解答正确性，返回结构化的参考解法或错误反馈。
+## 产品能力一览
 
-### API 接口
+### 学生使用
+1. **输入题目和作答** → 系统自动批改，指出具体错误（概念错误 / 计算错误 / 遗漏）
+2. **做错了** → 同时看到错误原因 + 正确参考解法
+3. **卡住了** → 获取分级提示，从方向引导逐步到完整步骤
+4. **做完一道题** → 自动推荐下一道合适的练习题
+5. **查看画像** → 看到自己的学习特征变化
 
-**`POST /solving/reference`**
+### 老师使用
+6. **查看学生画像** → 维度比例 + 趋势分析
+7. **获取教学策略** → 讲授/练习/讨论的具体比例建议
+
+---
+
+## 系统架构
+
+```
+Module 1 解题 ──→ Module 2 干预 ──→ Module 4 画像 ──→ Module 3 推荐
+                   (EventBus 自动串联)                   Module 5 教学策略
+                                                         Module 6 知识库
+```
+
+---
+
+## Module 1：解题系统（8 个 API）
+
+| 端点 | 方法 | 说明 |
+|------|:--:|------|
+| `/api/v1/solving/reference` | POST | 参考解法 + 链式验证评估（做错也能看解法） |
+| `/api/v1/solving/sessions` | POST | 创建 4 阶段 Polya 解题会话 |
+| `/api/v1/solving/sessions/{id}` | GET | 查询会话状态 |
+| `/api/v1/solving/sessions/{id}/orientation` | POST | 阶段1：定向 |
+| `/api/v1/solving/sessions/{id}/reconstruction` | POST | 阶段2：重构 |
+| `/api/v1/solving/sessions/{id}/transformation` | POST | 阶段3：变换 |
+| `/api/v1/solving/sessions/{id}/verification` | POST | 阶段4：验证 |
+| `/api/v1/solving/sessions/{id}/complete` | POST | 完成 |
+
+### 链式验证评估（90% 准确率）
+
+第1步：LLM 不看学生答案，独立算出正确答案
+第2步：拿着标准答案，逐行对比学生作答 → 指出概念错误/计算错误/遗漏
+做错了仍然生成参考解法（学生同时看到错误原因 + 正确解法）
 
 ```bash
-curl -X POST http://localhost:8000/solving/reference \
+curl -X POST http://localhost:8000/api/v1/solving/reference \
   -H "Content-Type: application/json" \
-  -d '{
-    "problem": "设 $a_0, a_1, \\ldots$ 是正整数序列...",
-    "student_work": null,
-    "model": "qwen-turbo",
-    "temperature": 0.7
-  }'
+  -d '{"problem":"求 f(x)=x^2-4x+3 的极值","student_work":"令 f(x)=0,x=1或3"}'
 ```
 
-**请求体**
+---
 
-| 字段              | 类型    | 必填 | 说明                        |
-| ----------------- | ------- | ---- | --------------------------- |
-| `problem`         | `str`   | ✅   | LaTeX 题干                  |
-| `student_work`    | `str`   | ❌   | LaTeX 学生已作答内容        |
-| `model`           | `str`   | ❌   | 模型名，默认 `qwen-turbo`   |
-| `temperature`     | `float` | ❌   | 温度，默认 `0.7`            |
-| `max_tokens`      | `int`   | ❌   | 最大生成长度，默认 `8192`   |
-| `enable_thinking` | `bool`  | ❌   | 深度思考（qwen3.5-plus 等） |
+## Module 2：干预系统（7 个 API）
 
-**响应体**
+| 端点 | 方法 | 说明 |
+|------|:--:|------|
+| `/api/v1/interventions` | POST | 创建干预（独立调用，无需前置解题状态） |
+| `/api/v1/interventions/feedback` | POST | 学生反馈 |
+| `/api/v1/interventions/end` | POST | 结束干预 |
+| `/api/v1/interventions/escalate` | POST | 强制升级 |
+| `/api/v1/interventions/{id}` | GET | 查询干预详情 |
+| `/api/v1/interventions/{id}/accept` | POST | 接受提示 |
+| `/api/v1/interventions/{id}/dismiss` | POST | 忽略提示 |
 
-| 字段             | 类型     | 说明                         |
-| ---------------- | -------- | ---------------------------- |
-| `success`        | `bool`   | 是否成功                     |
-| `evaluation`     | `object` | 评估结果                     |
-| `solution`       | `object` | 参考解法（success=True 时）  |
-| `error_feedback` | `object` | 错误反馈（success=False 时） |
+### R/M 双维度九级提示
 
-### 模型参数配置
+**R 维度（知识资源型）— 帮学生补充缺失的知识**
 
-| 模型           | temperature | max_tokens | enable_thinking |
-| -------------- | ----------- | ---------- | --------------- |
-| `qwen-turbo`   | 0.7         | 2048       | False           |
-| `qwen3.5-plus` | 0.7         | 8192       | True            |
+| 级别 | 提示程度 | 示例（题目：求极值，学生已求出 f'） |
+|------|------|------|
+| R1 | 方向引导 | "你算出了导数，导数能告诉你关于原函数的什么信息？" |
+| R2 | 知识指路 | "需要用到导数符号判别法——导数为零的点与极值有什么关系？" |
+| R3 | 第一步形式 | "令 f'(x)=0 解出临界点。现在解方程 3x²-12x+9=0。" |
+| R4 | 完整步骤 | 完整计算过程和中间结果 |
 
-### LLM 输出格式
+**M 维度（元认知型）— 帮学生激活策略思维**
 
-LLM 输出为**自然语言三段式**：
-
-```
-这题怎么看：
-关键观察点、真正突破口、整体路径。
-
-这题怎么想：
-第一步：...（关键判断和转折点）
-第二步：...
-第三步：...
-
-这题留下什么方法：
-总结核心思维动作，点出最关键的一步。
-```
-
-### 详细文档
-
-- [Module 1 详细文档](app/modules/solving/README.md)
-- [Module 1 测试说明](tests/modules/test_solving/README.md)
-
-## Module 2: Intervention（断点分层递进干预系统）
-
-### 核心能力
-
-基于 Module 1 生成的参考解法，定位学生断点，通过双维度诊断（Resource / Metacognitive）选择干预策略，生成递进式提示，引导学生自主跨越断点。
-
-### 核心概念：双维度诊断
-
-干预决策围绕两个维度展开：
-
-| 维度              | 描述                               | 干预策略          |
-| ----------------- | ---------------------------------- | ----------------- |
-| **Resource**      | 学生缺乏知识或步骤（不知道怎么做） | 补充知识/方法     |
-| **Metacognitive** | 学生有知识但未调用（知道但想不到） | 引导反思/策略激活 |
-
-每个维度有多个递进级别（R1-R4 / M1-M5），当前级别未能帮助学生进步时，自动升级到下一级别。
-
-### 五节点干预管道
-
-```
-学生请求干预
-    │
-    ▼
-┌──────────────────────────────────────────────────────────────┐
-│  ① BreakpointLocator（断点定位）                              │
-│     纯逻辑计算，无需 LLM。三级语义匹配定位断点位置和类型        │
-│                                                              │
-│  ② DimensionRouter（维度路由 → Node 2a）                      │
-│     判断断点属于 Resource 还是 Metacognitive 维度              │
-│                                                              │
-│  ③ SubTypeDecider（子类型决策 → Node 2b）                     │
-│     在维度内部确定具体子类型（R1-R4 / M1-M5）和强度            │
-│                                                              │
-│  ④ HintGeneratorV2（提示生成）                                 │
-│     基于子类型和强度生成提示，调用 LLM                         │
-│                                                              │
-│  ⑤ OutputGuardrail（输出守卫）                                │
-│     检查提示是否包含答案、是否过于直接，必要时降级或替换       │
-└──────────────────────────────────────────────────────────────┘
-    │
-    ▼
-返回干预提示 / 升级 / 终止
-```
-
-### 提示递进级别
-
-**Resource 维度（R）**
-
-| 级别 | 强度范围 | 提示特点                         |
-| ---- | -------- | -------------------------------- |
-| R1   | 0.0-0.25 | 方向引导，不给任何具体内容       |
-| R2   | 0.25-0.5 | 部分提示，揭示关键方向           |
-| R3   | 0.5-0.75 | 接近完整的思路，关键步骤有提示   |
-| R4   | 0.75-1.0 | 完整思路，但学生仍需自己完成计算 |
-
-**Metacognitive 维度（M）**
-
-| 级别 | 强度范围 | 提示特点                   |
-| ---- | -------- | -------------------------- |
-| M1   | 0.0-0.2  | 唤醒反思，不直接给解题方向 |
-| M2   | 0.2-0.4  | 点出可能的策略方向         |
-| M3   | 0.4-0.6  | 建议使用某种策略并说明原因 |
-| M4   | 0.6-0.8  | 比较多种策略的优劣         |
-| M5   | 0.8-1.0  | 引导学生比较并选择策略     |
-
-### API 接口
-
-**POST /interventions** — 创建干预
+| 级别 | 提示程度 | 示例 |
+|------|------|------|
+| M1 | 反思引导 | "你做的步骤在朝着目标前进吗？求极值需要什么条件？" |
+| M2 | 方向指引 | "下一步需要分析导数符号变化来判断单调性。" |
+| M3 | 策略推荐 | "用二阶导数判断极值类型，比符号表更直接。" |
+| M4 | 路径对比 | "符号表法和二阶导法各有利弊，你倾向哪种？" |
+| M5 | 完整思路 | 完整解题逻辑链 + 类比标准题型 |
 
 ```bash
-curl -X POST http://localhost:8000/interventions \
+curl -X POST http://localhost:8000/api/v1/interventions \
   -H "Content-Type: application/json" \
-  -d '{
-    "session_id": "session_001",
-    "intensity": 0.5,
-    "student_id": "student_001"
-  }'
+  -d '{"student_id":"demo","session_id":"demo","student_input":"stuck","intervention_type":"hint"}'
 ```
 
-**POST /interventions/feedback** — 学生反馈（进步 / 未进步）
+---
+
+## Module 3：推荐系统（2 个 API）
+
+| 端点 | 方法 | 说明 |
+|------|:--:|------|
+| `/api/v1/recommendations/recommend` | POST | 获取推荐题目 |
+| `/api/v1/recommendations/health` | GET | 健康检查 |
+
+### 功能
+- LLM 实时生成新题（非题库）+ 答案 + 提示
+- 自动识别题目关联知识点（CJK ngram 匹配 175 KP）
+- 三种策略：SAME_KP（同知识点）/ VARIATION（变式）/ BALANCED（均衡）
+- 19 道备用精选题，LLM 不可用时自动切换
 
 ```bash
-curl -X POST http://localhost:8000/interventions/feedback \
+curl -X POST http://localhost:8000/api/v1/recommendations/recommend \
   -H "Content-Type: application/json" \
-  -d '{
-    "session_id": "session_001",
-    "frontend_signal": "NOT_PROGRESSED",
-    "student_input": "学生仍然卡在构造步骤"
-  }'
+  -d '{"student_id":"demo","trigger":{"outcome":"SOLVED","current_problem_kps":["KP_3_13"],"current_method":"","current_difficulty":2,"session_id":"demo"}}'
 ```
 
-**POST /interventions/end** — 结束干预
+---
+
+## Module 4：学生画像（5 个 API）
+
+| 端点 | 方法 | 说明 |
+|------|:--:|------|
+| `/api/v1/profile/{id}` | GET | 完整画像 |
+| `/api/v1/profile/{id}/dimension-ratio` | GET | 维度比例 |
+| `/api/v1/profile/{id}/routing-hint` | GET | 路由提示 |
+| `/api/v1/profile/{id}/intervention` | POST | 记录干预 |
+| `/api/v1/profile/health` | GET | 健康检查 |
+
+### 画像指标
+- **dimension_ratio**：R 型（知识缺口）vs M 型（策略薄弱）占比
+- **ratio_trend**：线性回归趋势分析（rising/falling/stable）
+- **路由提示**：告知其他模块学生偏向类型和薄弱点
 
 ```bash
-curl -X POST http://localhost:8000/interventions/end \
-  -H "Content-Type: application/json" \
-  -d '{
-    "session_id": "session_001",
-    "reason": "学生已掌握"
-  }'
+curl http://localhost:8000/api/v1/profile/demo
 ```
 
-**POST /interventions/escalate** — 强制升级
+---
+
+## Module 5：教学策略（3 个 API）
+
+| 端点 | 方法 | 说明 |
+|------|:--:|------|
+| `/api/v1/teaching/strategy` | POST | 获取策略 |
+| `/api/v1/teaching/strategy/{id}` | GET | 查询 |
+| `/api/v1/teaching/health` | GET | 健康检查 |
+
+七种自适应策略（R偏+恶化 / R偏+稳定 / M偏+改善 / M偏 / 均衡 × 经验等级）
 
 ```bash
-curl -X POST http://localhost:8000/interventions/escalate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "session_id": "session_001",
-    "reason": "学生要求更多帮助"
-  }'
+curl -X POST http://localhost:8000/api/v1/teaching/strategy \
+  -H "Content-Type: application/json" -d '{"student_id":"demo"}'
 ```
 
-### 详细文档
+---
 
-- [Module 2 详细文档](app/modules/intervention/README.md)
-- [Module 2 测试说明](tests/modules/test_intervention/README.md)
+## Module 6：知识库
 
-## 环境变量
+298 篇文档嵌入索引（175 知识点 + 13 方法 + 110 题型），DashScope Embedding API 实现，零外部依赖。
 
-| 变量                | 必填 | 说明                            |
-| ------------------- | ---- | ------------------------------- |
-| `DASHSCOPE_API_KEY` | ✅   | 阿里云 DashScope API Key        |
-| `SOLVING_MODEL`     | ❌   | 解题默认模型，默认 `qwen-turbo` |
-| `MONGODB_URI`       | ❌   | MongoDB 连接 URI                |
+---
 
-## 测试
+## 前端
 
-```bash
-# 单元测试
-python -m pytest tests/modules/test_solving/test_solving.py -v
-python -m pytest tests/modules/test_intervention/ -v
+4 个页面，Vite 代理 `/api` → `:8000`：
 
-# 完整测试套件
-python -m pytest tests/ -v --ignore=tests/e2e
+| 页面 | 路径 | 功能 |
+|------|------|------|
+| 首页 | `/` | 系统状态 + 入口 |
+| 学习 | `/study` | 题目输入 → 评估 → 解法 → 提示 → 推荐 |
+| 画像 | `/profile/:id` | R/M 维度比 + 指标 |
+| 教学 | `/teaching/:id` | 讲授/练习/讨论比例 |
 
-# 带覆盖率
-python -m pytest tests/ --cov=app --cov-report=term-missing
-```
+---
 
-> **集成测试**：`tests/modules/test_integration/test_solving_intervention_connection.py`
-> — 验证 Module 1 (Solving) → SessionState → Module 2 (Intervention) 的完整连接
+## 核心指标
 
-## 技术栈
-
-| 层级     | 技术                         |
-| -------- | ---------------------------- |
-| 框架     | FastAPI + Uvicorn            |
-| 数据验证 | Pydantic v2                  |
-| 数据库   | MongoDB + Motor（异步驱动）  |
-| LLM      | DashScope（OpenAI 兼容接口） |
-| 测试     | pytest + pytest-asyncio      |
-| 代码质量 | ruff + black                 |
+| 指标 | 数值 |
+|------|------|
+| 测试用例 | 394 个，全部通过 |
+| API 端点 | 26 个 |
+| 知识点 | 175 个，12 章全覆盖 |
+| 提示级别 | 9 级（R1-R4 + M1-M5） |
+| 评估准确率 | 90%（10 题 benchmark） |
+| 代码规模 | 后端 16,500 行 / 前端 1,200 行 |

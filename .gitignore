@@ -80,4 +80,4 @@ mongo_data/
 docker-compose.override.yml
 
 # Project specific
-.sisyphus/
+.sisyphus/nul

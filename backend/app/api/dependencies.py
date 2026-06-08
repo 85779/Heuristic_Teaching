@@ -2,7 +2,6 @@
 API 依赖注入
 """
 
-from typing import Generator
 from app.core.registry.module_registry import ModuleRegistry
 from app.core.state.session_manager import SessionManager
 
@@ -10,6 +9,16 @@ from app.core.state.session_manager import SessionManager
 # 全局实例 (在应用启动时初始化)
 _module_registry: ModuleRegistry | None = None
 _session_manager: SessionManager | None = None
+
+
+def init_dependencies(
+    registry: ModuleRegistry,
+    session_manager: SessionManager,
+) -> None:
+    """Initialize global dependencies at startup."""
+    global _module_registry, _session_manager
+    _module_registry = registry
+    _session_manager = session_manager
 
 
 def get_module_registry() -> ModuleRegistry:

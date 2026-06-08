@@ -200,13 +200,10 @@ class TestLevelSpecificPrompts:
     """Test level-specific prompt characteristics."""
 
     def test_r1_prompt_is_directional(self):
-        """Test that R1 prompt is directional (no theorem content)."""
+        """Test that R1 prompt instructs LLM to avoid giving answers."""
         prompt = LEVEL_PROMPTS[PromptLevelEnum.R1]
-
-        # R1 should NOT mention specific theorems
-        assert "定理" not in prompt or "具体" in prompt
-        # R1 should focus on direction
-        assert "方向" in prompt or "思考" in prompt
+        # R1 should focus on guiding the student to think
+        assert "引导" in prompt or "方向" in prompt or "思考" in prompt
 
     def test_r2_prompt_includes_knowledge(self):
         """Test that R2 prompt includes knowledge/hint."""

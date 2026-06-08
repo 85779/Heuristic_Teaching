@@ -1,33 +1,40 @@
-"""Verification phase prompt template.
+"""Verification phase: validate solution, check errors, ensure correctness."""
 
-This prompt guides the LLM through the verification phase where students
-validate their solution, check for errors, and ensure correctness.
-"""
+VERIFICATION_PROMPT = """## 题目
+{problem}
+
+## 定向阶段
+{orientation}
+
+## 重构阶段
+{reconstruction}
+
+## 变换阶段
+{transformation}
+
+## 你的任务
+带领学生完成**验证阶段**：检查解答是否完整、逻辑是否正确、计算是否有误。
+
+输出 JSON:
+{{
+  "is_valid": true/false,
+  "issues": ["发现的问题1", "问题2"],
+  "corrections": ["修正建议1", "建议2"],
+  "confidence": 0.0-1.0,
+  "summary": "整体验证结论（1-2句话）"
+}}"""
 
 
 class VerificationPrompt:
-    """Prompt template for the verification phase."""
-
-    def __init__(self):
-        """Initialize the verification prompt."""
-        raise NotImplementedError
+    """Build verification phase prompts."""
 
     def get_prompt(
-        self, problem: str, orientation: str, reconstruction: str, transformation: str, context: dict
+        self, problem: str, orientation: str = "", reconstruction: str = "",
+        transformation: str = "", context: dict = None
     ) -> str:
-        """Get the verification prompt.
-
-        Args:
-            problem: The problem statement
-            orientation: Results from the orientation phase
-            reconstruction: Results from the reconstruction phase
-            transformation: Results from the transformation phase
-            context: Additional context information
-
-        Returns:
-            str: The formatted prompt
-
-        Raises:
-            NotImplementedError
-        """
-        raise NotImplementedError
+        return VERIFICATION_PROMPT.format(
+            problem=problem,
+            orientation=orientation,
+            reconstruction=reconstruction,
+            transformation=transformation,
+        )

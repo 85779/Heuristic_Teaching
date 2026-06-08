@@ -16,161 +16,101 @@ from app.modules.solving.service import ReferenceSolutionService
 
 router = APIRouter(prefix="/solving", tags=["solving"])
 
-
-@router.post("/sessions", response_model=SolvingSession)
-async def create_session(problem_id: str) -> SolvingSession:
-    """Create a new problem-solving session.
-
-    Args:
-        problem_id: ID of the problem to solve
-
-    Returns:
-        SolvingSession: The created session
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-@router.get("/sessions/{session_id}", response_model=SolvingSession)
-async def get_session(session_id: str) -> SolvingSession:
-    """Get a problem-solving session by ID.
-
-    Args:
-        session_id: ID of the session
-
-    Returns:
-        SolvingSession: The session details
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-@router.post("/sessions/{session_id}/orientation", response_model=OrientationResult)
-async def process_orientation(session_id: str) -> OrientationResult:
-    """Process the orientation phase for a session.
-
-    Args:
-        session_id: ID of the solving session
-
-    Returns:
-        OrientationResult: Orientation phase results
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-@router.post("/sessions/{session_id}/reconstruction", response_model=ReconstructionResult)
-async def process_reconstruction(session_id: str) -> ReconstructionResult:
-    """Process the reconstruction phase for a session.
-
-    Args:
-        session_id: ID of the solving session
-
-    Returns:
-        ReconstructionResult: Reconstruction phase results
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-@router.post("/sessions/{session_id}/transformation", response_model=TransformationResult)
-async def process_transformation(session_id: str) -> TransformationResult:
-    """Process the transformation phase for a session.
-
-    Args:
-        session_id: ID of the solving session
-
-    Returns:
-        TransformationResult: Transformation phase results
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-@router.post("/sessions/{session_id}/verification", response_model=VerificationResult)
-async def process_verification(session_id: str) -> VerificationResult:
-    """Process the verification phase for a session.
-
-    Args:
-        session_id: ID of the solving session
-
-    Returns:
-        VerificationResult: Verification phase results
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-@router.post("/sessions/{session_id}/complete", response_model=SolvingSession)
-async def complete_session(session_id: str) -> SolvingSession:
-    """Complete a problem-solving session.
-
-    Args:
-        session_id: ID of the solving session
-
-    Returns:
-        SolvingSession: The completed session
-
-    Raises:
-        NotImplementedError
-    """
-    raise NotImplementedError
-
-
-# ============== Reference Solution Endpoint ==============
-
-# Global service instance (will be initialized by module)
+# ===== Service references (set by module initialize()) =====
 _service: Optional[ReferenceSolutionService] = None
+_phase_service = None
+
+
+def set_service(service: ReferenceSolutionService) -> None:
+    global _service
+    _service = service
+
+
+def set_phase_service(service) -> None:
+    global _phase_service
+    _phase_service = service
 
 
 def get_service() -> ReferenceSolutionService:
-    """Get or create the service instance."""
-    global _service
     if _service is None:
-        _service = ReferenceSolutionService()
+        raise HTTPException(status_code=503, detail="Solving service not initialized")
     return _service
 
+
+def get_phase_service():
+    if _phase_service is None:
+        raise HTTPException(status_code=503, detail="Phase service not initialized")
+    return _phase_service
+
+
+# ===== Session Management =====
+
+@router.post("/sessions", response_model=SolvingSession)
+async def create_session(problem: str, service=Depends(get_phase_service)) -> SolvingSession:
+    """Create a new 4-phase solving session."""
+    return service.create_session(problem)
+
+
+@router.get("/sessions/{session_id}", response_model=SolvingSession)
+async def get_session(session_id: str, service=Depends(get_phase_service)) -> SolvingSession:
+    """Get session by ID."""
+    session = service.get_session(session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+    return session
+
+
+# ===== 4-Phase Workflow =====
+
+@router.post("/sessions/{session_id}/orientation", response_model=OrientationResult)
+async def process_orientation(
+    session_id: str, problem: str, service=Depends(get_phase_service),
+) -> OrientationResult:
+    """Phase 1: Problem orientation — understand, identify concepts, set goals."""
+    return await service.process_orientation(session_id, problem)
+
+
+@router.post("/sessions/{session_id}/reconstruction", response_model=ReconstructionResult)
+async def process_reconstruction(
+    session_id: str, service=Depends(get_phase_service),
+) -> ReconstructionResult:
+    """Phase 2: Problem reconstruction — break down, find relationships."""
+    return await service.process_reconstruction(session_id)
+
+
+@router.post("/sessions/{session_id}/transformation", response_model=TransformationResult)
+async def process_transformation(
+    session_id: str, service=Depends(get_phase_service),
+) -> TransformationResult:
+    """Phase 3: Solution transformation — choose strategies, plan steps."""
+    return await service.process_transformation(session_id)
+
+
+@router.post("/sessions/{session_id}/verification", response_model=VerificationResult)
+async def process_verification(
+    session_id: str, service=Depends(get_phase_service),
+) -> VerificationResult:
+    """Phase 4: Solution verification — validate, check errors."""
+    return await service.process_verification(session_id)
+
+
+@router.post("/sessions/{session_id}/complete", response_model=SolvingSession)
+async def complete_session(
+    session_id: str, service=Depends(get_phase_service),
+) -> SolvingSession:
+    """Complete the solving session."""
+    return await service.complete_session(session_id)
+
+
+# ===== Reference Solution (standalone, non-session) =====
 
 @router.post("/reference", response_model=SolvingResponse)
 async def generate_reference_solution(
     request: SolvingRequest,
     session_id: Optional[str] = None,
     x_session_id: Optional[str] = Header(None, alias="X-Session-ID"),
+    service: ReferenceSolutionService = Depends(get_service),
 ) -> SolvingResponse:
-    """Generate reference solution for a problem.
-    
-    This is the main entry point for Module 1: takes a problem
-    (with optional student work) and returns either:
-    - A complete reference solution (if evaluation passes)
-    - Error feedback (if student work has issues)
-    
-    Args:
-        request: SolvingRequest with:
-            - problem: LaTeX problem statement
-            - student_work: Optional LaTeX student work
-            - model: Model to use (default: qwen-turbo)
-            - temperature: Temperature (default: 0.7)
-    
-    Returns:
-        SolvingResponse with:
-            - success: Whether solution was generated
-            - evaluation: Evaluation result
-            - solution: ReferenceSolution (if success)
-            - error_feedback: ErrorFeedback (if not success)
-    """
-    # Get session_id from request body attribute or header fallback
+    """Generate a reference solution (or error feedback) for a math problem."""
     resolved_session_id = getattr(request, 'session_id', None) or session_id or x_session_id
-    service = get_service()
     return await service.generate(request, session_id=resolved_session_id)

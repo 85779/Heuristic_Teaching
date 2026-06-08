@@ -66,23 +66,28 @@ class SolutionParser:
         """
         sections: Dict[str, str] = {}
 
-        # 1. Opening: "这题怎么看"
-        opening_pattern = r"这题怎么看[:：]?\s*(.*?)(?=\n这题怎么想|这题留下什么|\n第[一二三四五1-5]步|\Z)"
+        # 1. Opening: "这题怎么看" (accept optional ##/### prefix and leading whitespace)
+        opening_pattern = r"(?:^|\n)\s*(?:#{1,3}\s*)?这题怎么看[:：]?\s*(.*?)(?=\n\s*(?:#{1,3}\s*)?(?:这题怎么想|这题留下什么)|\n第[一二三四五六七八九十1-9]步|\Z)"
         match = re.search(opening_pattern, text, re.DOTALL)
-        if match:
+        if match and match.group(1).strip():
             sections["opening"] = match.group(1).strip()
 
         # 2. Body: "这题怎么想" through "这题留下什么方法"
-        body_pattern = r"这题怎么想[:：]?\s*(.*?)(?=\n这题留下什么|这题留下什么方法|\Z)"
+        body_pattern = r"(?:^|\n)\s*(?:#{1,3}\s*)?这题怎么想[:：]?\s*(.*?)(?=\n\s*(?:#{1,3}\s*)?(?:这题留下什么|这题留下什么方法)|\Z)"
         match = re.search(body_pattern, text, re.DOTALL)
-        if match:
+        if match and match.group(1).strip():
             sections["body"] = match.group(1).strip()
 
         # 3. Conclusion: "这题留下什么方法"
-        conclusion_pattern = r"这题留下什么方法[:：]?\s*(.*)"
+        conclusion_pattern = r"(?:^|\n)\s*(?:#{1,3}\s*)?这题留下什么方法[:：]?\s*(.*)"
         match = re.search(conclusion_pattern, text, re.DOTALL)
-        if match:
+        if match and match.group(1).strip():
             sections["conclusion"] = match.group(1).strip()
+
+        # Fallback: if no markers found, treat entire text as body
+        if not sections.get("body") and not sections.get("opening"):
+            sections["body"] = text.strip()
+            sections["opening"] = ""
 
         return sections
 

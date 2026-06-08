@@ -109,15 +109,15 @@ class InterventionService:
         student_id = request.student_id
         student_input = request.student_input or ""
 
-        # Step 0: Load solving state from SessionState
+        # Step 0: Load solving state from SessionState, or create minimal from input
         solving_state = self._load_solving_state(session_id)
         if not solving_state:
-            return InterventionResponse(
-                success=False,
-                intervention=None,
-                message=f"No solving state found for session {session_id}",
-                breakpoint_location=None,
-            )
+            solving_state = {
+                "problem": student_input or "未知题目",
+                "student_work": student_input,
+                "student_steps": [],
+                "solution_steps": [],
+            }
 
         problem_context = solving_state.get("problem", "")
         solution_steps = solving_state.get("solution_steps", [])
@@ -552,9 +552,11 @@ class InterventionService:
         Returns:
             InterventionResponse with generated hint
         """
-        # Load solving state
+        # Load solving state or create minimal from request
         solving_state = self._load_solving_state(session_id)
         if not solving_state:
+            solving_state = {"problem": "未知题目", "student_work": "", "student_steps": [], "solution_steps": []}
+        if not solving_state.get("problem") and not solving_state.get("student_work"):
             return InterventionResponse(
                 success=False,
                 intervention=None,
@@ -832,9 +834,11 @@ class InterventionService:
         Returns:
             InterventionResponse with escalated intervention
         """
-        # Load solving state
+        # Load solving state or create minimal from request
         solving_state = self._load_solving_state(session_id)
         if not solving_state:
+            solving_state = {"problem": "未知题目", "student_work": "", "student_steps": [], "solution_steps": []}
+        if not solving_state.get("problem") and not solving_state.get("student_work"):
             return InterventionResponse(
                 success=False,
                 intervention=None,
@@ -1037,89 +1041,3 @@ class InterventionService:
             "student_last_step": location.student_last_step,
         }
 
-    # =======================================================================
-    # Legacy Methods (for backward compatibility)
-    # =======================================================================
-
-    async def generate(
-        self,
-        session_id: str,
-        intensity: float = 0.5,
-        student_work: Optional[str] = None,
-        student_id: Optional[str] = None,
-    ) -> Intervention:
-        """Legacy generate method (backward compatibility).
-
-        For new code, use create_intervention() instead.
-        """
-        request = InterventionRequest(
-            student_id=student_id or "unknown",
-            session_id=session_id,
-            student_input=student_work or "",
-            frontend_signal=None,
-            intervention_type=InterventionType.HINT,
-        )
-        response = await self.create_intervention(request)
-        if response.intervention:
-            return response.intervention
-        raise ValueError(response.message)
-
-    async def record_intervention_outcome(
-        self,
-        intervention_id: str,
-        outcome: str,
-    ) -> None:
-        """Record intervention outcome (legacy method).
-
-        For new code, use process_feedback() instead.
-        """
-        intervention = self._interventions.get(intervention_id)
-        if intervention:
-            intervention.status = InterventionStatus(outcome)
-            intervention.outcome_at = datetime.utcnow()
-            # Persist to MongoDB
-            await self._persist_intervention(intervention)
-
-    async def analyze_student_state(
-        self,
-        student_id: str,
-        session_id: str,
-    ) -> Dict[str, Any]:
-        """Analyze student state (stub for backward compatibility)."""
-        return {
-            "student_id": student_id,
-            "session_id": session_id,
-            "current_step": None,
-            "error_count": 0,
-        }
-
-    async def determine_intervention_type(self, analysis: Dict[str, Any]) -> str:
-        """Determine intervention type (stub for backward compatibility)."""
-        return "hint"
-
-    async def calculate_intensity(self, analysis: Dict[str, Any]) -> float:
-        """Calculate intensity (stub for backward compatibility)."""
-        return 0.5
-
-    async def generate_intervention(
-        self,
-        analysis: Dict[str, Any],
-        intervention_type: str,
-    ) -> Dict[str, Any]:
-        """Generate intervention (stub for backward compatibility)."""
-        return {"content": "Intervention content", "type": intervention_type}
-
-    async def deliver_intervention(
-        self,
-        intervention_id: str,
-        session_id: str,
-    ) -> Dict[str, Any]:
-        """Deliver intervention (stub for backward compatibility)."""
-        intervention = self._interventions.get(intervention_id)
-        if intervention:
-            intervention.status = InterventionStatus.DELIVERED
-            intervention.delivered_at = datetime.utcnow()
-        return {
-            "delivered": intervention is not None,
-            "intervention_id": intervention_id,
-        }

@@ -69,6 +69,21 @@ class SolvingModule(IModule):
         """
         self._context = context
         self._logger = context.logger
+
+        # Create reference solution service
+        from app.modules.solving.service import ReferenceSolutionService
+        self._service = ReferenceSolutionService(context=context)
+
+        # Create 4-phase service for guided problem-solving workflow
+        from app.modules.solving.phase_service import PhaseService
+        llm = self._service._get_llm_client()
+        self._phase_service = PhaseService(llm_client=llm)
+
+        # Inject into routes
+        from . import routes as solving_routes
+        solving_routes.set_service(self._service)
+        solving_routes.set_phase_service(self._phase_service)
+
         self._logger.info("SolvingModule initialized")
 
     async def shutdown(self) -> None:

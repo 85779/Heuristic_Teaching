@@ -69,13 +69,8 @@ class ModuleContext:
         pass
 
     def get_config(self, key: str, default: Any = None) -> Any:
-        """Get a configuration value.
-
-        Args:
-            key: Configuration key
-            default: Default value if key not found
-
-        Returns:
-            Configuration value or default
-        """
-        return self.config.get(key, default)
+        """Get a configuration value."""
+        try:
+            return getattr(self.config, key, default)
+        except Exception:
+            return default

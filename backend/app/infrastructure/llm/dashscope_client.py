@@ -225,7 +225,9 @@ class DashScopeClient(BaseLLMClient):
         if enable_search:
             request_kwargs["enable_search"] = enable_search
         if enable_thinking:
-            request_kwargs["enable_thinking"] = enable_thinking
+            extra_body = request_kwargs.get("extra_body", {})
+            extra_body["enable_thinking"] = True
+            request_kwargs["extra_body"] = extra_body
         if repetition_penalty is not None:
             request_kwargs["repetition_penalty"] = repetition_penalty
         if result_format is not None:

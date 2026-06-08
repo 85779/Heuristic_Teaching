@@ -12,35 +12,9 @@ import asyncio
 import logging
 from datetime import datetime
 
+from app.core.events.event_types import EventType
+
 logger = logging.getLogger(__name__)
-
-
-class EventType:
-    """Standard event type definitions."""
-
-    # Solving module events
-    SOLVING_STARTED = "solving.started"
-    SOLVING_STEP_COMPLETED = "solving.step_completed"
-    SOLVING_COMPLETED = "solving.completed"
-    SOLVING_FAILED = "solving.failed"
-
-    # Intervention module events
-    INTERVENTION_BREAKPOINT_DETECTED = "intervention.breakpoint_detected"
-    INTERVENTION_HINT_DELIVERED = "intervention.hint_delivered"
-    INTERVENTION_ESCALATED = "intervention.escalated"
-
-    # Student model events
-    STUDENT_MODEL_UPDATED = "student_model.updated"
-    STUDENT_MODEL_KNOWLEDGE_GAP_DETECTED = "student_model.knowledge_gap_detected"
-
-    # Recommendation module events
-    RECOMMENDATION_GENERATED = "recommendation.generated"
-
-    # System events
-    MODULE_INITIALIZED = "system.module_initialized"
-    MODULE_SHUTDOWN = "system.module_shutdown"
-    SESSION_STARTED = "system.session_started"
-    SESSION_ENDED = "system.session_ended"
 
 
 class Event:

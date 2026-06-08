@@ -1,5 +1,6 @@
 """Solving service for problem-solving business logic."""
 
+import logging
 import os
 from typing import TYPE_CHECKING, Optional
 from app.modules.solving.models import (
@@ -18,6 +19,8 @@ from app.infrastructure.llm.base_client import Message
 if TYPE_CHECKING:
     from app.core.context import ModuleContext
 
+logger = logging.getLogger(__name__)
+
 
 class ReferenceSolutionService:
     """Service for generating reference solutions.
@@ -33,14 +36,14 @@ class ReferenceSolutionService:
             context: Module execution context (optional)
         """
         self._context = context
-        self._evaluator = Evaluator()
         self._parser = SolutionParser()
         self._director = PromptDirector()
         self._llm_client: Optional[DashScopeClient] = None
+        self._evaluator = Evaluator(llm_client=None)  # client injected after creation
 
     def _get_llm_client(self) -> DashScopeClient:
         """Get or create LLM client.
-        
+
         Returns:
             DashScopeClient instance
         """
@@ -66,25 +69,35 @@ class ReferenceSolutionService:
             SolvingResponse with evaluation result and solution (if correct)
         """
         try:
-            # Step 1: Evaluate student work
-            evaluation = await self._evaluator.evaluate_student_work(
-                problem=request.problem,
-                student_work=request.student_work or "",
-                detail_level=DetailLevel.SIMPLE,
-            )
+            has_student_work = bool(request.student_work and request.student_work.strip())
 
-            # Step 2: If incorrect, return error feedback
-            if not evaluation.is_correct:
-                error_feedback = self._evaluator.create_error_feedback(evaluation)
-                return SolvingResponse(
-                    success=False,
-                    evaluation=evaluation,
-                    solution=None,
-                    error_feedback=error_feedback,
+            if has_student_work:
+                # Ensure evaluator has LLM client for accurate assessment
+                if self._evaluator._llm_client is None:
+                    self._evaluator._llm_client = self._get_llm_client()
+
+                # Step 1: Evaluate student work
+                evaluation = await self._evaluator.evaluate_student_work(
+                    problem=request.problem,
+                    student_work=request.student_work,
+                    detail_level=DetailLevel.SIMPLE,
                 )
 
+                # Step 2: If incorrect, prepare error feedback
+                # Still generate reference solution below so student can see the correct method
+                if not evaluation.is_correct:
+                    error_feedback = self._evaluator.create_error_feedback(evaluation)
+                    has_errors = True
+                else:
+                    error_feedback = None
+                    has_errors = False
+            else:
+                has_errors = False
+                error_feedback = None
+                evaluation = None
+
             # Step 3: Build appropriate prompt
-            if request.student_work:
+            if has_student_work:
                 prompt = self._director.build_continuation_prompt(
                     problem=request.problem,
                     student_work=request.student_work,
@@ -113,19 +126,35 @@ class ReferenceSolutionService:
                     "problem": request.problem,
                     "student_work": request.student_work or "",
                     "student_steps": getattr(request, 'student_steps', []) or [],
-                    "solution_steps": [s.dict() for s in solution.steps],
+                    "solution_steps": [s.model_dump(mode='python') for s in solution.steps],
                 }
                 self._context.state_manager.set_module_state(session_id, "solving", state)
 
+                # Publish event: Module 2 auto-intervention + Module 4 profile update
+                # Only publish if student submitted work (not pure reference request)
+                if evaluation is not None:
+                    from app.core.events.event_bus import Event
+                    await self._context.event_bus.publish(Event(
+                        event_type="solving.completed",
+                        data={
+                            "problem": request.problem,
+                            "student_work": request.student_work or "",
+                            "solution_steps": [s.model_dump(mode='python') for s in solution.steps],
+                            "evaluation": evaluation.model_dump(mode='python'),
+                        },
+                        session_id=session_id,
+                        source_module="solving",
+                    ))
+
             return SolvingResponse(
-                success=True,
+                success=not has_errors,
                 evaluation=evaluation,
                 solution=solution,
-                error_feedback=None,
+                error_feedback=error_feedback,
             )
 
-        except Exception as e:
-            # Return error response
+        except Exception:
+            logger.exception("Failed to generate reference solution")
             return SolvingResponse(
                 success=False,
                 evaluation=EvaluationResult(

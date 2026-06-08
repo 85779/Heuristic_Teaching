@@ -197,14 +197,15 @@ class TestSolvingModule:
         assert "继续" in prompt or "续" in prompt
 
     def test_evaluator_no_student_work(self):
-        """Test Evaluator with no student work."""
+        """Test Evaluator with no student work — returns not-correct (not-yet-started)."""
         from app.modules.solving.evaluator import Evaluator
 
         evaluator = Evaluator()
         result = evaluator._evaluate_with_rules("test problem", "")
 
-        assert result.is_correct is True
+        # Empty work → short content warning, low confidence, can still continue
         assert result.can_continue is True
+        assert result.confidence < 0.5
 
     def test_evaluator_determine_breakpoint(self):
         """Test Evaluator determines breakpoint from student work."""

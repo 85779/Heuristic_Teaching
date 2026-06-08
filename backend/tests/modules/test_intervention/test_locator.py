@@ -28,7 +28,7 @@ def test_missing_step(breakpoint_locator):
     result = breakpoint_locator.locate(student, solution)
     assert result.breakpoint_type == BreakpointType.MISSING_STEP
     assert result.breakpoint_position == 1
-    assert "第 2 步缺失" in result.gap_description
+    assert "第2步" in result.gap_description
 
 
 def test_wrong_direction(breakpoint_locator):

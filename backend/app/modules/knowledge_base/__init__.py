@@ -1,11 +1,26 @@
 """Module 6: RAG Knowledge Base System.
 
 This module provides retrieval-augmented generation (RAG) capabilities
-for the Socrates tutoring system, enabling semantic search across
-a knowledge base of mathematical concepts, methods, and examples.
+for the Socrates tutoring system.
+
+Includes both:
+- ChromaDB-based RAG (requires chromadb)
+- Lightweight embedding-based retriever (no external DB, uses DashScope embeddings)
 """
 
-from .service import RAGService
+# ChromaDB-based RAG (optional — requires chromadb)
+try:
+    from .service import RAGService
+except ImportError:
+    RAGService = None
+
+# Lightweight retriever (always available)
+try:
+    from .lightweight_retriever import LightweightRetriever, KnowledgeChunk
+except ImportError:
+    LightweightRetriever = None
+    KnowledgeChunk = None
+
 from .models import (
     KGDocument,
     KGChunk,
@@ -21,15 +36,14 @@ from .models import (
 )
 
 __all__ = [
-    # Main service
     "RAGService",
-    # Models
+    "LightweightRetriever",
+    "KnowledgeChunk",
     "KGDocument",
     "KGChunk",
     "KGQuery",
     "KGResult",
     "DocumentType",
-    # Exceptions
     "KGError",
     "ChromaDBConnectionError",
     "EmbeddingServiceError",
